@@ -3,5 +3,11 @@
 {% block page_title %}365.jeremykendall.net{% endblock %}
 
 {% block content %}
-    <p>{{message}}</p>
+    {% for image in images %}
+    <h2><a href="/{{image.day}}">{{image.day}}/365</a></h2>
+    <p><a href="/{{image.day}}"><img src="{{image.sizes.size.5.source}}" /></a></p>
+    <p>Posted {{image.posted}}</p>
+    {% else %}
+    <p>No images in project</p>
+    {% endfor %}
 {% endblock %}

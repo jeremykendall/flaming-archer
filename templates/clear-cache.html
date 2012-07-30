@@ -1,0 +1,11 @@
+{% extends 'layout.html' %}
+
+{% block page_title %}365.jeremykendall.net | Clear cache{% endblock %}
+
+{% block content %}
+<p>{{flash.cleared}}</p>
+<form name="clear-cache" id="clear-cache" action="/clear-cache" method="post">
+    <input type="hidden" name="clear" value="1" />
+    <input class="btn btn-danger btn-large" type="submit" value="Clear cache" />
+</form>
+{% endblock %}

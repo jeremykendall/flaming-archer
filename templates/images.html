@@ -3,5 +3,14 @@
 {% block page_title %}365.jeremykendall.net | Day {{day}}{% endblock %}
 
 {% block content %}
-    <p>Image for year {{year}} and day {{day}}</p>
+<h2><a href="/{{day}}">{{day}}/365</a></h2>
+    <p>
+        <img src="{{sizes.size.7.source}}" />
+    </p>
+    <p>
+        Posted: {{posted}}
+    </p>
+    <p>
+        <a href="{{sizes.size.7.url}}">View on Flickr</a>
+    </p>
 {% endblock %}
