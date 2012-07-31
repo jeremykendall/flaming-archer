@@ -1,8 +1,9 @@
 <?php
 
 require '../vendor/autoload.php';
-
 $config = require_once __DIR__ . '/../config.php';
+
+use Zend\Authentication\AuthenticationService;
 
 try {
     $db = new PDO($config['pdo']['dsn'], $config['pdo']['username'], $config['pdo']['password'], $config['pdo']['options']);
@@ -12,66 +13,35 @@ try {
 
 $service = new Tsf\Service\Images(
         new Tsf\Dao\Images($db),
-        new Tsf\Flickr($config['slim']['flickr.api.key'])
+        new Tsf\Flickr($config['flickr.api.key'])
 );
 
 // Prepare app
 $app = new Slim($config['slim']);
 
-$app->add(new Slim_Middleware_SessionCookie(array(
-        'expires' => '20 minutes',
-        'path' => '/',
-        'domain' => null,
-        'secure' => false,
-        'httponly' => false,
-        'name' => 'slim_session',
-        'secret' => 'Super secret secret!',
-        'cipher' => MCRYPT_RIJNDAEL_256,
-        'cipher_mode' => MCRYPT_MODE_CBC
-        )
-    )
-);
+$auth = new AuthenticationService();
+$storage = new Tsf\Authentication\Storage\EncryptedCookie();
+$auth->setStorage($storage);
+
+$app->add(new Slim_Middleware_SessionCookie($config['cookies']));
+$app->add(new Tsf\Middleware\Authentication($auth));
 
 // Prepare view
 $twigView = new View_Twig();
 $twigView->twigOptions = $config['twig'];
 $app->view($twigView);
 
+$app->add(new Tsf\Middleware\Navigation($auth));
+
 // Define routes
 $app->get('/', function () use ($app, $service) {
-        $log = $app->getLog();
-
-        if (apc_fetch('images') === false) {
-            $images = $service->findAll();
-            apc_store('images', $images);
-            $log->debug('images cache miss');
-        } else {
-            $images = apc_fetch('images');
-            $log->debug('images cache hit');
-        }
-
-//        die(var_dump($images[0]['sizes']));
-
+        $images = $service->findAll();
         $app->render('home.html', array('images' => $images));
     }
 );
 
 $app->get('/:day', function($day) use ($app, $service) {
-        $log = $app->getLog();
-
-        if (apc_fetch('day' . $day) === false) {
-            $image = $service->find($day);
-
-            if (!$image) {
-                $app->notFound();
-            }
-
-            apc_store('day' . $day, $image);
-            $log->debug("day$day cache miss");
-        } else {
-            $image = apc_fetch('day' . $day);
-            $log->debug("day$day cache hit");
-        }
+        $image = $service->find($day);
 
         if (!$image) {
             $app->notFound();
@@ -81,32 +51,74 @@ $app->get('/:day', function($day) use ($app, $service) {
     }
 )->conditions(array('day' => '([1-9]\d?|[12]\d\d|3[0-5]\d|36[0-6])'));
 
-$app->map('/clear-cache', function() use ($app) {
+$app->post('/admin/clear-cache', function() use ($app) {
 
+        $log = $app->getLog();
+
+        $cleared = null;
+
+        $clear = $app->request()->post('clear');
+
+        if ($clear == 1) {
+            if (apc_clear_cache('user')) {
+                $cleared = 'Cache was successfully cleared!';
+            } else {
+                $cleared = 'Cache was not cleared!';
+                $log->error('Cache not cleared');
+            }
+        }
+
+        $app->flash('cleared', $cleared);
+        $app->redirect('/admin');
+    }
+);
+
+$app->get('/admin', function() use ($app, $service) {
+        $images = $service->findAll();
+        $app->render('admin/photos.html', array('images' => $images));
+    }
+);
+
+$app->post('/admin/add-photo', function() use ($app, $service) {
+        $data = $app->request()->post();
+        $service->save($data);
+        $app->redirect('/admin');
+    }
+);
+
+$app->post('/admin/delete-photo', function() use ($app, $service) {
+        $day = $app->request()->post('day');
+        $service->delete($day);
+        $app->redirect('/admin');
+    }
+);
+
+$app->map('/login', function() use ($app, $db, $auth) {
         if ($app->request()->isGet()) {
-            $app->render('clear-cache.html');
+            $app->render('login.html');
         }
 
         if ($app->request()->isPost()) {
-            $log = $app->getLog();
-            $cleared = 'Cache was not cleared';
-            $clear = $app->request()->post('clear');
-            if ($clear == 1) {
-                if (apc_clear_cache('user')) {
-                    $log->error('Cache cleared');
-                    $cleared = 'Cache was successfully cleared';
-                }
-            }
 
-            $log->error('Cache not cleared');
-            $app->flash('cleared', $cleared);
-            $app->redirect('/clear-cache');
+            $post = $app->request()->post();
+
+            $authAdapter = new Tsf\Authentication\Adapter\Db($db, $post['email'], $post['password']);
+            $auth->setAdapter($authAdapter);
+            $result = $auth->authenticate();
+
+            if (!$result->isValid()) {
+                $messages = $result->getMessages();
+                $app->flash('error', $messages[0]);
+                $app->redirect('/login');
+            } else {
+                $app->redirect('/');
+            }
         }
     }
 )->via('GET', 'POST');
 
-$app->get('/cache-clear', function() use ($app) {
-        apc_delete('images');
+$app->get('/logout', function() use ($app, $auth) {
+        $auth->clearIdentity();
         $app->redirect('/');
     }
 );

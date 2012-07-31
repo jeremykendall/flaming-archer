@@ -1,0 +1,54 @@
+{% extends 'layout.html' %}
+
+{% block page_title %}365.jeremykendall.net | Add photo{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="span4">
+        <h2>Add a photo</h2>
+        <form name="add-photo" id="add-photo" class="well form-inline" method="post" action="/admin/add-photo">
+            <input type="text" id="day" class="span1" name="day" placeholder="Day"/>
+            <input type="text" id="photo_id" class="span2" name="photo_id" placeholder="Flickr photo id" />
+            <button type="submit" class="btn">Submit</button>
+        </form>
+    </div>
+    <div class="span4">
+        <h2>Clear photo cache</h2>
+        {% if flash.cleared %}
+        <p>{{flash.cleared}}</p>
+        {% endif %}
+        <form name="clear-cache" id="clear-cache" action="/admin/clear-cache" method="post">
+            <input type="hidden" name="clear" value="1" />
+            <button class="btn btn-danger btn-large" type="submit">
+                <i class="icon-trash icon-white"></i> Clear cache
+        </form>
+    </div>
+</div>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Photo</th><th>Day</th><th>Photo Id</th><th>Posted</th><th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for image in images %}
+        <tr>
+            <td><a href="/{{image.day}}"><img src="{{image.sizes.size.0.source}}" /></a></td>
+            <td>{{image.day}}</td>
+            <td>{{image.photo_id}}</td>
+            <td>{{image.posted|date("m/d/Y")}}</td>
+            <td>
+                <form action="/admin/delete-photo" method="post">
+                    <input type="hidden" name="delete" value="1" />
+                    <input type="hidden" name="photo_id" value="{{image.photo_id}}" />
+                    <input type="hidden" name="day" value="{{image.day}}" />
+                    <button class="btn btn-danger btn-mini">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

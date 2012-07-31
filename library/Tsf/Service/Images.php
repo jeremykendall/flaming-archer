@@ -63,4 +63,14 @@ class Images
         
         return $result;
     }
+    
+    public function save(array $data)
+    {
+        return $this->dao->save($data);
+    }
+    
+    public function delete($day)
+    {
+        return $this->dao->delete($day);
+    }
 }

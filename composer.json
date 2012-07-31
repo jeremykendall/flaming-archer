@@ -11,11 +11,18 @@
         "homepage": "http://www.joshlockhart.com/"
     }
     ],
+    "repositories": [
+    {
+        "type": "composer",
+        "url": "http://packages.zendframework.com/"
+    }
+    ],
     "require": {
         "php": ">=5.3.0",
         "slim/slim": "1.6.*",
         "slim/extras": "dev-release-1.0.3",
-        "twig/twig": ">=1.8.0,<2.0-dev"
+        "twig/twig": ">=1.8.0,<2.0-dev",
+        "zendframework/zend-authentication": "@dev"
     },
     "autoload": {
         "psr-0": 

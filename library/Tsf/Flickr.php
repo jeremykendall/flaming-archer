@@ -19,13 +19,14 @@ namespace Tsf;
  */
 class Flickr
 {
+
     /**
      * Flickr API key
      * 
      * @var string 
      */
     private $key;
-    
+
     /**
      * Public constructor
      * 
@@ -35,7 +36,7 @@ class Flickr
     {
         $this->key = $key;
     }
-    
+
     /**
      * Returns sizes array for photo identified by Flickr photo id
      * 
@@ -44,21 +45,29 @@ class Flickr
      */
     public function getSizes($photoId)
     {
-        $options = array(
-            'method' => 'flickr.photos.getSizes',
-            'api_key' => $this->key,
-            'photo_id' => $photoId,
-            'format' => 'json',
-            'nojsoncallback' => 1
-        );
-        
-        $url = 'http://api.flickr.com/services/rest/?' . http_build_query($options);
+        if (apc_fetch($photoId) === false) {
+            $options = array(
+                'method' => 'flickr.photos.getSizes',
+                'api_key' => $this->key,
+                'photo_id' => $photoId,
+                'format' => 'json',
+                'nojsoncallback' => 1
+            );
 
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $result = curl_exec($ch);
-        curl_close($ch);
-        
-        return json_decode($result, true);
+            $url = 'http://api.flickr.com/services/rest/?' . http_build_query($options);
+
+            $ch = curl_init($url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $result = curl_exec($ch);
+            curl_close($ch);
+            
+            $sizes = json_decode($result, true);
+            apc_store($photoId, $sizes);
+        } else {
+            $sizes = apc_fetch($photoId);
+        }
+
+        return $sizes;
     }
+
 }
