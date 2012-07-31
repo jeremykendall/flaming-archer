@@ -6,3 +6,5 @@
 .DS_STORE
 /nbproject/private/
 *.un~
+config.php
+composer.lock
