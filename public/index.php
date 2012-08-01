@@ -11,10 +11,9 @@ try {
     die($e->getMessage());
 }
 
-$service = new Tsf\Service\Images(
-        new Tsf\Dao\Images($db),
-        new Tsf\Flickr($config['flickr.api.key'])
-);
+$flickrService = new Tsf\Service\FlickrService($config['flickr.api.key']);
+$flickrAPC = new Tsf\Service\FlickrServiceApc($flickrService);
+$service = new Tsf\Service\ImageService(new Tsf\Dao\ImageDao($db), $flickrAPC);
 
 // Prepare app
 $app = new Slim($config['slim']);
@@ -25,18 +24,17 @@ $auth->setStorage($storage);
 
 $app->add(new Slim_Middleware_SessionCookie($config['cookies']));
 $app->add(new Tsf\Middleware\Authentication($auth));
+$app->add(new Tsf\Middleware\Navigation($auth));
 
 // Prepare view
 $twigView = new View_Twig();
 $twigView->twigOptions = $config['twig'];
 $app->view($twigView);
 
-$app->add(new Tsf\Middleware\Navigation($auth));
-
 // Define routes
 $app->get('/', function () use ($app, $service) {
         $images = $service->findAll();
-        $app->render('home.html', array('images' => $images));
+        $app->render('index.html', array('images' => $images));
     }
 );
 
@@ -54,9 +52,7 @@ $app->get('/:day', function($day) use ($app, $service) {
 $app->post('/admin/clear-cache', function() use ($app) {
 
         $log = $app->getLog();
-
         $cleared = null;
-
         $clear = $app->request()->post('clear');
 
         if ($clear == 1) {
@@ -75,7 +71,7 @@ $app->post('/admin/clear-cache', function() use ($app) {
 
 $app->get('/admin', function() use ($app, $service) {
         $images = $service->findAll();
-        $app->render('admin/photos.html', array('images' => $images));
+        $app->render('admin/index.html', array('images' => $images));
     }
 );
 

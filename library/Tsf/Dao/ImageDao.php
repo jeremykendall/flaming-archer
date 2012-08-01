@@ -18,7 +18,7 @@ namespace Tsf\Dao;
  * @package 
  * @author Jeremy Kendall <jeremy@jeremykendall.net>
  */
-class Images
+class ImageDao
 {
 
     /**

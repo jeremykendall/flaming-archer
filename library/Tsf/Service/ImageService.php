@@ -18,25 +18,25 @@ namespace Tsf\Service;
  * @package 
  * @author Jeremy Kendall <jeremy@jeremykendall.net>
  */
-class Images
+class ImageService
 {
     /**
-     * @var \Tsf\Dao\Images 
+     * @var \Tsf\Dao\ImageDao 
      */
     private $dao;
 
     /**
-     * @var \Tsf\Flickr 
+     * @var \Tsf\Service\FlickrInterface 
      */
     private $flickr;
     
     /**
      * Public constructor
      * 
-     * @param \Tsf\Dao\Images $dao
-     * @param \Tsf\Flickr $flickr 
+     * @param \Tsf\Dao\ImageDao $dao
+     * @param \Tsf\Service\FlickrInterface $flickr 
      */
-    public function __construct(\Tsf\Dao\Images $dao, \Tsf\Flickr $flickr)
+    public function __construct(\Tsf\Dao\ImageDao $dao, \Tsf\Service\FlickrInterface $flickr)
     {
         $this->dao = $dao;
         $this->flickr = $flickr;
