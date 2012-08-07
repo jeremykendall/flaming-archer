@@ -29,5 +29,6 @@
         {
             "Tsf": "library/"
         }
-    }
+    },
+    "minimum-stability": "dev"
 }
