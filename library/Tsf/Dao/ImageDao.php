@@ -26,6 +26,11 @@ class ImageDao
      */
     private $db;
 
+    /**
+     * Constructor
+     * 
+     * @param \PDO $db 
+     */
     public function __construct(\PDO $db)
     {
         $this->db = $db;
