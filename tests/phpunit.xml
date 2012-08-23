@@ -5,14 +5,20 @@
         <directory>./library</directory>
     </testsuite>
     
+    <filter>
+        <whitelist>
+            <directory suffix=".php">../library</directory>
+        </whitelist>
+    </filter>
+    
     <logging>
         <log type="coverage-html" 
-            target="./log/report" 
-            charset="UTF-8" 
-            yui="true" 
-            highlight="true" 
-            lowUpperBound="40"
-            highLowerBound="70" />
+             target="./log/report" 
+             charset="UTF-8" 
+             yui="true" 
+             highlight="true" 
+             lowUpperBound="40"
+             highLowerBound="70" />
         <log type="testdox-html" target="./log/testdox.html" />
     </logging>
     

@@ -71,10 +71,11 @@ class ImageDaoTest extends \PHPUnit_Framework_TestCase
      */
     public function testSave()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
+        $result = $this->dao->save(array('day' => 200, 'photo_id' => 999999));
+        $this->assertEquals(1, $result);
+        
+        $image = $this->dao->find(200);
+        $this->assertEquals(200, $image['day']);
     }
 
     /**
@@ -83,10 +84,17 @@ class ImageDaoTest extends \PHPUnit_Framework_TestCase
      */
     public function testDelete()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
+        $result = $this->dao->findAll();
+        $this->assertEquals(7, count($result));
+        
+        $result = $this->dao->delete(1);
+        $this->assertEquals(1, $result);
+        
+        $result = $this->dao->find(1);
+        $this->assertFalse($result);
+        
+        $result = $this->dao->findAll();
+        $this->assertEquals(6, count($result));
     }
 
 }

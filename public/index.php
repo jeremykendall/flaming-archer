@@ -40,7 +40,7 @@ $app->get('/', function () use ($app, $service) {
 
 $app->get('/:day', function($day) use ($app, $service) {
         $image = $service->find($day);
-
+        
         if (!$image) {
             $app->notFound();
         }
@@ -121,3 +121,14 @@ $app->get('/logout', function() use ($app, $auth) {
 
 // Run app
 $app->run();
+
+function d($expression)
+{
+    var_dump($expression);
+}
+
+function dd($expression)
+{
+    d($expression);
+    die();
+}
