@@ -6,7 +6,7 @@ return array(
         'templates.path' => __DIR__ . '/templates',
         'log.level' => 4,
         'log.enabled' => true,
-        'log.writer' => new Log_FileWriter(
+        'log.writer' => new Slim\Extras\Log\DateTimeFileWriter(
             array(
                 'path' => __DIR__ . '/logs',
                 'name_format' => 'y-m-d'
