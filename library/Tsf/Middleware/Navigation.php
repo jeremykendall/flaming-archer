@@ -18,7 +18,7 @@ namespace Tsf\Middleware;
  * @package 
  * @author Jeremy Kendall <jeremy@jeremykendall.net>
  */
-class Navigation extends \Slim_Middleware
+class Navigation extends \Slim\Middleware
 {
 
     /**

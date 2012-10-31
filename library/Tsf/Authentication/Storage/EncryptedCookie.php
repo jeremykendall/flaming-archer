@@ -44,7 +44,7 @@ class EncryptedCookie implements \Zend\Authentication\Storage\StorageInterface
 
     public function __construct($cookieName = 'identity')
     {
-        $this->app = \Slim::getInstance();
+        $this->app = \Slim\Slim::getInstance();
         $this->cookieName = $cookieName;
     }
 

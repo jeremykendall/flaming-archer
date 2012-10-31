@@ -18,7 +18,7 @@ namespace Tsf\Middleware;
  * @package 
  * @author Jeremy Kendall <jeremy@jeremykendall.net>
  */
-class Authentication extends \Slim_Middleware
+class Authentication extends \Slim\Middleware
 {
 
     /**
