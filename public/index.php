@@ -16,20 +16,19 @@ $flickrAPC = new Tsf\Service\FlickrServiceApc($flickrService);
 $service = new Tsf\Service\ImageService(new Tsf\Dao\ImageDao($db), $flickrAPC);
 
 // Prepare app
-$app = new Slim($config['slim']);
+$app = new Slim\Slim($config['slim']);
 
 $auth = new AuthenticationService();
 $storage = new Tsf\Authentication\Storage\EncryptedCookie();
 $auth->setStorage($storage);
 
-$app->add(new Slim_Middleware_SessionCookie($config['cookies']));
+$app->add(new Slim\Middleware\SessionCookie($config['cookies']));
 $app->add(new Tsf\Middleware\Authentication($auth));
 $app->add(new Tsf\Middleware\Navigation($auth));
 
 // Prepare view
-$twigView = new View_Twig();
-$twigView->twigOptions = $config['twig'];
-$app->view($twigView);
+Slim\Extras\Views\Twig::$twigOptions = $config['twig'];
+$app->view(new Slim\Extras\Views\Twig());
 
 // Define routes
 $app->get('/', function () use ($app, $service) {
