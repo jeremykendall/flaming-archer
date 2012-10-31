@@ -5,30 +5,42 @@ $config = require_once __DIR__ . '/../config.php';
 
 use Zend\Authentication\AuthenticationService;
 
+use Tsf\Service\FlickrService;
+use Tsf\Service\FlickrServiceApc;
+use Tsf\Service\ImageService;
+use Tsf\Dao\ImageDao;
+use Tsf\Authentication\Storage\EncryptedCookie;
+use Tsf\Authentication\Adapter\Db;
+use Tsf\Middleware\Authentication;
+use Tsf\Middleware\Navigation;
+
+use Slim\Middleware\SessionCookie;
+use Slim\Extras\Views\Twig;
+
 try {
     $db = new PDO($config['pdo']['dsn'], $config['pdo']['username'], $config['pdo']['password'], $config['pdo']['options']);
 } catch (PDOException $e) {
     die($e->getMessage());
 }
 
-$flickrService = new Tsf\Service\FlickrService($config['flickr.api.key']);
-$flickrAPC = new Tsf\Service\FlickrServiceApc($flickrService);
-$service = new Tsf\Service\ImageService(new Tsf\Dao\ImageDao($db), $flickrAPC);
+$flickrService = new FlickrService($config['flickr.api.key']);
+$flickrAPC = new FlickrServiceApc($flickrService);
+$service = new ImageService(new ImageDao($db), $flickrAPC);
 
 // Prepare app
 $app = new Slim\Slim($config['slim']);
 
 $auth = new AuthenticationService();
-$storage = new Tsf\Authentication\Storage\EncryptedCookie();
+$storage = new EncryptedCookie();
 $auth->setStorage($storage);
 
-$app->add(new Slim\Middleware\SessionCookie($config['cookies']));
-$app->add(new Tsf\Middleware\Authentication($auth));
-$app->add(new Tsf\Middleware\Navigation($auth));
+$app->add(new SessionCookie($config['cookies']));
+$app->add(new Authentication($auth));
+$app->add(new Navigation($auth));
 
 // Prepare view
-Slim\Extras\Views\Twig::$twigOptions = $config['twig'];
-$app->view(new Slim\Extras\Views\Twig());
+Twig::$twigOptions = $config['twig'];
+$app->view(new Twig());
 
 // Define routes
 $app->get('/', function () use ($app, $service) {
@@ -97,7 +109,7 @@ $app->map('/login', function() use ($app, $db, $auth) {
 
             $post = $app->request()->post();
 
-            $authAdapter = new Tsf\Authentication\Adapter\Db($db, $post['email'], $post['password']);
+            $authAdapter = new Db($db, $post['email'], $post['password']);
             $auth->setAdapter($authAdapter);
             $result = $auth->authenticate();
 
