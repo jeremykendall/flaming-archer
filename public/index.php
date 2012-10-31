@@ -3,7 +3,8 @@
 require '../vendor/autoload.php';
 $config = require_once __DIR__ . '/../config.php';
 
-use Zend\Authentication\AuthenticationService;
+use Slim\Middleware\SessionCookie;
+use Slim\Extras\Views\Twig;
 
 use Tsf\Service\FlickrService;
 use Tsf\Service\FlickrServiceApc;
@@ -14,8 +15,7 @@ use Tsf\Authentication\Adapter\Db;
 use Tsf\Middleware\Authentication;
 use Tsf\Middleware\Navigation;
 
-use Slim\Middleware\SessionCookie;
-use Slim\Extras\Views\Twig;
+use Zend\Authentication\AuthenticationService;
 
 try {
     $db = new PDO($config['pdo']['dsn'], $config['pdo']['username'], $config['pdo']['password'], $config['pdo']['options']);
