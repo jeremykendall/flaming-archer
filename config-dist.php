@@ -1,7 +1,6 @@
 <?php
 
 return array(
-    'flickr.api.key' => 'FLICKR API KEY',
     'slim' => array(
         'templates.path' => __DIR__ . '/templates',
         'log.level' => 4,
@@ -20,15 +19,6 @@ return array(
         'strict_variables' => false,
         'autoescape' => true
     ),
-    'pdo' => array(
-        'dsn' => 'YOUR DB VENDOR:host=localhost;dbname=YOUR DB NAME',
-        'username' => 'USERNAME',
-        'password' => 'PASSWORD',
-        'options' => array(
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
-        )
-    ),
     'cookies' => array(
         'expires' => '20 minutes',
         'path' => '/',
@@ -39,5 +29,15 @@ return array(
         'secret' => 'CHANGE THIS SECRET',
         'cipher' => MCRYPT_RIJNDAEL_256,
         'cipher_mode' => MCRYPT_MODE_CBC
+    ),
+    'flickr.api.key' => 'FLICKR API KEY',
+    'pdo' => array(
+        'dsn' => 'YOUR DB VENDOR:host=localhost;dbname=YOUR DB NAME',
+        'username' => 'USERNAME',
+        'password' => 'PASSWORD',
+        'options' => array(
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+        )
     )
 );
