@@ -33,7 +33,7 @@ return array(
         'expires' => '20 minutes',
         'path' => '/',
         'domain' => null,
-        'secure' => false,
+        'secure' => true,
         'httponly' => false,
         'name' => 'slim_session',
         'secret' => 'CHANGE THIS SECRET',
