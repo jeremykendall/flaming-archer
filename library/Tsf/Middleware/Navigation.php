@@ -2,6 +2,8 @@
 
 namespace Tsf\Middleware;
 
+use \Zend\Authentication\AuthenticationService;
+
 /**
  * --- Library
  * 
@@ -26,7 +28,7 @@ class Navigation extends \Slim\Middleware
      */
     private $auth;
 
-    public function __construct(\Zend\Authentication\AuthenticationService $auth)
+    public function __construct(AuthenticationService $auth)
     {
         $this->auth = $auth;
     }
