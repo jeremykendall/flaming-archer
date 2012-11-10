@@ -5,7 +5,6 @@ $config = require_once __DIR__ . '/../config.php';
 
 use Slim\Middleware\SessionCookie;
 use Slim\Extras\Views\Twig;
-
 use Tsf\Service\FlickrService;
 use Tsf\Service\FlickrServiceApc;
 use Tsf\Service\ImageService;
@@ -14,8 +13,9 @@ use Tsf\Authentication\Storage\EncryptedCookie;
 use Tsf\Authentication\Adapter\Db;
 use Tsf\Middleware\Authentication;
 use Tsf\Middleware\Navigation;
-
 use Zend\Authentication\AuthenticationService;
+use Zend\Cache\StorageFactory;
+use Zend\Cache\PatternFactory;
 
 try {
     $db = new PDO($config['pdo']['dsn'], $config['pdo']['username'], $config['pdo']['password'], $config['pdo']['options']);
@@ -24,8 +24,30 @@ try {
 }
 
 $flickrService = new FlickrService($config['flickr.api.key']);
-$flickrAPC = new FlickrServiceApc($flickrService);
-$service = new ImageService(new ImageDao($db), $flickrAPC);
+//$flickrAPC = new FlickrServiceApc($flickrService);
+$imageService = new ImageService(new ImageDao($db), $flickrService);
+
+$options = array(
+    'ttl' => 60 * 60 * 24, // One day
+    'namespace' => 'flaming-archer'
+);
+
+$cache = StorageFactory::factory(array(
+        'adapter' => array(
+            'name' => 'apc',
+            'options' => $options
+        ),
+        'plugins' => array(
+            'ExceptionHandler' => array(
+                'throw_exceptions' => false
+            )
+        )
+    ));
+
+$service = PatternFactory::factory('object', array(
+        'object' => $imageService,
+        'storage' => $cache
+    ));
 
 // Prepare app
 $app = new Slim\Slim($config['slim']);
@@ -51,7 +73,7 @@ $app->get('/', function () use ($app, $service) {
 
 $app->get('/:day', function($day) use ($app, $service) {
         $image = $service->find($day);
-        
+
         if (!$image) {
             $app->notFound();
         }
@@ -60,14 +82,14 @@ $app->get('/:day', function($day) use ($app, $service) {
     }
 )->conditions(array('day' => '([1-9]\d?|[12]\d\d|3[0-5]\d|36[0-6])'));
 
-$app->post('/admin/clear-cache', function() use ($app) {
+$app->post('/admin/clear-cache', function() use ($app, $service, $cache) {
 
         $log = $app->getLog();
         $cleared = null;
         $clear = $app->request()->post('clear');
 
         if ($clear == 1) {
-            if (apc_clear_cache('user')) {
+            if ($cache->flush()) {
                 $cleared = 'Cache was successfully cleared!';
             } else {
                 $cleared = 'Cache was not cleared!';
@@ -86,16 +108,18 @@ $app->get('/admin', function() use ($app, $service) {
     }
 );
 
-$app->post('/admin/add-photo', function() use ($app, $service) {
+$app->post('/admin/add-photo', function() use ($app, $service, $cache) {
         $data = $app->request()->post();
         $service->save($data);
+        $cache->flush();
         $app->redirect('/admin');
     }
 );
 
-$app->post('/admin/delete-photo', function() use ($app, $service) {
+$app->post('/admin/delete-photo', function() use ($app, $service, $cache) {
         $day = $app->request()->post('day');
         $service->delete($day);
+        $cache->flush();
         $app->redirect('/admin');
     }
 );
