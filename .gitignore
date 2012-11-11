@@ -8,3 +8,4 @@
 *.un~
 config.php
 /tests/log/*
+.vagrant
