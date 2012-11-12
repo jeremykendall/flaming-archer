@@ -37,3 +37,7 @@ apache2::vhost { 'flaming-archer.dev':
     docroot         => '/home/vagrant/sites/dev.flaming-archer/public',
     configfile_name => 'dev.flaming-archer'
 }
+
+class {'mysql':}
+
+class {'flaming-archer':}
