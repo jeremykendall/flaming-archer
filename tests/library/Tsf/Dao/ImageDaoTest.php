@@ -28,7 +28,7 @@ class ImageDaoTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->db = new \PDO('sqlite::memory:');
-        $this->db->exec(file_get_contents(realpath(__DIR__ . '/../../../_files/365.sql')));
+        $this->db->exec(file_get_contents(realpath(__DIR__ . '/../../../_files/flaming_archer.sql')));
         $this->dao = new ImageDao($this->db);
     }
 
