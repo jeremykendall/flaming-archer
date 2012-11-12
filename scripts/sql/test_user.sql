@@ -1,2 +1,2 @@
 CREATE USER 'testuser'@'localhost' IDENTIFIED BY 'testpass';
-GRANT SELECT, INSERT, UPDATE, DELETE on `365`.* TO 'testuser'@'localhost';
+GRANT SELECT, INSERT, UPDATE, DELETE on `flaming_archer`.* TO 'testuser'@'localhost';
