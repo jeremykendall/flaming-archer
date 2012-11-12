@@ -1,0 +1,3 @@
+[submodule "vagrant/puppet-modules"]
+	path = vagrant/puppet-modules
+	url = git@github.com:jeremykendall/puppet-modules.git
