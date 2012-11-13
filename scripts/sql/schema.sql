@@ -14,8 +14,7 @@ DROP TABLE IF EXISTS `users`;
 CREATE TABLE IF NOT EXISTS `users` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `email` varchar(255) NOT NULL,
-  `salt` varchar(29) NOT NULL,
   `password_hash` varchar(60) NOT NULL,
-  `lastLogin` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `lastLogin` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
