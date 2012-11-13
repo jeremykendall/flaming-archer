@@ -28,7 +28,8 @@ php5::pkg { [
     'php-apc',
     'php5-mcrypt',
     'php5-mysql',
-    'php5-xdebug'
+    'php5-xdebug',
+    'php5-curl'
 ]:}
 
 class {'apache2':}
