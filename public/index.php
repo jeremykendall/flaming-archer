@@ -1,6 +1,7 @@
 <?php
 
 require '../vendor/autoload.php';
+
 $config = require_once __DIR__ . '/../config.php';
 
 use Slim\Middleware\SessionCookie;
@@ -11,7 +12,7 @@ use Tsf\Service\FlickrServiceApc;
 use Tsf\Service\ImageService;
 use Tsf\Dao\ImageDao;
 use Tsf\Authentication\Storage\EncryptedCookie;
-use Tsf\Authentication\Adapter\Db;
+use Tsf\Authentication\Adapter\DbAdapter;
 use Tsf\Middleware\Authentication;
 use Tsf\Middleware\Navigation;
 
@@ -22,6 +23,8 @@ try {
 } catch (PDOException $e) {
     die($e->getMessage());
 }
+
+$authAdapter = new DbAdapter($db, new Phpass\Hash());
 
 $flickrService = new FlickrService($config['flickr.api.key']);
 $flickrAPC = new FlickrServiceApc($flickrService);
@@ -100,7 +103,7 @@ $app->post('/admin/delete-photo', function() use ($app, $service) {
     }
 );
 
-$app->map('/login', function() use ($app, $db, $auth) {
+$app->map('/login', function() use ($app, $auth, $authAdapter) {
         if ($app->request()->isGet()) {
             $app->render('login.html');
         }
@@ -109,7 +112,7 @@ $app->map('/login', function() use ($app, $db, $auth) {
 
             $post = $app->request()->post();
 
-            $authAdapter = new Db($db, $post['email'], $post['password']);
+            $authAdapter->setCredentials($post['email'], $post['password']);
             $auth->setAdapter($authAdapter);
             $result = $auth->authenticate();
 
