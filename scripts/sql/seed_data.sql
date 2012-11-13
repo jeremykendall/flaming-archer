@@ -10,5 +10,5 @@ INSERT INTO `images` (`id`, `day`, `photo_id`, `posted`) VALUES
 (19, 10, 7249204674, '2012-11-09 04:29:07'),
 (20, 11, 7623533156, '2012-11-09 12:19:54');
 
-INSERT INTO `users` (`id`, `email`, `salt`, `password_hash`, `lastLogin`) VALUES
-(1, 'jeremy@jeremykendall.net', '$2y$07$u03zmEbyX7iwwD.LQJ9CH$', '$2y$07$u03zmEbyX7iwwD.LQJ9CH.TagV4rVV15xCwg5HhFVx0IfxLaVbnTa', '2012-07-31 04:34:28');
+INSERT INTO `users` (`id`, `email`, `password_hash`, `lastLogin`) VALUES
+(1, 'user@example.com', '$2y$12$pZg9j8DBSIP2R/vfDzTQOeIt5n57r5VigCUl/HH.FrBOadi3YhdPS', NULL);
