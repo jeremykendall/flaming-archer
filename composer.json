@@ -10,7 +10,8 @@
         "slim/slim": "2.1.0",
         "slim/extras": "2.0.1",
         "twig/twig": "1.10.3",
-        "zendframework/zend-authentication": "2.0.*"
+        "zendframework/zend-authentication": "2.0.*",
+        "rych/phpass": "2.1.x-dev"
     },
     "autoload": {
         "psr-0": 

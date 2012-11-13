@@ -1,6 +1,57 @@
 {
-    "hash": "2dd4e527db5fa8a6db983bd70c4f69e7",
+    "hash": "2f347857274209904019ab528d3ed510",
     "packages": [
+        {
+            "name": "rych/phpass",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "git://github.com/rchouinard/phpass.git",
+                "reference": "565df4bb93fe8926ae976ce975bfc89d782d0bf7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/rchouinard/phpass/archive/565df4bb93fe8926ae976ce975bfc89d782d0bf7.zip",
+                "reference": "565df4bb93fe8926ae976ce975bfc89d782d0bf7",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.7"
+            },
+            "suggest": {
+                "ext-hash": "Some modules and features may require the HASH Message Digest Framework extension in order to work.",
+                "ext-openssl": "The OpenSSL extension is used as a secure source of random data."
+            },
+            "time": "1350004671",
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.1-dev"
+                }
+            },
+            "installation-source": "source",
+            "autoload": {
+                "psr-0": {
+                    "Phpass": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ryan Chouinard",
+                    "email": "rchouinard@gmail.com",
+                    "homepage": "http://ryanchouinard.com"
+                }
+            ],
+            "description": "PHP Password Library: Easy, secure password management for PHP",
+            "homepage": "https://github.com/rchouinard/phpass",
+            "keywords": [
+                "cryptography",
+                "password"
+            ]
+        },
         {
             "name": "slim/extras",
             "version": "2.0.1",
@@ -118,7 +169,7 @@
                     "dev-master": "1.10-dev"
                 }
             },
-            "installation-source": "source",
+            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Twig_": "lib/"
@@ -230,7 +281,7 @@
 
     ],
     "minimum-stability": "dev",
-    "stability-flags": [
-
-    ]
+    "stability-flags": {
+        "rych/phpass": 20
+    }
 }
