@@ -34,7 +34,7 @@ $service = new ImageService(new ImageDao($db), $flickrAPC);
 $app = new Slim\Slim($config['slim']);
 
 $auth = new AuthenticationService();
-$storage = new EncryptedCookie();
+$storage = new EncryptedCookie($app);
 $auth->setStorage($storage);
 
 $app->add(new SessionCookie($config['cookies']));
