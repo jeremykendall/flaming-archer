@@ -27,17 +27,17 @@ class FlickrServiceApc implements FlickrInterface
      * @var \Tsf\Service\FlickrInterface
      */
     private $flickr;
-    
+
     /**
      * @var \Tsf\Cache\Adapter\Apc
      */
     private $apc;
-    
+
     /**
      * Public constructor
-     * 
+     *
      * @param \Tsf\Service\FlickrInterface $flickr
-     * @param \Tsf\Cache\Adapter\Apc $apc
+     * @param \Tsf\Cache\Adapter\Apc       $apc
      */
     public function __construct(FlickrInterface $flickr, Apc $apc)
     {
@@ -48,7 +48,7 @@ class FlickrServiceApc implements FlickrInterface
     public function getSizes($photoId)
     {
         $sizes = $this->apc->fetch($photoId);
-        
+
         if ($sizes === false) {
             $sizes = $this->flickr->getSizes($photoId);
             $this->apc->store($photoId, $sizes);
