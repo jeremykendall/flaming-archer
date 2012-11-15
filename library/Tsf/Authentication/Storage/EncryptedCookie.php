@@ -24,7 +24,7 @@ class EncryptedCookie implements \Zend\Authentication\Storage\StorageInterface
     /**
      * Instance of Slim application
      * 
-     * @var Slim 
+     * @var \Slim\Slim 
      */
     private $app;
 
@@ -42,9 +42,9 @@ class EncryptedCookie implements \Zend\Authentication\Storage\StorageInterface
      */
     private $time = '2 weeks';
 
-    public function __construct($cookieName = 'identity')
+    public function __construct(\Slim\Slim $app, $cookieName = 'identity')
     {
-        $this->app = \Slim\Slim::getInstance();
+        $this->app = $app;
         $this->cookieName = $cookieName;
     }
 
