@@ -6,24 +6,24 @@ use \Zend\Authentication\Result;
 
 /**
  * Flaming Archer Library
- * 
+ *
  * @author Jeremy Kendall <jeremy@jeremykendall.net>
  */
 
 /**
  * Database auth adapter
- * 
+ *
  * @author Jeremy Kendall <jeremy@jeremykendall.net>
  */
-class DbAdapter implements \Zend\Authentication\Adapter\AdapterInterface {
-
+class DbAdapter implements \Zend\Authentication\Adapter\AdapterInterface
+{
     /**
      * Database connection
      *
      * @var \PDO
      */
     private $db;
-    
+
     /**
      * Password hasher
      *
@@ -47,21 +47,24 @@ class DbAdapter implements \Zend\Authentication\Adapter\AdapterInterface {
 
     /**
      * Public constructor
-     * 
-     * @param \PDO $db Database connection
+     *
+     * @param \PDO         $db     Database connection
      * @param \Phpass\Hash $hasher Password hasher
      */
-    public function __construct(\PDO $db, \Phpass\Hash $hasher) {
+    public function __construct(\PDO $db, \Phpass\Hash $hasher)
+    {
         $this->db = $db;
         $this->hasher = $hasher;
     }
-    
-    public function setCredentials($email, $password) {
+
+    public function setCredentials($email, $password)
+    {
         $this->email = $email;
         $this->password = $password;
     }
 
-    public function authenticate() {
+    public function authenticate()
+    {
         try {
             $sql = 'SELECT email, password_hash FROM users WHERE email = :email';
             $stmt = $this->db->prepare($sql);
@@ -74,6 +77,7 @@ class DbAdapter implements \Zend\Authentication\Adapter\AdapterInterface {
 
         if ($this->hasher->checkPassword($this->password, $user['password_hash'])) {
             unset($user['password_hash']);
+
             return new Result(Result::SUCCESS, $user, array());
         } else {
             return new Result(Result::FAILURE_CREDENTIAL_INVALID, array(), array('Invalid username or password provided'));

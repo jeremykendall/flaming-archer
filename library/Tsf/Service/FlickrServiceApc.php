@@ -4,18 +4,18 @@ namespace Tsf\Service;
 
 /**
  * --- Library
- * 
- * @category 
- * @package 
+ *
+ * @category
+ * @package
  * @author Jeremy Kendall <jeremy@jeremykendall.net>
  * @version $Id$
  */
 
 /**
  * FlickrApc class
- * 
- * @category 
- * @package 
+ *
+ * @category
+ * @package
  * @author Jeremy Kendall <jeremy@jeremykendall.net>
  */
 class FlickrServiceApc implements FlickrInterface
@@ -39,7 +39,7 @@ class FlickrServiceApc implements FlickrInterface
         } else {
             $sizes = apc_fetch($photoId);
         }
-        
+
         return $sizes;
     }
 
