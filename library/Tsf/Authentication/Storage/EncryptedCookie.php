@@ -4,18 +4,18 @@ namespace Tsf\Authentication\Storage;
 
 /**
  * --- Library
- * 
- * @category 
- * @package 
+ *
+ * @category
+ * @package
  * @author Jeremy Kendall <jeremy@jeremykendall.net>
  * @version $Id$
  */
 
 /**
  * EncryptedCookie class
- * 
- * @category 
- * @package 
+ *
+ * @category
+ * @package
  * @author Jeremy Kendall <jeremy@jeremykendall.net>
  */
 class EncryptedCookie implements \Zend\Authentication\Storage\StorageInterface
@@ -23,28 +23,28 @@ class EncryptedCookie implements \Zend\Authentication\Storage\StorageInterface
 
     /**
      * Instance of Slim application
-     * 
-     * @var Slim 
+     *
+     * @var \Slim\Slim
      */
     private $app;
 
     /**
      * Encrypted cookie name
-     * 
+     *
      * @var string
      */
     private $cookieName;
 
     /**
      * Duration of cookie
-     * 
-     * @var int|string 
+     *
+     * @var int|string
      */
     private $time = '2 weeks';
 
-    public function __construct($cookieName = 'identity')
+    public function __construct(\Slim\Slim $app, $cookieName = 'identity')
     {
-        $this->app = \Slim\Slim::getInstance();
+        $this->app = $app;
         $this->cookieName = $cookieName;
     }
 
@@ -77,13 +77,14 @@ class EncryptedCookie implements \Zend\Authentication\Storage\StorageInterface
     public function read()
     {
         $value = $this->app->getEncryptedCookie($this->cookieName);
+
         return json_decode($value, true);
     }
 
     /**
      * Writes $contents to storage
      *
-     * @param  mixed $contents
+     * @param  mixed                       $contents
      * @throws Zend_Auth_Storage_Exception If writing $contents to
      *                                     storage is impossible
      * @return void

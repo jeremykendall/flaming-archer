@@ -4,25 +4,25 @@ namespace Tsf\Middleware;
 
 /**
  * --- Library
- * 
- * @category 
- * @package 
+ *
+ * @category
+ * @package
  * @author Jeremy Kendall <jeremy@jeremykendall.net>
  * @version $Id$
  */
 
 /**
  * Authentication class
- * 
- * @category 
- * @package 
+ *
+ * @category
+ * @package
  * @author Jeremy Kendall <jeremy@jeremykendall.net>
  */
 class Authentication extends \Slim\Middleware
 {
 
     /**
-     * @var \Zend\Authentication\AuthenticationService 
+     * @var \Zend\Authentication\AuthenticationService
      */
     private $auth;
 
@@ -33,7 +33,7 @@ class Authentication extends \Slim\Middleware
 
     public function call()
     {
-        
+
         $app = $this->app;
         $auth = $this->auth;
         $req = $app->request();

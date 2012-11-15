@@ -35,7 +35,7 @@
     <tbody>
         {% for image in images %}
         <tr>
-            <td><a href="/{{image.day}}"><img src="{{image.sizes.size.0.source}}" /></a></td>
+            <td><a href="/{{image.day}}"><img src="{{image.sizes.size.0.source}}" width="{{image.sizes.size.0.width}}" height="{{image.sizes.size.0.height}}" /></a></td>
             <td>{{image.day}}</td>
             <td>{{image.photo_id}}</td>
             <td>{{image.posted|date("m/d/Y")}}</td>
