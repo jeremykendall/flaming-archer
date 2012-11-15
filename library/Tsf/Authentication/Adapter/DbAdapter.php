@@ -5,25 +5,20 @@ namespace Tsf\Authentication\Adapter;
 use \Zend\Authentication\Result;
 
 /**
- * --- Library
+ * Flaming Archer Library
  * 
- * @category 
- * @package 
  * @author Jeremy Kendall <jeremy@jeremykendall.net>
- * @version $Id$
  */
 
 /**
  * Database auth adapter
  * 
- * @category 
- * @package 
  * @author Jeremy Kendall <jeremy@jeremykendall.net>
  */
 class DbAdapter implements \Zend\Authentication\Adapter\AdapterInterface {
 
     /**
-     * Database adapter
+     * Database connection
      *
      * @var \PDO
      */
@@ -50,6 +45,12 @@ class DbAdapter implements \Zend\Authentication\Adapter\AdapterInterface {
      */
     private $password;
 
+    /**
+     * Public constructor
+     * 
+     * @param \PDO $db Database connection
+     * @param \Phpass\Hash $hasher Password hasher
+     */
     public function __construct(\PDO $db, \Phpass\Hash $hasher) {
         $this->db = $db;
         $this->hasher = $hasher;
