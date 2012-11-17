@@ -45,9 +45,11 @@ class ImageService
     public function find($day)
     {
         $image = $this->dao->find($day);
+
         if (!$image) {
             return null;
         }
+
         $sizes = $this->flickr->getSizes($image['photo_id']);
 
         return array_merge($image, $sizes);
