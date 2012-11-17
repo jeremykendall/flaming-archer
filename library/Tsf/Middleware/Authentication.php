@@ -49,9 +49,6 @@ class Authentication extends \Slim\Middleware
                 $secured_urls = isset($config['security.urls']) ? $config['security.urls'] : array();
                 foreach ($secured_urls as $surl) {
                     $patternAsRegex = $surl['path'];
-                    if (substr($surl['path'], -1) === '/') {
-                        $patternAsRegex = $patternAsRegex . '?';
-                    }
                     $patternAsRegex = '@^' . $patternAsRegex . '$@';
                     if (preg_match($patternAsRegex, $req->getPathInfo())) {
                         if (!$auth->hasIdentity()) {
