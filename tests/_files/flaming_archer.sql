@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
   `email` TEXT NOT NULL,
   `password_hash` TEXT NOT NULL,
-  `lastLogin` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+  `last_login` timestamp NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 INSERT INTO `images` VALUES (1, 1, 7606616668, '2012-07-29 15:31:56');
@@ -20,5 +20,5 @@ INSERT INTO `images` VALUES (5, 5, 6136481403, '2012-07-30 02:08:28');
 INSERT INTO `images` VALUES (9, 6, 6195102774, '2012-07-31 23:26:32');
 INSERT INTO `images` VALUES (10, 7, 7739657682, '2012-08-07 16:01:02');
 
-INSERT INTO `users` (`id`, `email`, `password_hash`, `lastLogin`) VALUES
+INSERT INTO `users` (`id`, `email`, `password_hash`, `last_login`) VALUES
 (1, 'user@example.com', '$2y$12$pZg9j8DBSIP2R/vfDzTQOeIt5n57r5VigCUl/HH.FrBOadi3YhdPS', NULL);
