@@ -1,0 +1,12 @@
+language: php
+
+php:
+  - 5.3
+  - 5.4
+
+script: cd tests && phpunit -c phpunit.xml
+
+before_script:
+  - pecl install apc
+  - echo "extension=apc.so" >> `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"`
+  - composer install
