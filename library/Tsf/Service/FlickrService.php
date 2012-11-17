@@ -4,7 +4,7 @@ namespace Tsf\Service;
 
 /**
  * Tsf Library
- * 
+ *
  * @category Tsf
  * @package Tsf_Flickr
  * @author Jeremy Kendall <jeremy@jeremykendall.net>
@@ -12,7 +12,7 @@ namespace Tsf\Service;
 
 /**
  * Flickr class
- * 
+ *
  * @category Tsf
  * @package Tsf_Flickr
  * @author Jeremy Kendall <jeremy@jeremykendall.net>
@@ -22,14 +22,14 @@ class FlickrService implements FlickrInterface
 
     /**
      * Flickr API key
-     * 
-     * @var string 
+     *
+     * @var string
      */
     private $key;
 
     /**
      * Public constructor
-     * 
+     *
      * @param string $key Flickr API key
      */
     public function __construct($key)
@@ -39,9 +39,9 @@ class FlickrService implements FlickrInterface
 
     /**
      * Returns sizes array for photo identified by Flickr photo id
-     * 
-     * @param int $photoId
-     * @return array Array of photo size information 
+     *
+     * @param  int   $photoId
+     * @return array Array of photo size information
      */
     public function getSizes($photoId)
     {

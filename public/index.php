@@ -10,10 +10,13 @@ use Tsf\Service\FlickrService;
 use Tsf\Service\FlickrServiceApc;
 use Tsf\Service\ImageService;
 use Tsf\Dao\ImageDao;
+use Tsf\Dao\UserDao;
 use Tsf\Authentication\Storage\EncryptedCookie;
 use Tsf\Authentication\Adapter\DbAdapter;
 use Tsf\Middleware\Authentication;
 use Tsf\Middleware\Navigation;
+use Tsf\Cache\Adapter\Apc;
+
 use Zend\Authentication\AuthenticationService;
 use Zend\Cache\StorageFactory;
 use Zend\Cache\PatternFactory;
@@ -24,7 +27,9 @@ try {
     die($e->getMessage());
 }
 
-$authAdapter = new DbAdapter($db, new Phpass\Hash());
+$userDao = new UserDao($db);
+
+$authAdapter = new DbAdapter($userDao, new Phpass\Hash());
 
 $flickrService = new FlickrService($config['flickr.api.key']);
 //$flickrAPC = new FlickrServiceApc($flickrService);
@@ -56,7 +61,7 @@ $service = PatternFactory::factory('object', array(
 $app = new Slim\Slim($config['slim']);
 
 $auth = new AuthenticationService();
-$storage = new EncryptedCookie();
+$storage = new EncryptedCookie($app);
 $auth->setStorage($storage);
 
 $app->add(new SessionCookie($config['cookies']));

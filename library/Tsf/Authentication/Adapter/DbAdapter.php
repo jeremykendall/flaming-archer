@@ -5,30 +5,26 @@ namespace Tsf\Authentication\Adapter;
 use \Zend\Authentication\Result;
 
 /**
- * --- Library
- * 
- * @category 
- * @package 
+ * Flaming Archer Library
+ *
  * @author Jeremy Kendall <jeremy@jeremykendall.net>
- * @version $Id$
  */
 
 /**
  * Database auth adapter
- * 
- * @category 
- * @package 
+ *
  * @author Jeremy Kendall <jeremy@jeremykendall.net>
  */
-class DbAdapter implements \Zend\Authentication\Adapter\AdapterInterface {
+class DbAdapter implements \Zend\Authentication\Adapter\AdapterInterface
+{
 
     /**
-     * Database adapter
+     * Database connection
      *
-     * @var \PDO
+     * @var \Tsf\Dao\UserDao
      */
-    private $db;
-    
+    private $dao;
+
     /**
      * Password hasher
      *
@@ -50,29 +46,35 @@ class DbAdapter implements \Zend\Authentication\Adapter\AdapterInterface {
      */
     private $password;
 
-    public function __construct(\PDO $db, \Phpass\Hash $hasher) {
-        $this->db = $db;
+    /**
+     * Public constructor
+     *
+     * @param \Tsf\Dao\UserDao $dao    User Dao
+     * @param \Phpass\Hash     $hasher Password hasher
+     */
+    public function __construct(\Tsf\Dao\UserDao $dao, \Phpass\Hash $hasher)
+    {
+        $this->dao = $dao;
         $this->hasher = $hasher;
     }
-    
-    public function setCredentials($email, $password) {
+
+    public function setCredentials($email, $password)
+    {
         $this->email = $email;
         $this->password = $password;
     }
 
-    public function authenticate() {
-        try {
-            $sql = 'SELECT email, password_hash FROM users WHERE email = :email';
-            $stmt = $this->db->prepare($sql);
-            $stmt->bindValue(':email', $this->email, \PDO::PARAM_STR);
-            $stmt->execute();
-            $user = $stmt->fetch();
-        } catch (PDOException $e) {
-            throw new \Zend\Authentication\Exception\RuntimeException($e->getMessage());
+    public function authenticate()
+    {
+        $user = $this->dao->findByEmail($this->email);
+
+        if ($user === false) {
+            return new Result(Result::FAILURE_IDENTITY_NOT_FOUND, array(), array('Invalid username or password provided'));
         }
 
         if ($this->hasher->checkPassword($this->password, $user['password_hash'])) {
             unset($user['password_hash']);
+
             return new Result(Result::SUCCESS, $user, array());
         } else {
             return new Result(Result::FAILURE_CREDENTIAL_INVALID, array(), array('Invalid username or password provided'));

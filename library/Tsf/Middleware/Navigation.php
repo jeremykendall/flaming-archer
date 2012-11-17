@@ -6,25 +6,25 @@ use \Zend\Authentication\AuthenticationService;
 
 /**
  * --- Library
- * 
- * @category 
- * @package 
+ *
+ * @category
+ * @package
  * @author Jeremy Kendall <jeremy@jeremykendall.net>
  * @version $Id$
  */
 
 /**
  * Navigation class
- * 
- * @category 
- * @package 
+ *
+ * @category
+ * @package
  * @author Jeremy Kendall <jeremy@jeremykendall.net>
  */
 class Navigation extends \Slim\Middleware
 {
 
     /**
-     * @var \Zend\Authentication\AuthenticationService 
+     * @var \Zend\Authentication\AuthenticationService
      */
     private $auth;
 
@@ -43,7 +43,7 @@ class Navigation extends \Slim\Middleware
         $admin = array('caption' => 'Admin', 'href' => '/admin');
         $login = array('caption' => 'Login', 'href' => '/login');
         $logout = array('caption' => 'Logout', 'href' => '/logout');
-        
+
         if ($auth->hasIdentity()) {
             $navigation = array($home, $admin, $logout);
         } else {
@@ -68,4 +68,3 @@ class Navigation extends \Slim\Middleware
     }
 
 }
-
