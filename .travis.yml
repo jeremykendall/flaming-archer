@@ -7,6 +7,5 @@ php:
 script: cd tests && phpunit -c phpunit.xml --testsuite travis-ci
 
 before_script:
-  - pecl install apc
-  - echo "extension=apc.so" >> `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"`
+  - sudo apt-get install php-apc
   - composer install
