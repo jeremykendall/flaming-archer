@@ -15,11 +15,6 @@ class ImageDaoTest extends \CommonDbTestCase
     protected $dao;
 
     /**
-     * @var \PDO
-     */
-    protected $db;
-
-    /**
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
      */

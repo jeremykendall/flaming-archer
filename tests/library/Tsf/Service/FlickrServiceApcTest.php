@@ -42,6 +42,15 @@ class FlickrServiceApcTest extends \PHPUnit_Framework_TestCase
     {
         $this->serviceApc = null;
     }
+    
+    public function testObjectCreation()
+    {
+        $this->assertInstanceOf('Tsf\Service\FlickrServiceApc', $this->serviceApc);
+        $this->assertInstanceOf('Tsf\Service\FlickrInterface', $this->serviceApc);
+        $this->assertObjectHasAttribute('apc', $this->serviceApc);
+        $this->assertObjectHasAttribute('flickr', $this->serviceApc);
+
+    }
 
     /**
      * @covers Tsf\Service\FlickrServiceApc::getSizes
