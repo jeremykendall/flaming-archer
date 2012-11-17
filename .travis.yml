@@ -7,5 +7,4 @@ php:
 script: cd tests && phpunit -c phpunit.xml --testsuite travis-ci
 
 before_script:
-  - sudo apt-get install php-apc
   - composer install
