@@ -8,7 +8,6 @@
     <testsuite name="travis-ci">
         <directory>./library</directory>
         <exclude>./library/Tsf/Service/FlickrServiceTest.php</exclude>
-        <exclude>./library/Tsf/Cache/Adapter/ApcTest.php</exclude>
     </testsuite>
     
     <filter>
