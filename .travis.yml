@@ -7,4 +7,5 @@ php:
 script: cd tests && phpunit -c phpunit.xml --testsuite travis-ci
 
 before_script:
+  - ./tests/travis-ci/install-apc.sh
   - composer install
