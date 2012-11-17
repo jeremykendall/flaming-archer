@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit bootstrap="./bootstrap.php" colors="true">
     
-    <testsuite name="Library Test Suite">
+    <testsuite name="all-tests">
         <directory>./library</directory>
+    </testsuite>
+    
+    <testsuite name="travis-ci">
+        <directory>./library</directory>
+        <exclude>./library/Tsf/Service/FlickrServiceTest.php</exclude>
+        <exclude>./library/Tsf/Cache/Adapter/ApcTest.php</exclude>
     </testsuite>
     
     <filter>
