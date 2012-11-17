@@ -3,7 +3,7 @@
 return array(
     'slim' => array(
         'templates.path' => __DIR__ . '/templates',
-        'log.level' => 4,
+        'log.level' => Slim\Log::DEBUG,
         'log.enabled' => true,
         'log.writer' => new Slim\Extras\Log\DateTimeFileWriter(
             array(

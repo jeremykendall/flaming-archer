@@ -17,12 +17,13 @@ use \Zend\Authentication\Result;
  */
 class DbAdapter implements \Zend\Authentication\Adapter\AdapterInterface
 {
+
     /**
      * Database connection
      *
-     * @var \PDO
+     * @var \Tsf\Dao\UserDao
      */
-    private $db;
+    private $dao;
 
     /**
      * Password hasher
@@ -48,12 +49,12 @@ class DbAdapter implements \Zend\Authentication\Adapter\AdapterInterface
     /**
      * Public constructor
      *
-     * @param \PDO         $db     Database connection
-     * @param \Phpass\Hash $hasher Password hasher
+     * @param \Tsf\Dao\UserDao $dao    User Dao
+     * @param \Phpass\Hash     $hasher Password hasher
      */
-    public function __construct(\PDO $db, \Phpass\Hash $hasher)
+    public function __construct(\Tsf\Dao\UserDao $dao, \Phpass\Hash $hasher)
     {
-        $this->db = $db;
+        $this->dao = $dao;
         $this->hasher = $hasher;
     }
 
@@ -65,14 +66,10 @@ class DbAdapter implements \Zend\Authentication\Adapter\AdapterInterface
 
     public function authenticate()
     {
-        try {
-            $sql = 'SELECT email, password_hash FROM users WHERE email = :email';
-            $stmt = $this->db->prepare($sql);
-            $stmt->bindValue(':email', $this->email, \PDO::PARAM_STR);
-            $stmt->execute();
-            $user = $stmt->fetch();
-        } catch (PDOException $e) {
-            throw new \Zend\Authentication\Exception\RuntimeException($e->getMessage());
+        $user = $this->dao->findByEmail($this->email);
+
+        if ($user === false) {
+            return new Result(Result::FAILURE_IDENTITY_NOT_FOUND, array(), array('Invalid username or password provided'));
         }
 
         if ($this->hasher->checkPassword($this->password, $user['password_hash'])) {

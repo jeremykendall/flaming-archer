@@ -11,10 +11,12 @@ use Tsf\Service\FlickrService;
 use Tsf\Service\FlickrServiceApc;
 use Tsf\Service\ImageService;
 use Tsf\Dao\ImageDao;
+use Tsf\Dao\UserDao;
 use Tsf\Authentication\Storage\EncryptedCookie;
 use Tsf\Authentication\Adapter\DbAdapter;
 use Tsf\Middleware\Authentication;
 use Tsf\Middleware\Navigation;
+use Tsf\Cache\Adapter\Apc;
 
 use Zend\Authentication\AuthenticationService;
 
@@ -24,10 +26,13 @@ try {
     die($e->getMessage());
 }
 
-$authAdapter = new DbAdapter($db, new Phpass\Hash());
+$userDao = new UserDao($db);
+
+$authAdapter = new DbAdapter($userDao, new Phpass\Hash());
 
 $flickrService = new FlickrService($config['flickr.api.key']);
-$flickrAPC = new FlickrServiceApc($flickrService);
+$cache = new Apc();
+$flickrAPC = new FlickrServiceApc($flickrService, $cache);
 $service = new ImageService(new ImageDao($db), $flickrAPC);
 
 // Prepare app
@@ -63,14 +68,14 @@ $app->get('/:day', function($day) use ($app, $service) {
     }
 )->conditions(array('day' => '([1-9]\d?|[12]\d\d|3[0-5]\d|36[0-6])'));
 
-$app->post('/admin/clear-cache', function() use ($app) {
+$app->post('/admin/clear-cache', function() use ($app, $cache) {
 
         $log = $app->getLog();
         $cleared = null;
         $clear = $app->request()->post('clear');
 
         if ($clear == 1) {
-            if (apc_clear_cache('user')) {
+            if ($cache->clear('user')) {
                 $cleared = 'Cache was successfully cleared!';
             } else {
                 $cleared = 'Cache was not cleared!';
