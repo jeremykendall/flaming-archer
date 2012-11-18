@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="Flaming Archer" default="build">
+
+    <property file="build.properties" />
+
+    <fileset id="php-files" dir="${project.basedir}">
+        <include name="library/*.php" />
+    </fileset>
+
+    <target name="clean" description="Clean build path">
+        <delete dir="${project.basedir}/build" />
+        <mkdir dir="${project.basedir}/build" />
+        <mkdir dir="${project.basedir}/build/api" />
+        <mkdir dir="${project.basedir}/build/cache" />
+        <mkdir dir="${project.basedir}/build/code-browser" />
+        <mkdir dir="${project.basedir}/build/coverage" />
+        <mkdir dir="${project.basedir}/build/logs" />
+        <mkdir dir="${project.basedir}/build/pdepend" />
+    </target>
+
+    <target name="phplint" description="Running php lint check">
+        <phplint haltonfailure="true">
+            <fileset refid="php-files" />
+        </phplint>
+    </target>
+
+    <target name="phpunit" description="Running unit tests">
+        <exec
+            passthru="${passthru}"
+            dir="${project.basedir}/tests"
+            command="phpunit
+                --log-junit=${project.basedir}/build/logs/junit.xml
+                --coverage-clover=${project.basedir}/build/logs/clover.xml
+                --coverage-html=${project.basedir}/build/coverage" />
+    </target>
+
+    <target name="phpdoc" description="Generate API documentation">
+        <exec
+            passthru="${passthru}"
+            command="phpdoc
+                -d ${project.basedir}/library
+                -t ${project.basedir}/build/api
+                --defaultpackagename=Fa
+                --title='Flaming Archer'
+                --force" />
+    </target>
+    
+    <target name="phpcs" description="Coding Standards Analysis">
+        <exec
+            passthru="${passthru}"
+            command="phpcs
+                --report=checkstyle
+                --report-file=${project.basedir}/build/logs/checkstyle.xml
+                --standard=PSR2
+                --extensions=php
+                ${project.basedir}/library" />
+    </target>
+    
+    <!--
+    <target name="phpcpd" description="Copy/Paste detection">
+        <phpcpd>
+            <fileset refid="php-files" />
+            <formatter
+                type="pmd"
+                outfile="${project.basedir}/build/logs/pmd-cpd.xml" />
+        </phpcpd>
+    </target>
+-->
+<!--
+    <taskdef name="phploc" classname="phing.tasks.my.PHPLocTask" />
+    
+    <target name="phploc" description="Generate phploc.csv">
+        <phploc reportType="csv" reportName="phploc" reportDirectory="${project.basedir}/build/logs/">
+            <fileset refid="php-files" />
+        </phploc>
+    </target>
+-->
+    <target name="phpcb" description="Source code browser">
+        <exec
+            passthru="${passthru}"
+            command="phpcb
+                --log ${project.basedir}/build/logs
+                --source ${project.basedir}/library
+                --output ${project.basedir}/build/code-browser" />
+    </target>
+
+    <target name="pdepend" description="Calculate dependencies">
+        <exec
+            passthru="${passthru}"
+            dir="${project.basedir}/library"
+            command="pdepend
+                --configuration=${project.basedir}/pdepend.xml
+                --jdepend-chart=${project.basedir}/build/pdepend/dependencies.svg
+                --jdepend-xml=${project.basedir}/build/logs/jdepend.xml
+                --overview-pyramid=${project.basedir}/build/pdepend/overview-pyramid.svg
+                --suffix=php
+                ${project.basedir}" />
+    </target>
+
+    <target name="phpmd" description="Mess detection">
+        <phpmd>
+            <fileset refid="php-files" />
+            <formatter
+                type="xml"
+                outfile="${project.basedir}/build/logs/pmd.xml" />
+        </phpmd>
+    </target>
+
+    <target name="build" description="Build app">
+        <phingCall target="clean" />
+        <phingCall target="phplint" />
+        <phingCall target="phpdoc" />
+        <phingCall target="phpcs" />
+        <phingCall target="phpunit" />
+        <!--
+        <phingCall target="phpcpd" />
+        -->
+        <phingCall target="phpmd" />
+        <phingCall target="pdepend" />
+        <!--
+        <phingCall target="phploc" />
+        -->
+        <phingCall target="phpcb" />
+    </target>
+</project>
