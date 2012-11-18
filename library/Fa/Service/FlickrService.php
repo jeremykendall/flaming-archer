@@ -1,21 +1,19 @@
 <?php
 
+/**
+ * Flaming Archer
+ *
+ * @link      http://github.com/jeremykendall/flaming-archer for the canonical source repository
+ * @copyright Copyright (c) 2012 Jeremy Kendall (http://about.me/jeremykendall)
+ * @license   http://github.com/jeremykendall/flaming-archer/blob/master/LICENSE MIT License
+ */
+
 namespace Fa\Service;
 
 /**
- * Fa Library
+ * Flickr service
  *
- * @category Fa
- * @package Fa_Flickr
- * @author Jeremy Kendall <jeremy@jeremykendall.net>
- */
-
-/**
- * Flickr class
- *
- * @category Fa
- * @package Fa_Flickr
- * @author Jeremy Kendall <jeremy@jeremykendall.net>
+ * Abstracts calls to the Flickr API
  */
 class FlickrService implements FlickrInterface
 {

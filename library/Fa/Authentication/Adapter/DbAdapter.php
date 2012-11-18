@@ -1,25 +1,25 @@
 <?php
 
+/**
+ * Flaming Archer
+ *
+ * @link      http://github.com/jeremykendall/flaming-archer for the canonical source repository
+ * @copyright Copyright (c) 2012 Jeremy Kendall (http://about.me/jeremykendall)
+ * @license   http://github.com/jeremykendall/flaming-archer/blob/master/LICENSE MIT License
+ */
+
 namespace Fa\Authentication\Adapter;
 
 use \Zend\Authentication\Result;
 
 /**
- * Flaming Archer Library
- *
- * @author Jeremy Kendall <jeremy@jeremykendall.net>
- */
-
-/**
- * Database auth adapter
- *
- * @author Jeremy Kendall <jeremy@jeremykendall.net>
+ * Database auththentication adapter
  */
 class DbAdapter implements \Zend\Authentication\Adapter\AdapterInterface
 {
 
     /**
-     * Database connection
+     * User Dao
      *
      * @var \Fa\Dao\UserDao
      */
@@ -58,12 +58,23 @@ class DbAdapter implements \Zend\Authentication\Adapter\AdapterInterface
         $this->hasher = $hasher;
     }
 
+    /**
+     * Sets user email and password
+     *
+     * @param string $email
+     * @param string $password
+     */
     public function setCredentials($email, $password)
     {
         $this->email = $email;
         $this->password = $password;
     }
 
+    /**
+     * Performs authentication
+     *
+     * @return \Zend\Authentication\Result Authentication result
+     */
     public function authenticate()
     {
         $user = $this->dao->findByEmail($this->email);

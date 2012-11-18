@@ -1,39 +1,47 @@
 <?php
 
+/**
+ * Flaming Archer
+ *
+ * @link      http://github.com/jeremykendall/flaming-archer for the canonical source repository
+ * @copyright Copyright (c) 2012 Jeremy Kendall (http://about.me/jeremykendall)
+ * @license   http://github.com/jeremykendall/flaming-archer/blob/master/LICENSE MIT License
+ */
+
 namespace Fa\Middleware;
 
 /**
- * --- Library
+ * Authentication middleware
  *
- * @category
- * @package
- * @author Jeremy Kendall <jeremy@jeremykendall.net>
- * @version $Id$
- */
-
-/**
- * Authentication class
- *
- * @category
- * @package
- * @author Jeremy Kendall <jeremy@jeremykendall.net>
+ * Checks if user is authenticated when user visiting secured URI. Will redirect
+ * a user to login if they attempt to visit a secured URI and are not authenticated
  */
 class Authentication extends \Slim\Middleware
 {
 
     /**
+     * Authentication service
+     *
      * @var \Zend\Authentication\AuthenticationService
      */
     private $auth;
 
+    /**
+     * Public constructor
+     *
+     * @param \Zend\Authentication\AuthenticationService $auth Authentication service
+     */
     public function __construct(\Zend\Authentication\AuthenticationService $auth)
     {
         $this->auth = $auth;
     }
 
+    /**
+     * Uses 'slim.before.router' to check for authentication when visitor attempts
+     * to access a secured URI. Will redirect unauthenticated user to login page.
+     */
     public function call()
     {
-
         $app = $this->app;
         $auth = $this->auth;
         $req = $app->request();

@@ -1,21 +1,24 @@
 <?php
 
-namespace Fa\Dao;
-
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * Flaming Archer
+ *
+ * @link      http://github.com/jeremykendall/flaming-archer for the canonical source repository
+ * @copyright Copyright (c) 2012 Jeremy Kendall (http://about.me/jeremykendall)
+ * @license   http://github.com/jeremykendall/flaming-archer/blob/master/LICENSE MIT License
  */
 
+namespace Fa\Dao;
+
 /**
- * Description of UserDao
- *
- * @author jkendall
+ * User Dao
  */
 class UserDao
 {
 
     /**
+     * Database connection
+     *
      * @var \PDO
      */
     protected $db;
@@ -31,7 +34,7 @@ class UserDao
     }
 
     /**
-     * Finds user by email address
+     * Find user by email address
      *
      * @param  string $email User's email address
      * @return array  User record

@@ -1,38 +1,47 @@
 <?php
 
+/**
+ * Flaming Archer
+ *
+ * @link      http://github.com/jeremykendall/flaming-archer for the canonical source repository
+ * @copyright Copyright (c) 2012 Jeremy Kendall (http://about.me/jeremykendall)
+ * @license   http://github.com/jeremykendall/flaming-archer/blob/master/LICENSE MIT License
+ */
+
 namespace Fa\Middleware;
 
 use \Zend\Authentication\AuthenticationService;
 
 /**
- * --- Library
+ * Navigation Middleware
  *
- * @category
- * @package
- * @author Jeremy Kendall <jeremy@jeremykendall.net>
- * @version $Id$
- */
-
-/**
- * Navigation class
- *
- * @category
- * @package
- * @author Jeremy Kendall <jeremy@jeremykendall.net>
+ * Constructs array of navigation items and appends them to the view. Navigation
+ * items differ if user is authenticated or not.
  */
 class Navigation extends \Slim\Middleware
 {
 
     /**
+     * Authentication service
+     *
      * @var \Zend\Authentication\AuthenticationService
      */
     private $auth;
 
+    /**
+     * Public constructor
+     *
+     * @param \Zend\Authentication\AuthenticationService $auth Authentication service
+     */
     public function __construct(AuthenticationService $auth)
     {
         $this->auth = $auth;
     }
 
+    /**
+     * Constructs array of navigation items and appends them to the view. Navigation
+     * items differ if user is authenticated or not. Uses 'slim.before.router'.
+     */
     public function call()
     {
         $app = $this->app;
@@ -52,16 +61,16 @@ class Navigation extends \Slim\Middleware
 
         $this->app->hook('slim.before.router', function () use ($app, $auth, $req, $navigation) {
 
-                foreach ($navigation as &$link) {
-                    if ($link['href'] == $req->getPath()) {
-                        $link['class'] = 'active';
-                    } else {
-                        $link['class'] = '';
+                    foreach ($navigation as &$link) {
+                        if ($link['href'] == $req->getPath()) {
+                            $link['class'] = 'active';
+                        } else {
+                            $link['class'] = '';
+                        }
                     }
-                }
 
-                $app->view()->appendData(array('navigation' => $navigation));
-            }
+                    $app->view()->appendData(array('navigation' => $navigation));
+                }
         );
 
         $this->next->call();

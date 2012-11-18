@@ -1,22 +1,17 @@
 <?php
 
+/**
+ * Flaming Archer
+ *
+ * @link      http://github.com/jeremykendall/flaming-archer for the canonical source repository
+ * @copyright Copyright (c) 2012 Jeremy Kendall (http://about.me/jeremykendall)
+ * @license   http://github.com/jeremykendall/flaming-archer/blob/master/LICENSE MIT License
+ */
+
 namespace Fa\Authentication\Storage;
 
 /**
- * --- Library
- *
- * @category
- * @package
- * @author Jeremy Kendall <jeremy@jeremykendall.net>
- * @version $Id$
- */
-
-/**
- * EncryptedCookie class
- *
- * @category
- * @package
- * @author Jeremy Kendall <jeremy@jeremykendall.net>
+ * Encrypted Cookie authentication storage
  */
 class EncryptedCookie implements \Zend\Authentication\Storage\StorageInterface
 {
@@ -42,6 +37,12 @@ class EncryptedCookie implements \Zend\Authentication\Storage\StorageInterface
      */
     private $time = '2 weeks';
 
+    /**
+     * Public constructor
+     *
+     * @param \Slim\Slim $app
+     * @param string     $cookieName
+     */
     public function __construct(\Slim\Slim $app, $cookieName = 'identity')
     {
         $this->app = $app;
@@ -108,6 +109,8 @@ class EncryptedCookie implements \Zend\Authentication\Storage\StorageInterface
     }
 
     /**
+     * Sets duration of cookie
+     *
      * @param int|string $time The duration of the cookie;
      *                         If integer, should be UNIX timestamp;
      *                         If string, converted to UNIX timestamp with `strtotime`;
