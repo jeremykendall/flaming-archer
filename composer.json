@@ -18,8 +18,7 @@
     "autoload": {
         "psr-0": 
         {
-            "Tsf": "library/"
+            "Fa": "library/"
         }
-    },
-    "minimum-stability": "dev"
+    }
 }

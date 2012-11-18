@@ -1,5 +1,5 @@
 {
-    "hash": "295d28f13798ceddba56092a2032e436",
+    "hash": "e0aa14828c33f8f244f44820d21fdc1e",
     "packages": [
         {
             "name": "rych/phpass",
@@ -513,7 +513,7 @@
     "aliases": [
 
     ],
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "stability-flags": {
         "rych/phpass": 20
     }
