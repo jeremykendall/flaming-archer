@@ -25,7 +25,6 @@ class {'base': stage => pre}
 class {'php5':}
 php5::pkg { [
     'php5-intl',
-    'php-apc',
     'php5-mcrypt',
     'php5-sqlite',
     'php5-xdebug',
