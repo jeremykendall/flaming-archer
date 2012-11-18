@@ -65,7 +65,7 @@ $app->get('/day/:day', function($day) use ($app, $service) {
         $app->notFound();
     }
 
-    $app->render('images.html', $image);
+    $app->render('day.html', $image);
 })->conditions(array('day' => '([1-9]\d?|[12]\d\d|3[0-5]\d|36[0-6])'));
 
 $app->post('/admin/clear-cache', function() use ($app, $cache) {
