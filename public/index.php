@@ -7,7 +7,7 @@ $config = require_once __DIR__ . '/../config.php';
 use Slim\Middleware\SessionCookie;
 use Slim\Extras\Views\Twig;
 use Tsf\Service\FlickrService;
-use Tsf\Service\FlickrServiceApc;
+use Tsf\Service\FlickrServiceCache;
 use Tsf\Service\ImageService;
 use Tsf\Dao\ImageDao;
 use Tsf\Dao\UserDao;
@@ -15,47 +15,44 @@ use Tsf\Authentication\Storage\EncryptedCookie;
 use Tsf\Authentication\Adapter\DbAdapter;
 use Tsf\Middleware\Authentication;
 use Tsf\Middleware\Navigation;
-use Tsf\Cache\Adapter\Apc;
-
 use Zend\Authentication\AuthenticationService;
 use Zend\Cache\StorageFactory;
-use Zend\Cache\PatternFactory;
 
 try {
-    $db = new PDO($config['pdo']['dsn'], $config['pdo']['username'], $config['pdo']['password'], $config['pdo']['options']);
+    $db = new PDO(
+        $config['pdo']['dsn'],
+        $config['pdo']['username'],
+        $config['pdo']['password'],
+        $config['pdo']['options']
+    );
 } catch (PDOException $e) {
     die($e->getMessage());
 }
 
-$userDao = new UserDao($db);
-
-$authAdapter = new DbAdapter($userDao, new Phpass\Hash());
-
-$flickrService = new FlickrService($config['flickr.api.key']);
-//$flickrAPC = new FlickrServiceApc($flickrService);
-$imageService = new ImageService(new ImageDao($db), $flickrService);
-
 $options = array(
     'ttl' => 60 * 60 * 24, // One day
-    'namespace' => 'flaming-archer'
+    'namespace' => 'flaming-archer',
+    'cache_dir' => realpath('../tmp')
 );
 
 $cache = StorageFactory::factory(array(
-        'adapter' => array(
-            'name' => 'apc',
-            'options' => $options
-        ),
-        'plugins' => array(
-            'ExceptionHandler' => array(
-                'throw_exceptions' => false
+            'adapter' => array(
+                'name' => 'filesystem',
+                'options' => $options
+            ),
+            'plugins' => array(
+                'ExceptionHandler' => array(
+                    'throw_exceptions' => false
+                ),
+                'Serializer'
             )
-        )
-    ));
+        ));
 
-$service = PatternFactory::factory('object', array(
-        'object' => $imageService,
-        'storage' => $cache
-    ));
+$userDao = new UserDao($db);
+$authAdapter = new DbAdapter($userDao, new Phpass\Hash());
+$flickrService = new FlickrService($config['flickr.api.key']);
+$flickrServiceCache = new FlickrServiceCache($flickrService, $cache);
+$service = new ImageService(new ImageDao($db), $flickrServiceCache);
 
 // Prepare app
 $app = new Slim\Slim($config['slim']);
@@ -90,8 +87,7 @@ $app->get('/:day', function($day) use ($app, $service) {
     }
 )->conditions(array('day' => '([1-9]\d?|[12]\d\d|3[0-5]\d|36[0-6])'));
 
-$app->post('/admin/clear-cache', function() use ($app, $service, $cache) {
-
+$app->post('/admin/clear-cache', function() use ($app, $cache) {
         $log = $app->getLog();
         $cleared = null;
         $clear = $app->request()->post('clear');
