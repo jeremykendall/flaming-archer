@@ -58,7 +58,7 @@ $app->get('/', function () use ($app, $service) {
     $app->render('index.html', array('images' => $images));
 });
 
-$app->get('/:day', function($day) use ($app, $service) {
+$app->get('/day/:day', function($day) use ($app, $service) {
     $image = $service->find($day);
 
     if (!$image) {
