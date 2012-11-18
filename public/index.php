@@ -6,15 +6,15 @@ $config = require_once __DIR__ . '/../config.php';
 
 use Slim\Middleware\SessionCookie;
 use Slim\Extras\Views\Twig;
-use Tsf\Service\FlickrService;
-use Tsf\Service\FlickrServiceCache;
-use Tsf\Service\ImageService;
-use Tsf\Dao\ImageDao;
-use Tsf\Dao\UserDao;
-use Tsf\Authentication\Storage\EncryptedCookie;
-use Tsf\Authentication\Adapter\DbAdapter;
-use Tsf\Middleware\Authentication;
-use Tsf\Middleware\Navigation;
+use Fa\Service\FlickrService;
+use Fa\Service\FlickrServiceCache;
+use Fa\Service\ImageService;
+use Fa\Dao\ImageDao;
+use Fa\Dao\UserDao;
+use Fa\Authentication\Storage\EncryptedCookie;
+use Fa\Authentication\Adapter\DbAdapter;
+use Fa\Middleware\Authentication;
+use Fa\Middleware\Navigation;
 use Zend\Authentication\AuthenticationService;
 use Zend\Cache\StorageFactory;
 
