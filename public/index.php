@@ -20,33 +20,16 @@ use Zend\Cache\StorageFactory;
 
 try {
     $db = new PDO(
-        $config['pdo']['dsn'],
-        $config['pdo']['username'],
-        $config['pdo']['password'],
+        'sqlite:' . $config['database'],
+        null,
+        null,
         $config['pdo']['options']
     );
 } catch (PDOException $e) {
     die($e->getMessage());
 }
 
-$options = array(
-    'ttl' => 60 * 60 * 24, // One day
-    'namespace' => 'flaming-archer',
-    'cache_dir' => realpath('../tmp')
-);
-
-$cache = StorageFactory::factory(array(
-            'adapter' => array(
-                'name' => 'filesystem',
-                'options' => $options
-            ),
-            'plugins' => array(
-                'ExceptionHandler' => array(
-                    'throw_exceptions' => false
-                ),
-                'Serializer'
-            )
-        ));
+$cache = StorageFactory::factory($config['cache']);
 
 $userDao = new UserDao($db);
 $authAdapter = new DbAdapter($userDao, new Phpass\Hash());
