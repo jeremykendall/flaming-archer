@@ -5,3 +5,4 @@
 config.php
 /tests/log/*
 .vagrant
+docs
