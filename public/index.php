@@ -20,9 +20,9 @@ use Zend\Cache\StorageFactory;
 
 try {
     $db = new PDO(
-        'sqlite:' . $config['database'],
-        null,
-        null,
+        $config['pdo']['dsn'],
+        $config['pdo']['username'],
+        $config['pdo']['password'],
         $config['pdo']['options']
     );
 } catch (PDOException $e) {
@@ -54,92 +54,84 @@ $app->view(new Twig());
 
 // Define routes
 $app->get('/', function () use ($app, $service) {
-        $images = $service->findAll();
-        $app->render('index.html', array('images' => $images));
-    }
-);
+    $images = $service->findAll();
+    $app->render('index.html', array('images' => $images));
+});
 
 $app->get('/:day', function($day) use ($app, $service) {
-        $image = $service->find($day);
+    $image = $service->find($day);
 
-        if (!$image) {
-            $app->notFound();
-        }
-
-        $app->render('images.html', $image);
+    if (!$image) {
+        $app->notFound();
     }
-)->conditions(array('day' => '([1-9]\d?|[12]\d\d|3[0-5]\d|36[0-6])'));
+
+    $app->render('images.html', $image);
+})->conditions(array('day' => '([1-9]\d?|[12]\d\d|3[0-5]\d|36[0-6])'));
 
 $app->post('/admin/clear-cache', function() use ($app, $cache) {
-        $log = $app->getLog();
-        $cleared = null;
-        $clear = $app->request()->post('clear');
+    $log = $app->getLog();
+    $cleared = null;
+    $clear = $app->request()->post('clear');
 
-        if ($clear == 1) {
-            if ($cache->flush()) {
-                $cleared = 'Cache was successfully cleared!';
-            } else {
-                $cleared = 'Cache was not cleared!';
-                $log->error('Cache not cleared');
-            }
+    if ($clear == 1) {
+        if ($cache->flush()) {
+            $cleared = 'Cache was successfully cleared!';
+        } else {
+            $cleared = 'Cache was not cleared!';
+            $log->error('Cache not cleared');
         }
-
-        $app->flash('cleared', $cleared);
-        $app->redirect('/admin');
     }
-);
+
+    $app->flash('cleared', $cleared);
+    $app->redirect('/admin');
+});
 
 $app->get('/admin', function() use ($app, $service) {
-        $images = $service->findAll();
-        $app->render('admin/index.html', array('images' => $images));
-    }
-);
+    $images = $service->findAll();
+    $app->render('admin/index.html', array('images' => $images));
+});
 
 $app->post('/admin/add-photo', function() use ($app, $service, $cache) {
-        $data = $app->request()->post();
-        $service->save($data);
-        $cache->flush();
-        $app->redirect('/admin');
-    }
-);
+    $data = $app->request()->post();
+    $service->save($data);
+    $cache->flush();
+    $app->redirect('/admin');
+});
 
 $app->post('/admin/delete-photo', function() use ($app, $service, $cache) {
-        $day = $app->request()->post('day');
-        $service->delete($day);
-        $cache->flush();
-        $app->redirect('/admin');
-    }
-);
+    $day = $app->request()->post('day');
+    $service->delete($day);
+    $cache->flush();
+    $app->redirect('/admin');
+});
 
 $app->map('/login', function() use ($app, $auth, $authAdapter) {
-        if ($app->request()->isGet()) {
-            $app->render('login.html');
-        }
+    if ($app->request()->isGet()) {
+        $app->render('login.html');
+    }
 
-        if ($app->request()->isPost()) {
+    if ($app->request()->isPost()) {
 
-            $post = $app->request()->post();
+        $post = $app->request()->post();
 
-            $authAdapter->setCredentials($post['email'], $post['password']);
-            $auth->setAdapter($authAdapter);
-            $result = $auth->authenticate();
+        $authAdapter->setCredentials($post['email'], $post['password']);
+        $auth->setAdapter($authAdapter);
+        $result = $auth->authenticate();
 
-            if (!$result->isValid()) {
-                $messages = $result->getMessages();
-                $app->flash('error', $messages[0]);
-                $app->redirect('/login');
-            } else {
-                $app->redirect('/');
-            }
+        if (!$result->isValid()) {
+            $messages = $result->getMessages();
+            $app->flash('error', $messages[0]);
+            $app->redirect('/login');
+        } else {
+            $app->redirect('/');
         }
     }
-)->via('GET', 'POST');
+})->via('GET', 'POST');
 
 $app->get('/logout', function() use ($app, $auth) {
-        $auth->clearIdentity();
-        $app->redirect('/');
-    }
-);
+    $auth->clearIdentity();
+    $app->redirect('/');
+});
 
 // Run app
 $app->run();
