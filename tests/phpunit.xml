@@ -7,7 +7,7 @@
     
     <testsuite name="travis-ci">
         <directory>./library</directory>
-        <exclude>./library/Tsf/Service/FlickrServiceTest.php</exclude>
+        <exclude>./library/Fa/Service/FlickrServiceTest.php</exclude>
     </testsuite>
     
     <filter>
