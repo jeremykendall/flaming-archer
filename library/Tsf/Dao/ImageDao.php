@@ -39,7 +39,7 @@ class ImageDao
     public function find($day)
     {
         $stmt = $this->db->prepare("SELECT * FROM images WHERE day = :day");
-        $stmt->bindValue(':day', $day, \PDO::PARAM_INT);
+        $stmt->bindValue(':day', $day);
         $stmt->execute();
 
         return $stmt->fetch();
@@ -54,8 +54,8 @@ class ImageDao
     {
         $sql = 'INSERT INTO images (day, photo_id) VALUES (:day, :photo_id)';
         $stmt = $this->db->prepare($sql);
-        $stmt->bindValue(':day', $data['day'], \PDO::PARAM_INT);
-        $stmt->bindValue(':photo_id', $data['photo_id'], \PDO::PARAM_INT);
+        $stmt->bindValue(':day', $data['day']);
+        $stmt->bindValue(':photo_id', $data['photo_id']);
 
         return $stmt->execute();
     }
@@ -64,7 +64,7 @@ class ImageDao
     {
         $sql = 'DELETE FROM images WHERE day = :day';
         $stmt = $this->db->prepare($sql);
-        $stmt->bindValue(':day', $day, \PDO::PARAM_INT);
+        $stmt->bindValue(':day', $day);
 
         return $stmt->execute();
     }

@@ -65,11 +65,12 @@ class ImageDaoTest extends \CommonDbTestCase
      */
     public function testSave()
     {
-        $result = $this->dao->save(array('day' => 200, 'photo_id' => 999999));
+        $result = $this->dao->save(array('day' => 200, 'photo_id' => 7623527264));
         $this->assertEquals(1, $result);
 
         $image = $this->dao->find(200);
         $this->assertEquals(200, $image['day']);
+        $this->assertEquals(7623527264, $image['photo_id']);
     }
 
     /**
