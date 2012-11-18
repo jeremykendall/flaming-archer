@@ -27,7 +27,7 @@ php5::pkg { [
     'php5-intl',
     'php-apc',
     'php5-mcrypt',
-    'php5-mysql',
+    'php5-sqlite',
     'php5-xdebug',
     'php5-curl'
 ]:}
@@ -38,7 +38,3 @@ apache2::vhost { 'flaming-archer.dev':
     docroot         => '/home/vagrant/sites/dev.flaming-archer/public',
     configfile_name => 'dev.flaming-archer'
 }
-
-class {'mysql':}
-
-class {'flaming-archer':}
