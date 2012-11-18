@@ -10,13 +10,3 @@ Flaming Archer is a photo-a-day application I put together to learn the [Slim PH
 This project is the basis of my *Keeping it Small: Getting to know the Slim micro framework* presentation, presented at [TechCamp Memphis](http://techcampmemphis.com/) on November 3, 2012. [Slides](http://www.slideshare.net/jeremykendall/keeping-it-small-slim-php) and [video](http://www.youtube.com/watch?v=yEA0VWHCFac) are available. 
 
 *The presentation was given on [revision 8f3d27](https://github.com/jeremykendall/flaming-archer/tree/8f3d27b73159924102b607cbc0f4a005c971058e)*
-
-
-License
-----------------
-
-This work is licensed under the [Creative Commons Attribution-ShareAlike 3.0
-Unported License](http://creativecommons.org/licenses/by-sa/3.0/).
-
-
-
