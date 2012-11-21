@@ -1,5 +1,5 @@
 {
-    "hash": "757a9dc3bf03aac5112be09ab56cb99a",
+    "hash": "bea1db4ad1958e69c882975a88e6c662",
     "packages": [
         {
             "name": "composer/composer",
@@ -121,6 +121,36 @@
                 "json",
                 "schema"
             ]
+        },
+        {
+            "name": "mikey179/vfsStream",
+            "version": "v1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mikey179/vfsStream",
+                "reference": "v1.1.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/mikey179/vfsStream/zipball/v1.1.0",
+                "reference": "v1.1.0",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "time": "2012-08-25 05:49:29",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-0": {
+                    "org\\bovigo\\vfs": "src/main/php"
+                }
+            },
+            "license": [
+                "BSD"
+            ],
+            "homepage": "http://vfs.bovigo.org/"
         },
         {
             "name": "rych/phpass",

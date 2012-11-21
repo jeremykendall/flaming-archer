@@ -15,6 +15,7 @@
         "zendframework/zend-cache": "2.0.*",
         "zendframework/zend-serializer": "2.0.*",
         "rych/phpass": "2.1.x-dev",
+        "mikey179/vfsStream": "1.1.*",
         "composer/composer": "1.0.x-dev"
     },
     "autoload": {
