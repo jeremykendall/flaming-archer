@@ -26,7 +26,8 @@ try {
         $config['pdo']['options']
     );
 } catch (PDOException $e) {
-    die($e->getMessage());
+    error_log('Database connection error in ' . $e->getFile() . ' on line ' . $e->getLine() . ': ' . $e->getMessage());
+    die('Database connection error. Please check error logs.');
 }
 
 $cache = StorageFactory::factory($config['cache']);
