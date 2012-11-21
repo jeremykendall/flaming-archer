@@ -7,18 +7,24 @@
     ],
     "require": {
         "php": ">=5.3.10",
+        "ext-mcrypt": "*",
         "slim/slim": "2.1.0",
         "slim/extras": "2.0.1",
         "twig/twig": "1.10.3",
         "zendframework/zend-authentication": "2.0.*",
         "zendframework/zend-cache": "2.0.*",
         "zendframework/zend-serializer": "2.0.*",
-        "rych/phpass": "2.1.x-dev"
+        "rych/phpass": "2.1.x-dev",
+        "composer/composer": "1.0.x-dev"
     },
     "autoload": {
         "psr-0": 
         {
             "Fa": "library/"
         }
+    },
+    "scripts": {
+        "post-install-cmd": "Fa\\Setup::createConfig",
+        "post-update-cmd": "Fa\\Setup::createConfig"
     }
 }
