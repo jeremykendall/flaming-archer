@@ -41,6 +41,12 @@ $service = new ImageService(new ImageDao($db), $flickrServiceCache);
 // Prepare app
 $app = new Slim\Slim($config['slim']);
 
+$app->configureMode('development', function() {
+    error_reporting(-1);
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+});
+
 $auth = new AuthenticationService();
 $storage = new EncryptedCookie($app);
 $auth->setStorage($storage);
