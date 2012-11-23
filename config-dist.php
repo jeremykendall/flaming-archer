@@ -1,7 +1,7 @@
 <?php
 
 // SQLite database file
-$sqlite = realpath(__DIR__ . '/db/flaming-archer.db');
+$sqlite = __DIR__ . '/db/flaming-archer.db';
 
 $config = array(
     'slim' => array(
