@@ -25,7 +25,13 @@
         }
     },
     "scripts": {
-        "post-install-cmd": "Fa\\Setup::createConfig",
-        "post-update-cmd": "Fa\\Setup::createConfig"
+        "post-install-cmd": [
+            "Fa\\Composer\\Script\\Config::create",
+            "Fa\\Composer\\Script\\SQLite::prepare"
+        ],
+        "post-update-cmd": [
+            "Fa\\Composer\\Script\\Config::create",
+            "Fa\\Composer\\Script\\SQLite::prepare"
+        ]
     }
 }
