@@ -8,19 +8,25 @@
  * @license   http://github.com/jeremykendall/flaming-archer/blob/master/LICENSE MIT License
  */
 
-namespace Fa;
+namespace Fa\Composer\Script;
 
 use Composer\Script\Event;
 
 /**
- * Setup
+ * Config class
  *
- * Performs application setup tasks. Intended to be called by Composer
+ * Ensures config file exists
  */
-class Setup
+class Config
 {
 
-    public static function createConfig(Event $event)
+    /**
+     * Creates config file if it does not already exist
+     * 
+     * @param \Composer\Script\Event $event
+     * @return boolean True if successfull
+     */
+    public static function create(Event $event)
     {
         $dir = dirname($event->getComposer()->getConfig()->get('vendor-dir'));
         
@@ -40,11 +46,6 @@ class Setup
         
         $io->write('Found config.php.', true);
         return true;
-    }
-
-    public static function prepareDatabase(Event $event)
-    {
-        return null;
     }
 
 }
