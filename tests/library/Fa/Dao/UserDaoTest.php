@@ -12,6 +12,11 @@ class UserDaoTest extends \CommonDbTestCase
      * @var UserDao
      */
     protected $dao;
+    
+    /**
+     * @var array User
+     */
+    protected $user;
 
     /**
      * Sets up the fixture, for example, opens a network connection.
@@ -21,6 +26,12 @@ class UserDaoTest extends \CommonDbTestCase
     {
         parent::setUp();
         $this->dao = new UserDao($this->db);
+        $this->user = array(
+            'id' => '1',
+            'email' => 'user@example.com',
+            'password_hash' => '$2y$12$pZg9j8DBSIP2R/vfDzTQOeIt5n57r5VigCUl/HH.FrBOadi3YhdPS',
+            'last_login' => null
+        );
     }
 
     /**
@@ -39,23 +50,24 @@ class UserDaoTest extends \CommonDbTestCase
      */
     public function testFindByEmail()
     {
-        $expected = array(
-            'id' => '1',
-            'email' => 'user@example.com',
-            'password_hash' => '$2y$12$pZg9j8DBSIP2R/vfDzTQOeIt5n57r5VigCUl/HH.FrBOadi3YhdPS',
-            'last_login' => null
-        );
-        
         $user = $this->dao->findByEmail('user@example.com');
         
         $this->assertNotNull($user);
-        $this->assertEquals($expected, $user);
+        $this->assertEquals($this->user, $user);
     }
     
     public function testFindByEmailUserNotExist()
     {
         $user = $this->dao->findByEmail('snoop@lion.com');
         $this->assertFalse($user);
+    }
+    
+    public function testFindAll()
+    {
+        $result = $this->dao->findAll();
+        $this->assertInternalType('array', $result);
+        $this->assertEquals(1, count($result));
+        $this->assertEquals($this->user, $result[0]);
     }
 
 }

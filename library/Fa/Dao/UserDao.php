@@ -49,5 +49,11 @@ class UserDao
 
         return $user;
     }
+    
+    public function findAll()
+    {
+        $sql = 'SELECT * FROM users';
+        return $this->db->query($sql)->fetchAll();
+    }
 
 }
