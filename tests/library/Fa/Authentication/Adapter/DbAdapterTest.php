@@ -37,7 +37,7 @@ class DbAdapterTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->dao = $this->getMock('Fa\Dao\UserDao', array('findByEmail'), array(), '', false);
+        $this->dao = $this->getMock('Fa\Dao\UserDao', array('findByEmail', 'recordLogin'), array(), '', false);
         $this->hasher = $this->getMock('\Phpass\Hash');
         $this->adapter = new DbAdapter($this->dao, $this->hasher);
         
