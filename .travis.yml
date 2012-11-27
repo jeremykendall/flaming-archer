@@ -7,4 +7,4 @@ php:
 script: cd tests && phpunit -c phpunit.xml --testsuite travis-ci
 
 before_script:
-  - composer install
+  - composer install --dev
