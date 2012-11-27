@@ -4,8 +4,8 @@
 
     <property file="build.properties" />
 
-    <fileset id="php-files" dir="${project.basedir}">
-        <include name="library/*.php" />
+    <fileset id="php-files" dir="${project.basedir}/library">
+        <include name="**/*.php" />
     </fileset>
 
     <target name="clean" description="Clean build path">
@@ -95,11 +95,12 @@
                 --jdepend-xml=${project.basedir}/build/logs/jdepend.xml
                 --overview-pyramid=${project.basedir}/build/pdepend/overview-pyramid.svg
                 --suffix=php
+                --ignore=tests,vendor
                 ${project.basedir}" />
     </target>
 
     <target name="phpmd" description="Mess detection">
-        <phpmd>
+        <phpmd rulesets="codesize,design,unusedcode,controversial">
             <fileset refid="php-files" />
             <formatter
                 type="xml"
