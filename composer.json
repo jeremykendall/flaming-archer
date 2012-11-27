@@ -1,4 +1,15 @@
 {
+    "name": "jeremykendall/flaming-archer",
+    "description": "A photo 365 project application. Requires user to have a Flickr API key",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jeremy Kendall",
+            "homepage": "http://about.me/jeremykendall",
+            "role": "Developer"
+        }
+    ],
+    "keywords": ["photography", "flickr", "photo-a-day", "photo 365"],
     "repositories": [
     {
         "type": "composer",
@@ -14,9 +25,11 @@
         "zendframework/zend-authentication": "2.0.*",
         "zendframework/zend-cache": "2.0.*",
         "zendframework/zend-serializer": "2.0.*",
-        "rych/phpass": "2.1.x-dev",
-        "mikey179/vfsStream": "1.1.*",
-        "composer/composer": "1.0.x-dev"
+        "rych/phpass": "2.1.x-dev"
+    },
+    "require-dev": {
+        "composer/composer": "1.0.x-dev",
+        "mikey179/vfsStream": "1.1.*"
     },
     "autoload": {
         "psr-0": 
