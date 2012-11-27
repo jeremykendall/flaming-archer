@@ -85,7 +85,7 @@ class DbAdapter implements \Zend\Authentication\Adapter\AdapterInterface
 
         if ($this->hasher->checkPassword($this->password, $user['password_hash'])) {
             unset($user['password_hash']);
-
+            $this->dao->recordLogin($user['email']);
             return new Result(Result::SUCCESS, $user, array());
         } else {
             return new Result(Result::FAILURE_CREDENTIAL_INVALID, array(), array('Invalid username or password provided'));

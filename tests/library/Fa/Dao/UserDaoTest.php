@@ -70,4 +70,15 @@ class UserDaoTest extends \CommonDbTestCase
         $this->assertEquals($this->user, $result[0]);
     }
 
+    public function testRecordLogin()
+    {
+        $now = new \DateTime('now');
+        $email = 'user@example.com';
+        $this->assertTrue($this->dao->recordLogin($email));
+        $user = $this->dao->findByEmail($email);
+        $this->assertNotNull($user['last_login']);
+        $last_login = new \DateTime($user['last_login']);
+        $interval = $now->diff($last_login);
+        $this->assertLessThanOrEqual(3, $interval->s, "last_login wasn't updated within the last 3 seconds.");
+    }
 }
