@@ -54,8 +54,8 @@ class Authentication extends \Slim\Middleware
         );
 
         $this->app->hook('slim.before.router', function () use ($app, $auth, $req, $config) {
-                $secured_urls = isset($config['security.urls']) ? $config['security.urls'] : array();
-                foreach ($secured_urls as $surl) {
+                $securedUrls = isset($config['security.urls']) ? $config['security.urls'] : array();
+                foreach ($securedUrls as $surl) {
                     $patternAsRegex = $surl['path'];
                     $patternAsRegex = '@^' . $patternAsRegex . '$@';
                     if (preg_match($patternAsRegex, $req->getPathInfo())) {
