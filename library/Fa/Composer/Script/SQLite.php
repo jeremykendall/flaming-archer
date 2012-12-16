@@ -20,6 +20,12 @@ use Composer\Script\Event;
 class SQLite
 {
 
+    /**
+     * Checks for database and configures database if it does not exist
+     *
+     * @param  \Composer\Script\Event           $event
+     * @throws \Fa\Composer\Script\PDOException
+     */
     public static function prepare(Event $event)
     {
         $root = dirname($event->getComposer()->getConfig()->get('vendor-dir'));
@@ -28,7 +34,7 @@ class SQLite
         $io = $event->getIO();
 
         $io->write('Reviewing your Flaming Archer database . . .', true);
-        
+
         $dbExists = file_exists($config['database']);
 
         if (!$dbExists) {
@@ -46,10 +52,8 @@ class SQLite
                 throw $e;
             }
             $io->write("Done! Please browse to http://your-flaming-archer-site.com/setup to complete set up.", true);
-            return true;
+        } else {
+            $io->write('Database found.', true);
         }
-        
-        $io->write('Database found.', true);
-        return true;
     }
 }
