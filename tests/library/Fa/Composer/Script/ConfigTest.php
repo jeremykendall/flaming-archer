@@ -63,7 +63,6 @@ class ConfigTest extends \ComposerScriptTestCase
                 ->will($this->returnValue($this->composerConfig));
 
         $result = Config::create($this->event);
-        $this->assertTrue($result);
         $this->assertTrue($this->root->hasChild('config.php'));
     }
     
@@ -90,7 +89,6 @@ class ConfigTest extends \ComposerScriptTestCase
                 ->will($this->returnValue($this->composerConfig));
 
         $result = Config::create($this->event);
-        $this->assertTrue($result);
     }
 
 }
