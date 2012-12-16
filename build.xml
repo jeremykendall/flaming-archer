@@ -28,7 +28,7 @@
     <target name="phpunit" description="Running unit tests">
         <exec
             passthru="${passthru}"
-            dir="${project.basedir}/tests"
+            dir="${project.basedir}"
             command="phpunit
                 --log-junit=${project.basedir}/build/logs/junit.xml
                 --coverage-clover=${project.basedir}/build/logs/clover.xml
@@ -45,7 +45,7 @@
                 --title='Flaming Archer'
                 --force" />
     </target>
-    
+
     <target name="phpcs" description="Coding Standards Analysis">
         <exec
             passthru="${passthru}"
@@ -56,8 +56,7 @@
                 --extensions=php
                 ${project.basedir}/library" />
     </target>
-    
-    <!--
+
     <target name="phpcpd" description="Copy/Paste detection">
         <phpcpd>
             <fileset refid="php-files" />
@@ -66,16 +65,13 @@
                 outfile="${project.basedir}/build/logs/pmd-cpd.xml" />
         </phpcpd>
     </target>
--->
-<!--
-    <taskdef name="phploc" classname="phing.tasks.my.PHPLocTask" />
-    
+
     <target name="phploc" description="Generate phploc.csv">
         <phploc reportType="csv" reportName="phploc" reportDirectory="${project.basedir}/build/logs/">
             <fileset refid="php-files" />
         </phploc>
     </target>
--->
+
     <target name="phpcb" description="Source code browser">
         <exec
             passthru="${passthru}"
@@ -114,14 +110,10 @@
         <phingCall target="phpdoc" />
         <phingCall target="phpcs" />
         <phingCall target="phpunit" />
-        <!--
         <phingCall target="phpcpd" />
-        -->
         <phingCall target="phpmd" />
         <phingCall target="pdepend" />
-        <!--
         <phingCall target="phploc" />
-        -->
         <phingCall target="phpcb" />
     </target>
 </project>

@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="./bootstrap.php" colors="true">
+<phpunit bootstrap="tests/bootstrap.php" colors="true">
     
     <testsuite name="all-tests">
-        <directory>./library</directory>
+        <directory>tests/library</directory>
     </testsuite>
     
     <testsuite name="travis-ci">
-        <directory>./library</directory>
-        <exclude>./library/Fa/Service/FlickrServiceTest.php</exclude>
+        <directory>tests/library</directory>
+        <exclude>tests/library/Fa/Service/FlickrServiceTest.php</exclude>
     </testsuite>
     
     <filter>
         <whitelist>
-            <directory suffix=".php">../library</directory>
+            <directory suffix=".php">./library</directory>
         </whitelist>
     </filter>
     
     <logging>
         <log type="coverage-html" 
-             target="./log/report" 
+             target="tests/log/report" 
              charset="UTF-8" 
              yui="true" 
              highlight="true" 
              lowUpperBound="40"
              highLowerBound="70" />
-        <log type="testdox-html" target="./log/testdox.html" />
+        <log type="testdox-html" target="tests/log/testdox.html" />
     </logging>
     
 </phpunit>
