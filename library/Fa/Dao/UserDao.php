@@ -49,28 +49,30 @@ class UserDao
 
         return $user;
     }
-    
+
     /**
      * Returns all users in the database
-     * 
+     *
      * @return array Users
      */
     public function findAll()
     {
         $sql = 'SELECT * FROM users';
+
         return $this->db->query($sql)->fetchAll();
     }
-    
+
     /**
      * Updates login timestamp
-     * 
-     * @param string $email User's email address
-     * @return bool  True on success, false on failure
+     *
+     * @param  string $email User's email address
+     * @return bool   True on success, false on failure
      */
     public function recordLogin($email)
     {
         $sql = "UPDATE users SET last_login = datetime('now') WHERE email = :email";
         $stmt = $this->db->prepare($sql);
+
         return $stmt->execute(array('email' => $email));
     }
 
