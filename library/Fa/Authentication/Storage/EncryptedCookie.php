@@ -12,7 +12,7 @@ namespace Fa\Authentication\Storage;
 
 /**
  * Encrypted Cookie authentication storage
- * 
+ *
  * Wrapper around Slim PHP's encrypted cookie
  */
 class EncryptedCookie implements \Zend\Authentication\Storage\StorageInterface
