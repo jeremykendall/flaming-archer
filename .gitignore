@@ -7,3 +7,4 @@ config.php
 .vagrant
 docs
 build
+tags
