@@ -21,16 +21,16 @@
         "ext-mcrypt": "*",
         "slim/slim": "2.2.0",
         "slim/extras": "2.0.3",
-        "twig/twig": "1.12.2",
-        "zendframework/zend-authentication": "2.0.*",
-        "zendframework/zend-cache": "2.0.*",
-        "zendframework/zend-serializer": "2.0.*",
-        "zendframework/zend-inputfilter": "2.0.*",
+        "twig/twig": "1.13.0",
+        "zendframework/zend-authentication": "2.1.*",
+        "zendframework/zend-cache": "2.1.*",
+        "zendframework/zend-serializer": "2.1.*",
+        "zendframework/zend-inputfilter": "2.1.*",
         "rych/phpass": "2.1.x-dev"
     },
     "require-dev": {
-        "composer/composer": "1.0.x-dev",
-        "mikey179/vfsStream": "1.1.*",
+        "composer/composer": "1.0.*@dev",
+        "mikey179/vfsStream": "1.2.*",
         "jeremykendall/phpctagger": "dev-master"
     },
     "autoload": {
