@@ -13,6 +13,7 @@ use Fa\Dao\ImageDao;
 use Fa\Dao\UserDao;
 use Fa\Authentication\Storage\EncryptedCookie;
 use Fa\Authentication\Adapter\DbAdapter;
+use Fa\Validate\Setup;
 use Fa\Middleware\Authentication;
 use Fa\Middleware\Navigation;
 use Zend\Authentication\AuthenticationService;
@@ -60,6 +61,16 @@ Twig::$twigOptions = $config['twig'];
 $app->view(new Twig());
 
 // Define routes
+$app->map('/setup', function () use ($app, $userDao) {
+    if ($app->request()->isGet()) {
+        $app->render('setup.html');
+    }
+
+    if ($app->request()->isPost()) {
+
+    }
+})->via('GET', 'POST');
+
 $app->get('/', function () use ($app, $service) {
     $images = $service->findAll();
     $app->render('index.html', array('images' => $images));

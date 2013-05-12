@@ -61,16 +61,16 @@ class Navigation extends \Slim\Middleware
 
         $this->app->hook('slim.before.router', function () use ($app, $auth, $req, $navigation) {
 
-                    foreach ($navigation as &$link) {
-                        if ($link['href'] == $req->getPath()) {
-                            $link['class'] = 'active';
-                        } else {
-                            $link['class'] = '';
-                        }
+                foreach ($navigation as &$link) {
+                    if ($link['href'] == $req->getPath()) {
+                        $link['class'] = 'active';
+                    } else {
+                        $link['class'] = '';
                     }
-
-                    $app->view()->appendData(array('navigation' => $navigation));
                 }
+
+                $app->view()->appendData(array('navigation' => $navigation));
+            }
         );
 
         $this->next->call();

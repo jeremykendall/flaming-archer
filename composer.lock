@@ -1,5 +1,5 @@
 {
-    "hash": "37f5b3af6eccd27a0fdaf9ff0d5bb1a7",
+    "hash": "268184db6c04b3a1f1ecb64520913666",
     "packages": [
         {
             "name": "rych/phpass",
@@ -22,14 +22,12 @@
                 "ext-hash": "Some modules and features may require the HASH Message Digest Framework extension in order to work.",
                 "ext-openssl": "The OpenSSL extension is used as a secure source of random data."
             },
-            "time": "2012-10-12 01:17:51",
             "type": "library",
             "extra": {
                 "branch-alias": {
                     "dev-master": "2.1-dev"
                 }
             },
-            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Phpass": "src/"
@@ -50,36 +48,36 @@
             "keywords": [
                 "cryptography",
                 "password"
-            ]
+            ],
+            "time": "2012-10-12 01:17:51"
         },
         {
             "name": "slim/extras",
-            "version": "2.0.1",
+            "version": "2.0.3",
             "target-dir": "Slim/Extras",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeguy/Slim-Extras",
-                "reference": "2.0.1"
+                "reference": "2.0.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/codeguy/Slim-Extras/zipball/2.0.1",
-                "reference": "2.0.1",
+                "url": "https://github.com/codeguy/Slim-Extras/archive/2.0.3.zip",
+                "reference": "2.0.3",
                 "shasum": ""
             },
             "require": {
-                "slim/slim": ">=2.0.0",
-                "php": ">=5.3.0"
+                "php": ">=5.3.0",
+                "slim/slim": ">=2.0.0"
             },
-            "time": "2012-10-26 03:19:35",
             "type": "library",
-            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Twig_Extensions_": "Views/Extension/",
                     "Slim\\Extras": "."
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -98,35 +96,36 @@
             "description": "Extras package for the Slim Framework",
             "homepage": "http://github.com/codeguy/Slim-Extras",
             "keywords": [
-                "templating",
-                "extensions"
-            ]
+                "extensions",
+                "middleware",
+                "templating"
+            ],
+            "time": "2013-01-07 17:56:10"
         },
         {
             "name": "slim/slim",
-            "version": "2.1.0",
+            "version": "2.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeguy/Slim",
-                "reference": "2.1.0"
+                "reference": "2.2.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/codeguy/Slim/zipball/2.1.0",
-                "reference": "2.1.0",
+                "url": "https://github.com/codeguy/Slim/archive/2.2.0.zip",
+                "reference": "2.2.0",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.0"
             },
-            "time": "2012-09-12 09:07:46",
             "type": "library",
-            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Slim": "."
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -143,38 +142,38 @@
                 "microframework",
                 "rest",
                 "router"
-            ]
+            ],
+            "time": "2012-12-13 02:15:50"
         },
         {
             "name": "twig/twig",
-            "version": "v1.10.3",
+            "version": "v1.12.2",
             "source": {
                 "type": "git",
                 "url": "git://github.com/fabpot/Twig.git",
-                "reference": "v1.10.3"
+                "reference": "v1.12.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/fabpot/Twig/zipball/v1.10.3",
-                "reference": "v1.10.3",
+                "url": "https://api.github.com/repos/fabpot/Twig/zipball/v1.12.2",
+                "reference": "v1.12.2",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.2.4"
             },
-            "time": "2012-10-19 03:45:49",
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.10-dev"
+                    "dev-master": "1.12-dev"
                 }
             },
-            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Twig_": "lib/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3"
             ],
@@ -192,15 +191,16 @@
             "homepage": "http://twig.sensiolabs.org",
             "keywords": [
                 "templating"
-            ]
+            ],
+            "time": "2013-02-09 18:21:53"
         },
         {
             "name": "zendframework/zend-authentication",
-            "version": "2.0.4",
+            "version": "2.0.7",
             "target-dir": "Zend/Authentication",
             "dist": {
                 "type": "zip",
-                "url": "http://packages.zendframework.com/composer/Zend_Authentication-2.0.4.zip",
+                "url": "http://packages.zendframework.com/composer/Zend_Authentication-2.0.7.zip",
                 "reference": null,
                 "shasum": null
             },
@@ -210,11 +210,10 @@
             },
             "suggest": {
                 "zendframework/zend-db": "Zend\\Db component",
-                "zendframework/zend-uri": "Zend\\Uri component",
-                "zendframework/zend-session": "Zend\\Session component"
+                "zendframework/zend-session": "Zend\\Session component",
+                "zendframework/zend-uri": "Zend\\Uri component"
             },
             "type": "library",
-            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Zend\\Authentication\\": ""
@@ -226,8 +225,8 @@
             "description": "provides an API for authentication and includes concrete authentication adapters for common use case scenarios",
             "homepage": "http://packages.zendframework.com/",
             "keywords": [
-                "zf2",
-                "authentication"
+                "authentication",
+                "zf2"
             ],
             "support": {
                 "email": "fw-general-subscribe@lists.zend.com",
@@ -238,32 +237,31 @@
         },
         {
             "name": "zendframework/zend-cache",
-            "version": "2.0.4",
+            "version": "2.0.7",
             "target-dir": "Zend/Cache",
             "dist": {
                 "type": "zip",
-                "url": "http://packages.zendframework.com/composer/Zend_Cache-2.0.4.zip",
+                "url": "http://packages.zendframework.com/composer/Zend_Cache-2.0.7.zip",
                 "reference": null,
                 "shasum": null
             },
             "require": {
                 "php": ">=5.3.3",
-                "zendframework/zend-stdlib": "self.version",
+                "zendframework/zend-eventmanager": "self.version",
                 "zendframework/zend-servicemanager": "self.version",
-                "zendframework/zend-eventmanager": "self.version"
+                "zendframework/zend-stdlib": "self.version"
             },
             "require-dev": {
                 "zendframework/zend-serializer": "self.version"
             },
             "suggest": {
-                "zendframework/zend-serializer": "Zend\\Serializer component",
                 "ext-apc": "APC >= 3.1.6 to use the APC storage adapter",
                 "ext-dba": "DBA, to use the DBA storage adapter",
                 "ext-memcached": "Memcached >= 1.0.0 to use the Memcached storage adapter",
-                "ext-wincache": "WinCache, to use the WinCache storage adapter"
+                "ext-wincache": "WinCache, to use the WinCache storage adapter",
+                "zendframework/zend-serializer": "Zend\\Serializer component"
             },
             "type": "library",
-            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Zend\\Cache\\": ""
@@ -275,8 +273,8 @@
             "description": "provides a generic way to cache any data",
             "homepage": "http://packages.zendframework.com/",
             "keywords": [
-                "zf2",
-                "cache"
+                "cache",
+                "zf2"
             ],
             "support": {
                 "email": "fw-general-subscribe@lists.zend.com",
@@ -287,11 +285,11 @@
         },
         {
             "name": "zendframework/zend-eventmanager",
-            "version": "2.0.4",
+            "version": "2.0.7",
             "target-dir": "Zend/EventManager",
             "dist": {
                 "type": "zip",
-                "url": "http://packages.zendframework.com/composer/Zend_EventManager-2.0.4.zip",
+                "url": "http://packages.zendframework.com/composer/Zend_EventManager-2.0.7.zip",
                 "reference": null,
                 "shasum": null
             },
@@ -300,7 +298,6 @@
                 "zendframework/zend-stdlib": "self.version"
             },
             "type": "library",
-            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Zend\\EventManager\\": ""
@@ -312,8 +309,128 @@
             "description": " ",
             "homepage": "http://packages.zendframework.com/",
             "keywords": [
-                "zf2",
-                "eventmanager"
+                "eventmanager",
+                "zf2"
+            ],
+            "support": {
+                "email": "fw-general-subscribe@lists.zend.com",
+                "irc": "irc://irc.freenode.net/zftalk",
+                "issues": "https://github.com/zendframework/zf2/issues",
+                "source": "https://github.com/zendframework/zf2"
+            }
+        },
+        {
+            "name": "zendframework/zend-filter",
+            "version": "2.0.7",
+            "target-dir": "Zend/Filter",
+            "dist": {
+                "type": "zip",
+                "url": "http://packages.zendframework.com/composer/Zend_Filter-2.0.7.zip",
+                "reference": null,
+                "shasum": null
+            },
+            "require": {
+                "php": ">=5.3.3",
+                "zendframework/zend-stdlib": "self.version"
+            },
+            "require-dev": {
+                "zendframework/zend-crypt": "self.version"
+            },
+            "suggest": {
+                "zendframework/zend-crypt": "Zend\\Crypt component",
+                "zendframework/zend-i18n": "Zend\\I18n component",
+                "zendframework/zend-validator": "Zend\\Validator component"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Zend\\Filter\\": ""
+                }
+            },
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "provides a set of commonly needed data filters",
+            "homepage": "http://packages.zendframework.com/",
+            "keywords": [
+                "filter",
+                "zf2"
+            ],
+            "support": {
+                "email": "fw-general-subscribe@lists.zend.com",
+                "irc": "irc://irc.freenode.net/zftalk",
+                "issues": "https://github.com/zendframework/zf2/issues",
+                "source": "https://github.com/zendframework/zf2"
+            }
+        },
+        {
+            "name": "zendframework/zend-i18n",
+            "version": "2.0.7",
+            "target-dir": "Zend/I18n",
+            "dist": {
+                "type": "zip",
+                "url": "http://packages.zendframework.com/composer/Zend_I18n-2.0.7.zip",
+                "reference": null,
+                "shasum": null
+            },
+            "require": {
+                "ext-intl": "*",
+                "php": ">=5.3.3",
+                "zendframework/zend-filter": "self.version",
+                "zendframework/zend-stdlib": "self.version"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Zend\\I18n\\": ""
+                }
+            },
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": " ",
+            "homepage": "http://packages.zendframework.com/",
+            "keywords": [
+                "i18n",
+                "zf2"
+            ],
+            "support": {
+                "email": "fw-general-subscribe@lists.zend.com",
+                "irc": "irc://irc.freenode.net/zftalk",
+                "issues": "https://github.com/zendframework/zf2/issues",
+                "source": "https://github.com/zendframework/zf2"
+            }
+        },
+        {
+            "name": "zendframework/zend-inputfilter",
+            "version": "2.0.7",
+            "target-dir": "Zend/InputFilter",
+            "dist": {
+                "type": "zip",
+                "url": "http://packages.zendframework.com/composer/Zend_InputFilter-2.0.7.zip",
+                "reference": null,
+                "shasum": null
+            },
+            "require": {
+                "php": ">=5.3.3",
+                "zendframework/zend-filter": "self.version",
+                "zendframework/zend-stdlib": "self.version",
+                "zendframework/zend-validator": "self.version"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Zend\\InputFilter\\": ""
+                }
+            },
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": " ",
+            "homepage": "http://packages.zendframework.com/",
+            "keywords": [
+                "inputfilter",
+                "zf2"
             ],
             "support": {
                 "email": "fw-general-subscribe@lists.zend.com",
@@ -324,11 +441,11 @@
         },
         {
             "name": "zendframework/zend-json",
-            "version": "2.0.4",
+            "version": "2.0.7",
             "target-dir": "Zend/Json",
             "dist": {
                 "type": "zip",
-                "url": "http://packages.zendframework.com/composer/Zend_Json-2.0.4.zip",
+                "url": "http://packages.zendframework.com/composer/Zend_Json-2.0.7.zip",
                 "reference": null,
                 "shasum": null
             },
@@ -340,7 +457,6 @@
                 "zendframework/zend-server": "Zend\\Server component"
             },
             "type": "library",
-            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Zend\\Json\\": ""
@@ -352,8 +468,8 @@
             "description": "provides convenience methods for serializing native PHP to JSON and decoding JSON to native PHP",
             "homepage": "http://packages.zendframework.com/",
             "keywords": [
-                "zf2",
-                "json"
+                "json",
+                "zf2"
             ],
             "support": {
                 "email": "fw-general-subscribe@lists.zend.com",
@@ -364,11 +480,11 @@
         },
         {
             "name": "zendframework/zend-math",
-            "version": "2.0.4",
+            "version": "2.0.7",
             "target-dir": "Zend/Math",
             "dist": {
                 "type": "zip",
-                "url": "http://packages.zendframework.com/composer/Zend_Math-2.0.4.zip",
+                "url": "http://packages.zendframework.com/composer/Zend_Math-2.0.7.zip",
                 "reference": null,
                 "shasum": null
             },
@@ -376,7 +492,6 @@
                 "php": ">=5.3.3"
             },
             "type": "library",
-            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Zend\\Math\\": ""
@@ -388,8 +503,8 @@
             "description": " ",
             "homepage": "http://packages.zendframework.com/",
             "keywords": [
-                "zf2",
-                "math"
+                "math",
+                "zf2"
             ],
             "support": {
                 "email": "fw-general-subscribe@lists.zend.com",
@@ -400,22 +515,21 @@
         },
         {
             "name": "zendframework/zend-serializer",
-            "version": "2.0.4",
+            "version": "2.0.7",
             "target-dir": "Zend/Serializer",
             "dist": {
                 "type": "zip",
-                "url": "http://packages.zendframework.com/composer/Zend_Serializer-2.0.4.zip",
+                "url": "http://packages.zendframework.com/composer/Zend_Serializer-2.0.7.zip",
                 "reference": null,
                 "shasum": null
             },
             "require": {
                 "php": ">=5.3.3",
-                "zendframework/zend-stdlib": "self.version",
                 "zendframework/zend-json": "self.version",
-                "zendframework/zend-math": "self.version"
+                "zendframework/zend-math": "self.version",
+                "zendframework/zend-stdlib": "self.version"
             },
             "type": "library",
-            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Zend\\Serializer\\": ""
@@ -427,8 +541,8 @@
             "description": "provides an adapter based interface to simply generate storable representation of PHP types by different facilities, and recover",
             "homepage": "http://packages.zendframework.com/",
             "keywords": [
-                "zf2",
-                "serializer"
+                "serializer",
+                "zf2"
             ],
             "support": {
                 "email": "fw-general-subscribe@lists.zend.com",
@@ -439,11 +553,11 @@
         },
         {
             "name": "zendframework/zend-servicemanager",
-            "version": "2.0.4",
+            "version": "2.0.7",
             "target-dir": "Zend/ServiceManager",
             "dist": {
                 "type": "zip",
-                "url": "http://packages.zendframework.com/composer/Zend_ServiceManager-2.0.4.zip",
+                "url": "http://packages.zendframework.com/composer/Zend_ServiceManager-2.0.7.zip",
                 "reference": null,
                 "shasum": null
             },
@@ -454,7 +568,6 @@
                 "zendframework/zend-di": "Zend\\Di component"
             },
             "type": "library",
-            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Zend\\ServiceManager\\": ""
@@ -466,8 +579,8 @@
             "description": " ",
             "homepage": "http://packages.zendframework.com/",
             "keywords": [
-                "zf2",
-                "servicemanager"
+                "servicemanager",
+                "zf2"
             ],
             "support": {
                 "email": "fw-general-subscribe@lists.zend.com",
@@ -478,11 +591,11 @@
         },
         {
             "name": "zendframework/zend-stdlib",
-            "version": "2.0.4",
+            "version": "2.0.7",
             "target-dir": "Zend/Stdlib",
             "dist": {
                 "type": "zip",
-                "url": "http://packages.zendframework.com/composer/Zend_Stdlib-2.0.4.zip",
+                "url": "http://packages.zendframework.com/composer/Zend_Stdlib-2.0.7.zip",
                 "reference": null,
                 "shasum": null
             },
@@ -493,7 +606,6 @@
                 "pecl-weakref": "Implementation of weak references for Stdlib\\CallbackHandler"
             },
             "type": "library",
-            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Zend\\Stdlib\\": ""
@@ -505,8 +617,53 @@
             "description": " ",
             "homepage": "http://packages.zendframework.com/",
             "keywords": [
-                "zf2",
-                "stdlib"
+                "stdlib",
+                "zf2"
+            ],
+            "support": {
+                "email": "fw-general-subscribe@lists.zend.com",
+                "irc": "irc://irc.freenode.net/zftalk",
+                "issues": "https://github.com/zendframework/zf2/issues",
+                "source": "https://github.com/zendframework/zf2"
+            }
+        },
+        {
+            "name": "zendframework/zend-validator",
+            "version": "2.0.7",
+            "target-dir": "Zend/Validator",
+            "dist": {
+                "type": "zip",
+                "url": "http://packages.zendframework.com/composer/Zend_Validator-2.0.7.zip",
+                "reference": null,
+                "shasum": null
+            },
+            "require": {
+                "php": ">=5.3.3",
+                "zendframework/zend-i18n": "self.version",
+                "zendframework/zend-servicemanager": "self.version",
+                "zendframework/zend-stdlib": "self.version"
+            },
+            "require-dev": {
+                "zendframework/zend-math": "self.version"
+            },
+            "suggest": {
+                "zendframework/zend-db": "Zend\\Db component",
+                "zendframework/zend-math": "Zend\\Math component"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Zend\\Validator\\": ""
+                }
+            },
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "provides a set of commonly needed validators",
+            "homepage": "http://packages.zendframework.com/",
+            "keywords": [
+                "validator",
+                "zf2"
             ],
             "support": {
                 "email": "fw-general-subscribe@lists.zend.com",
@@ -516,13 +673,414 @@
             }
         }
     ],
-    "packages-dev": null,
+    "packages-dev": [
+        {
+            "name": "composer/composer",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/composer/composer.git",
+                "reference": "57fe33d0f371a95232d74e64c5c559eeac77a24f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/composer/composer/zipball/57fe33d0f371a95232d74e64c5c559eeac77a24f",
+                "reference": "57fe33d0f371a95232d74e64c5c559eeac77a24f",
+                "shasum": ""
+            },
+            "require": {
+                "justinrainbow/json-schema": "1.1.*",
+                "php": ">=5.3.2",
+                "seld/jsonlint": "1.*",
+                "symfony/console": ">=2.1,<3.0",
+                "symfony/finder": ">=2.1,<3.0",
+                "symfony/process": ">=2.1,<3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": ">=3.7.10.0,<3.8"
+            },
+            "suggest": {
+                "ext-openssl": "Enabling the openssl extension allows you to access https URLs for repositories and packages",
+                "ext-zip": "Enabling the zip extension allows you to unzip archives, and allows gzip compression of all internet traffic"
+            },
+            "bin": [
+                "bin/composer"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Composer": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jordi Boggiano",
+                    "email": "j.boggiano@seld.be",
+                    "homepage": "http://seld.be",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Nils Adermann",
+                    "email": "naderman@naderman.de",
+                    "homepage": "http://www.naderman.de"
+                }
+            ],
+            "description": "Dependency Manager",
+            "homepage": "http://getcomposer.org/",
+            "keywords": [
+                "autoload",
+                "dependency",
+                "package"
+            ],
+            "time": "2013-03-11 13:02:49"
+        },
+        {
+            "name": "jeremykendall/phpctagger",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jeremykendall/phpctagger.git",
+                "reference": "0.0.7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jeremykendall/phpctagger/zipball/0.0.7",
+                "reference": "0.0.7",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.10"
+            },
+            "require-dev": {
+                "behat/mink": "1.4@stable",
+                "behat/mink-sahi-driver": "*@stable",
+                "behat/mink-zombie-driver": "*@stable",
+                "composer/composer": "1.0.x-dev"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "PhpCtagger\\": "library/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jeremy Kendall",
+                    "homepage": "http://about.me/jeremykendall",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Creates ctags for composer projects",
+            "keywords": [
+                "composer",
+                "ctags",
+                "exuberant ctags",
+                "php",
+                "vim"
+            ],
+            "time": "2013-01-17 14:34:23"
+        },
+        {
+            "name": "justinrainbow/json-schema",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "git://github.com/justinrainbow/json-schema.git",
+                "reference": "v1.1.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/justinrainbow/json-schema/archive/v1.1.0.zip",
+                "reference": "v1.1.0",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "JsonSchema": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "NewBSD"
+            ],
+            "authors": [
+                {
+                    "name": "Igor Wiedler",
+                    "email": "igor@wiedler.ch",
+                    "homepage": "http://wiedler.ch/igor/"
+                },
+                {
+                    "name": "Bruno Prieto Reis",
+                    "email": "bruno.p.reis@gmail.com"
+                },
+                {
+                    "name": "Justin Rainbow",
+                    "email": "justin.rainbow@gmail.com"
+                },
+                {
+                    "name": "Robert Schönthal",
+                    "email": "seroscho@googlemail.com",
+                    "homepage": "http://digitalkaoz.net"
+                }
+            ],
+            "description": "A library to validate a json schema.",
+            "homepage": "https://github.com/justinrainbow/json-schema",
+            "keywords": [
+                "json",
+                "schema"
+            ],
+            "time": "2012-01-03 00:33:17"
+        },
+        {
+            "name": "mikey179/vfsStream",
+            "version": "v1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mikey179/vfsStream",
+                "reference": "v1.1.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/mikey179/vfsStream/zipball/v1.1.0",
+                "reference": "v1.1.0",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "org\\bovigo\\vfs": "src/main/php"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD"
+            ],
+            "homepage": "http://vfs.bovigo.org/",
+            "time": "2012-08-25 05:49:29"
+        },
+        {
+            "name": "seld/jsonlint",
+            "version": "1.1.1",
+            "source": {
+                "type": "git",
+                "url": "http://github.com/Seldaek/jsonlint",
+                "reference": "1.1.1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Seldaek/jsonlint/zipball/1.1.1",
+                "reference": "1.1.1",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "bin": [
+                "bin/jsonlint"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Seld\\JsonLint": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jordi Boggiano",
+                    "email": "j.boggiano@seld.be",
+                    "homepage": "http://seld.be",
+                    "role": "Developer"
+                }
+            ],
+            "description": "JSON Linter",
+            "keywords": [
+                "json",
+                "linter",
+                "parser",
+                "validator"
+            ],
+            "time": "2013-02-11 23:03:12"
+        },
+        {
+            "name": "symfony/console",
+            "version": "v2.2.0",
+            "target-dir": "Symfony/Component/Console",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/Console.git",
+                "reference": "v2.2.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/Console/zipball/v2.2.0",
+                "reference": "v2.2.0",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.2-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Symfony\\Component\\Console\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "http://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony Console Component",
+            "homepage": "http://symfony.com",
+            "time": "2013-03-01 06:43:14"
+        },
+        {
+            "name": "symfony/finder",
+            "version": "v2.2.0",
+            "target-dir": "Symfony/Component/Finder",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/Finder.git",
+                "reference": "v2.2.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/Finder/zipball/v2.2.0",
+                "reference": "v2.2.0",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.2-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Symfony\\Component\\Finder\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "http://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony Finder Component",
+            "homepage": "http://symfony.com",
+            "time": "2013-02-28 14:06:36"
+        },
+        {
+            "name": "symfony/process",
+            "version": "v2.2.0",
+            "target-dir": "Symfony/Component/Process",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/Process.git",
+                "reference": "v2.2.0-RC3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/Process/zipball/v2.2.0-RC3",
+                "reference": "v2.2.0-RC3",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.2-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Symfony\\Component\\Process\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "http://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony Process Component",
+            "homepage": "http://symfony.com",
+            "time": "2013-02-18 21:28:10"
+        }
+    ],
     "aliases": [
 
     ],
     "minimum-stability": "stable",
     "stability-flags": {
         "rych/phpass": 20,
-        "composer/composer": 20
-    }
+        "composer/composer": 20,
+        "jeremykendall/phpctagger": 20
+    },
+    "platform": {
+        "php": ">=5.3.10",
+        "ext-mcrypt": "*"
+    },
+    "platform-dev": [
+
+    ]
 }

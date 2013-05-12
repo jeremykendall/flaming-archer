@@ -19,17 +19,19 @@
     "require": {
         "php": ">=5.3.10",
         "ext-mcrypt": "*",
-        "slim/slim": "2.1.0",
-        "slim/extras": "2.0.1",
-        "twig/twig": "1.10.3",
+        "slim/slim": "2.2.0",
+        "slim/extras": "2.0.3",
+        "twig/twig": "1.12.2",
         "zendframework/zend-authentication": "2.0.*",
         "zendframework/zend-cache": "2.0.*",
         "zendframework/zend-serializer": "2.0.*",
+        "zendframework/zend-inputfilter": "2.0.*",
         "rych/phpass": "2.1.x-dev"
     },
     "require-dev": {
         "composer/composer": "1.0.x-dev",
-        "mikey179/vfsStream": "1.1.*"
+        "mikey179/vfsStream": "1.1.*",
+        "jeremykendall/phpctagger": "dev-master"
     },
     "autoload": {
         "psr-0": 
@@ -40,11 +42,13 @@
     "scripts": {
         "post-install-cmd": [
             "Fa\\Composer\\Script\\Config::create",
-            "Fa\\Composer\\Script\\SQLite::prepare"
+            "Fa\\Composer\\Script\\SQLite::prepare",
+            "PhpCtagger\\Composer\\Script\\Ctagger::ctag"
         ],
         "post-update-cmd": [
             "Fa\\Composer\\Script\\Config::create",
-            "Fa\\Composer\\Script\\SQLite::prepare"
+            "Fa\\Composer\\Script\\SQLite::prepare",
+            "PhpCtagger\\Composer\\Script\\Ctagger::ctag"
         ]
     }
 }
