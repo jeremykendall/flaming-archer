@@ -7,4 +7,5 @@ php:
 script: phpunit --testsuite travis-ci
 
 before_script:
-  - composer install --dev
+  - composer self-update
+  - composer update
