@@ -4,18 +4,18 @@ require '../vendor/autoload.php';
 
 $config = require_once __DIR__ . '/../config.php';
 
-use Slim\Middleware\SessionCookie;
-use Slim\Extras\Views\Twig;
+use Fa\Authentication\Adapter\DbAdapter;
+use Fa\Authentication\Storage\EncryptedCookie;
+use Fa\Dao\ImageDao;
+use Fa\Dao\UserDao;
+use Fa\Middleware\Authentication;
+use Fa\Middleware\Navigation;
 use Fa\Service\FlickrService;
 use Fa\Service\FlickrServiceCache;
 use Fa\Service\ImageService;
-use Fa\Dao\ImageDao;
-use Fa\Dao\UserDao;
-use Fa\Authentication\Storage\EncryptedCookie;
-use Fa\Authentication\Adapter\DbAdapter;
 use Fa\Validate\Setup;
-use Fa\Middleware\Authentication;
-use Fa\Middleware\Navigation;
+use Slim\Extras\Views\Twig;
+use Slim\Middleware\SessionCookie;
 use Zend\Authentication\AuthenticationService;
 use Zend\Cache\StorageFactory;
 
