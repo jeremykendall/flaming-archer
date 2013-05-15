@@ -7,6 +7,35 @@ namespace Fa\Middleware;
  */
 class AuthenticationTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var Zend\Authentication\AuthenticationService
+     */
+    private $authenticationService;
+
+    /**
+     * @var Authentication
+     */
+    private $middleware;
+
+    protected function setUp()
+    {
+        parent::setUp();
+        $config = array(
+            'login.url' => '/login',
+            'security.urls' => array(
+                array('path' => '/admin'),
+                array('path' => '/admin/.+')
+            )
+        );
+        $this->auththenticationService = $this->getMock('Zend\Authentication\AuthenticationService');
+        $this->middleware = new Authentication($this->auththenticationService, $config);
+    }
+
+    protected function tearDown()
+    {
+        $this->middleware = null;
+        parent::tearDown();
+    }
 
     public function testVisitHomePageNotLoggedInSucceeds()
     {
@@ -14,75 +43,66 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
             'SCRIPT_NAME' => '/index.php',
             'PATH_INFO' => '/'
         ));
-        
+
         $app = new \Slim\Slim();
-        
+
         $app->get('/', function() {
             echo 'Success';
         });
-        
-        $auththenticationService = $this->getMock('Zend\Authentication\AuthenticationService');
-        
-        $mw = new Authentication($auththenticationService);
-        $mw->setApplication($app);
-        $mw->setNextMiddleware($app);
-        $mw->call();
+
+        $this->middleware->setApplication($app);
+        $this->middleware->setNextMiddleware($app);
+        $this->middleware->call();
         $response = $app->response();
         $this->assertTrue($response->isOk());
     }
-    
+
     public function testVisitAdminPageNotLoggedInRedirectsToLogin()
     {
         \Slim\Environment::mock(array(
             'SCRIPT_NAME' => '/index.php',
             'PATH_INFO' => '/admin'
         ));
-        
+
         $app = new \Slim\Slim();
-        
+
         $app->get('/admin', function() {
             echo 'Y U NO LOGGED IN';
         });
-        
-        $auththenticationService = $this->getMock('Zend\Authentication\AuthenticationService', array('hasIdentity'));
-        
-        $auththenticationService->expects($this->once())
-                ->method('hasIdentity')
-                ->will($this->returnValue(false));
-        
-        $mw = new Authentication($auththenticationService);
-        $mw->setApplication($app);
-        $mw->setNextMiddleware($app);
-        $mw->call();
+
+        $this->auththenticationService->expects($this->once())
+            ->method('hasIdentity')
+            ->will($this->returnValue(false));
+
+        $this->middleware->setApplication($app);
+        $this->middleware->setNextMiddleware($app);
+        $this->middleware->call();
         $response = $app->response();
         $this->assertTrue($response->isRedirect());
         $this->assertEquals(302, $response->status());
         $this->assertEquals('/login', $response->header('location'));
     }
-    
+
     public function testVisitAdminPageLoggedInSucceeds()
     {
         \Slim\Environment::mock(array(
             'SCRIPT_NAME' => '/index.php',
             'PATH_INFO' => '/admin'
         ));
-        
+
         $app = new \Slim\Slim();
-        
+
         $app->get('/admin', function() {
             echo 'Success';
         });
-        
-        $auththenticationService = $this->getMock('Zend\Authentication\AuthenticationService', array('hasIdentity'));
-        
-        $auththenticationService->expects($this->once())
-                ->method('hasIdentity')
-                ->will($this->returnValue(true));
-        
-        $mw = new Authentication($auththenticationService);
-        $mw->setApplication($app);
-        $mw->setNextMiddleware($app);
-        $mw->call();
+
+        $this->auththenticationService->expects($this->once())
+            ->method('hasIdentity')
+            ->will($this->returnValue(true));
+
+        $this->middleware->setApplication($app);
+        $this->middleware->setNextMiddleware($app);
+        $this->middleware->call();
         $response = $app->response();
         $this->assertTrue($response->isOk());
     }
