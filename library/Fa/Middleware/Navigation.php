@@ -40,7 +40,7 @@ class Navigation extends \Slim\Middleware
 
     /**
      * Constructs array of navigation items and appends them to the view. Navigation
-     * items differ if user is authenticated or not. Uses 'slim.before.router'.
+     * items differ if user is authenticated or not.
      */
     public function call()
     {

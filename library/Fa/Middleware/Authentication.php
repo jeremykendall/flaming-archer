@@ -54,25 +54,23 @@ class Authentication extends \Slim\Middleware
     public function call()
     {
         $app = $this->app;
-        $auth = $this->auth;
         $req = $app->request();
+        $auth = $this->auth;
         $config = $this->config;
 
-        $this->app->hook('slim.before.router', function () use ($app, $auth, $req, $config) {
-                $securedUrls = isset($config['security.urls']) ? $config['security.urls'] : array();
-                foreach ($securedUrls as $surl) {
-                    $patternAsRegex = $surl['path'];
-                    $patternAsRegex = '@^' . $patternAsRegex . '$@';
-                    if (preg_match($patternAsRegex, $req->getPathInfo())) {
-                        if (!$auth->hasIdentity()) {
-                            if ($req->getPath() !== $config['login.url']) {
-                                $app->redirect($config['login.url']);
-                            }
-                        }
+        $checkAuth = function () use ($app, $auth, $req, $config) {
+            $securedUrls = isset($config['security.urls']) ? $config['security.urls'] : array();
+            foreach ($securedUrls as $url) {
+                $urlPattern = '@^' . $url['path'] . '$@';
+                if (preg_match($urlPattern, $req->getPathInfo()) && !$auth->hasIdentity()) {
+                    if ($req->getPath() !== $config['login.url']) {
+                        $app->redirect($config['login.url']);
                     }
                 }
             }
-        );
+        };
+
+        $this->app->hook('slim.before.router', $checkAuth);
 
         $this->next->call();
     }
