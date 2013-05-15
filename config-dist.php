@@ -62,7 +62,12 @@ $config = array(
             ),
             'Serializer'
         )
-    )
+    ),
+    'login.url' => '/login',
+    'security.urls' => array(
+        array('path' => '/admin'),
+        array('path' => '/admin/.+')
+    ),
 );
 
 return $config;
