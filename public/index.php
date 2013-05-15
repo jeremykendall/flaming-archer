@@ -15,7 +15,6 @@ use Fa\Service\FlickrServiceCache;
 use Fa\Service\ImageService;
 use Fa\Validate\Setup;
 use Slim\Extras\Views\Twig;
-use Slim\Middleware\SessionCookie;
 use Zend\Authentication\AuthenticationService;
 use Zend\Cache\StorageFactory;
 
@@ -31,12 +30,13 @@ try {
     die('Database connection error. Please check error logs.');
 }
 
-$cache = StorageFactory::factory($config['cache']);
-
 $userDao = new UserDao($db);
 $authAdapter = new DbAdapter($userDao, new Phpass\Hash());
+
+$cache = StorageFactory::factory($config['cache']);
 $flickrService = new FlickrService($config['flickr.api.key']);
 $flickrServiceCache = new FlickrServiceCache($flickrService, $cache);
+
 $service = new ImageService(new ImageDao($db), $flickrServiceCache);
 
 // Prepare app
@@ -52,9 +52,8 @@ $auth = new AuthenticationService();
 $storage = new EncryptedCookie($app);
 $auth->setStorage($storage);
 
-$app->add(new SessionCookie($config['cookies']));
-$app->add(new Authentication($auth));
 $app->add(new Navigation($auth));
+$app->add(new Authentication($auth, $config));
 
 // Prepare view
 Twig::$twigOptions = $config['twig'];
