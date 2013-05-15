@@ -8,3 +8,4 @@ config.php
 docs
 build
 tags
+composer.lock
