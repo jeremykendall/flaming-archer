@@ -44,36 +44,27 @@ class Navigation extends \Slim\Middleware
      */
     public function call()
     {
-        $app = $this->app;
-        $auth = $this->auth;
-        $req = $app->request();
-
         $home = array('caption' => 'Home', 'href' => '/');
         $admin = array('caption' => 'Admin', 'href' => '/admin');
         $login = array('caption' => 'Login', 'href' => '/login');
         $logout = array('caption' => 'Logout', 'href' => '/logout');
 
-        if ($auth->hasIdentity()) {
+        if ($this->auth->hasIdentity()) {
             $navigation = array($home, $admin, $logout);
         } else {
             $navigation = array($home, $login);
         }
 
-        $this->app->hook('slim.before.router', function () use ($app, $auth, $req, $navigation) {
-
-                foreach ($navigation as &$link) {
-                    if ($link['href'] == $req->getPath()) {
-                        $link['class'] = 'active';
-                    } else {
-                        $link['class'] = '';
-                    }
-                }
-
-                $app->view()->appendData(array('navigation' => $navigation));
+        foreach ($navigation as &$link) {
+            if ($link['href'] == $this->app->request()->getPath()) {
+                $link['class'] = 'active';
+            } else {
+                $link['class'] = '';
             }
-        );
+        }
+
+        $this->app->view()->appendData(array('navigation' => $navigation));
 
         $this->next->call();
     }
-
 }
