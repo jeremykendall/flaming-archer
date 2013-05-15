@@ -16,4 +16,6 @@ This project is the basis of my *Keeping it Small: Getting to know the Slim micr
 
 ### php[tek] 2013
 
+This project is the basis of my *Keeping it Small: Getting to know the Slim micro framework* presentation, presented at [phptek](http://tek.phparch.com/) on May 15, 2013. [Slides](http://slidesha.re/13xHfWR) are available. 
+
 *The presentation was given on [revision fb71177](https://github.com/jeremykendall/flaming-archer/commit/fb711771ed9b7a8b1c745685a9b1534bee55dafe)*
