@@ -29,6 +29,8 @@ class Authentication extends \Slim\Middleware
     private $auth;
 
     /**
+     * Config array
+     *
      * @var array
      */
     private $config;
@@ -36,7 +38,8 @@ class Authentication extends \Slim\Middleware
     /**
      * Public constructor
      *
-     * @param AuthenticationService $auth Authentication service
+     * @param AuthenticationService $auth   Authentication service
+     * @param array                 $config Configuration array
      */
     public function __construct(AuthenticationService $auth, array $config)
     {
