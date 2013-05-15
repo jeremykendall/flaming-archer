@@ -13,7 +13,6 @@ use Fa\Middleware\Navigation;
 use Fa\Service\FlickrService;
 use Fa\Service\FlickrServiceCache;
 use Fa\Service\ImageService;
-use Fa\Validate\Setup;
 use Slim\Extras\Views\Twig;
 use Zend\Authentication\AuthenticationService;
 use Zend\Cache\StorageFactory;
@@ -60,16 +59,6 @@ Twig::$twigOptions = $config['twig'];
 $app->view(new Twig());
 
 // Define routes
-$app->map('/setup', function () use ($app, $userDao) {
-    if ($app->request()->isGet()) {
-        $app->render('setup.html');
-    }
-
-    if ($app->request()->isPost()) {
-
-    }
-})->via('GET', 'POST');
-
 $app->get('/', function () use ($app, $service) {
     $images = $service->findAll();
     $app->render('index.html', array('images' => $images));
