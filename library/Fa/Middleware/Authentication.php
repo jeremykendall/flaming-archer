@@ -10,6 +10,8 @@
 
 namespace Fa\Middleware;
 
+use Zend\Authentication\AuthenticationService;
+
 /**
  * Authentication middleware
  *
@@ -22,18 +24,24 @@ class Authentication extends \Slim\Middleware
     /**
      * Authentication service
      *
-     * @var \Zend\Authentication\AuthenticationService
+     * @var AuthenticationService
      */
     private $auth;
 
     /**
+     * @var array
+     */
+    private $config;
+
+    /**
      * Public constructor
      *
-     * @param \Zend\Authentication\AuthenticationService $auth Authentication service
+     * @param AuthenticationService $auth Authentication service
      */
-    public function __construct(\Zend\Authentication\AuthenticationService $auth)
+    public function __construct(AuthenticationService $auth, array $config)
     {
         $this->auth = $auth;
+        $this->config = $config;
     }
 
     /**
@@ -45,13 +53,7 @@ class Authentication extends \Slim\Middleware
         $app = $this->app;
         $auth = $this->auth;
         $req = $app->request();
-        $config = array(
-            'login.url' => '/login',
-            'security.urls' => array(
-                array('path' => '/admin'),
-                array('path' => '/admin/.+')
-            )
-        );
+        $config = $this->config;
 
         $this->app->hook('slim.before.router', function () use ($app, $auth, $req, $config) {
                 $securedUrls = isset($config['security.urls']) ? $config['security.urls'] : array();
