@@ -62,14 +62,12 @@ class Authentication extends \Slim\Middleware
             $securedUrls = isset($config['security.urls']) ? $config['security.urls'] : array();
             foreach ($securedUrls as $url) {
                 $urlPattern = '@^' . $url['path'] . '$@';
-                if (preg_match($urlPattern, $req->getPathInfo()) && !$auth->hasIdentity()) {
-                    if ($req->getPath() !== $config['login.url']) {
-                        $app->redirect($config['login.url']);
-                    }
-                }
+                if (preg_match($urlPattern, $req->getPathInfo()) === 1 && $auth->hasIdentity() === false) {
+                    return $app->redirect($config['login.url']);
+                }             
             }
         };
-
+        
         $this->app->hook('slim.before.router', $checkAuth);
 
         $this->next->call();
