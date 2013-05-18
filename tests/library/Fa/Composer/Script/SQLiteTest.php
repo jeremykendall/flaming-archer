@@ -93,22 +93,6 @@ class SQLiteTest extends \ComposerScriptTestCase
 
         SQLite::prepare($this->event);
         $this->assertTrue(file_exists($this->dbFile));
-
-        $config = $this->applicationConfig;
-
-        try {
-            $db = new \PDO(
-                $config['pdo']['dsn'],
-                $config['pdo']['username'],
-                $config['pdo']['password'],
-                $config['pdo']['options']
-            );
-            $result = $db->query("SELECT name FROM sqlite_master WHERE type='table' AND name IN ('images', 'users');")->fetchAll();
-            $this->assertEquals(2, count($result));
-            $db = null;
-        } catch (PDOException $e) {
-            throw $e;
-        }
     }
     
     public function testPrepareExists()
