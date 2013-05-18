@@ -23,20 +23,12 @@ class EncryptedCookieTest extends \PHPUnit_Framework_TestCase
      */
     protected $cookieContents = '{"message":"Cookie contents"}';
 
-    /**
-     * Sets up the fixture, for example, opens a network connection.
-     * This method is called before a test is executed.
-     */
     protected function setUp()
     {
         $this->app = $this->getMock('\Slim\Slim', array('getEncryptedCookie', 'setEncryptedCookie', 'deleteCookie'), array(), '', false);
         $this->cookie = new EncryptedCookie($this->app, 'cookieName');
     }
 
-    /**
-     * Tears down the fixture, for example, closes a network connection.
-     * This method is called after a test is executed.
-     */
     protected function tearDown()
     {
         $this->cookie = null;
@@ -47,10 +39,7 @@ class EncryptedCookieTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Fa\Authentication\Storage\EncryptedCookie', $this->cookie);
         $this->assertInstanceOf('\Zend\Authentication\Storage\StorageInterface', $this->cookie);
     }
-
-    /**
-     * @covers Fa\Authentication\Storage\EncryptedCookie::isEmpty
-     */
+    
     public function testIsEmptyTrue()
     {
         $this->app->expects($this->once())
@@ -60,9 +49,6 @@ class EncryptedCookieTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->cookie->isEmpty());
     }
     
-    /**
-     * @covers Fa\Authentication\Storage\EncryptedCookie::isEmpty
-     */
     public function testIsEmptyFalse()
     {
         $this->app->expects($this->once())
@@ -72,9 +58,6 @@ class EncryptedCookieTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->cookie->isEmpty());
     }
 
-    /**
-     * @covers Fa\Authentication\Storage\EncryptedCookie::read
-     */
     public function testRead()
     {
         $this->app->expects($this->once())
@@ -85,9 +68,6 @@ class EncryptedCookieTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(json_decode($this->cookieContents, true), $contents);
     }
 
-    /**
-     * @covers Fa\Authentication\Storage\EncryptedCookie::write
-     */
     public function testWrite()
     {
         $this->app->expects($this->once())
@@ -97,10 +77,6 @@ class EncryptedCookieTest extends \PHPUnit_Framework_TestCase
         $this->cookie->write(array("I'm a cookie"));
     }
 
-    /**
-     * @covers Fa\Authentication\Storage\EncryptedCookie::clear
-     * @todo   Implement testClear().
-     */
     public function testClear()
     {
         $this->app->expects($this->once())
@@ -108,5 +84,4 @@ class EncryptedCookieTest extends \PHPUnit_Framework_TestCase
                 ->with('cookieName');
         $this->cookie->clear();
     }
-
 }
