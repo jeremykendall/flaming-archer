@@ -48,7 +48,7 @@ class SQLite
                 );
                 $db->exec(file_get_contents($root . '/scripts/sql/schema.sql'));
                 $db = null;
-            } catch (PDOException $e) {
+            } catch (\PDOException $e) {
                 throw $e;
             }
             $io->write("Done! Please browse to http://your-flaming-archer-site.com/setup to complete set up.", true);
