@@ -133,4 +133,31 @@ class SQLiteTest extends \ComposerScriptTestCase
 
         SQLite::prepare($this->event);
     }
+
+    public function testPDOConnectionIssueThrowsException()
+    {
+        $this->setExpectedException('\PDOException');
+
+        $output = array(
+            'Reviewing your Flaming Archer database . . .',
+            'Creating new database . . .',
+        );
+
+        // Copy the application config over the test directory
+        copy($this->rootPath . '/../config-bad-db.php', $this->rootPath . '/config.php');
+        $this->assertFileExists($this->rootPath . '/config.php', 'Application config was not copied correctly in ' . __METHOD__);
+
+        // Configure expectations
+        foreach ($output as $index => $message) {
+            $this->outputMock->expects($this->at($index))
+                    ->method('write')
+                    ->with($this->equalTo($message), $this->equalTo(true));
+        }
+
+        $this->composerMock->expects($this->once())
+                ->method('getConfig')
+                ->will($this->returnValue($this->composerConfig));
+
+        SQLite::prepare($this->event);
+    }
 }
