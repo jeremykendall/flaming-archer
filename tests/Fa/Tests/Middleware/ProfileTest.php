@@ -1,7 +1,8 @@
 <?php
 
-namespace Fa\Middleware;
+namespace Fa\Tests\Middleware;
 
+use Fa\Middleware\Profile;
 use Slim\Slim;
 use Slim\View as SlimView;
 
