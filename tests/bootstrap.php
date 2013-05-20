@@ -6,10 +6,8 @@ ini_set('display_startup_errors', 1);
 
 date_default_timezone_set('America/Chicago');
 
-require_once realpath(__DIR__ . '/../vendor/autoload.php');
-require_once 'PHPUnit/Autoload.php';
-require_once 'CommonDbTestCase.php';
-require_once 'library/Fa/Composer/Script/ComposerScriptTestCase.php';
+$loader = require_once realpath(__DIR__ . '/../vendor/autoload.php');
+$loader->add('Fa\\', __DIR__);
 
 define('APPLICATION_PATH', realpath(__DIR__ . '/..'));
 

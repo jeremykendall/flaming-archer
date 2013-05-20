@@ -1,7 +1,8 @@
 <?php
 
-namespace Fa\Authentication\Adapter;
+namespace Fa\Tests\Authentication\Adapter;
 
+use Fa\Authentication\Adapter\DbAdapter;
 use Zend\Authentication\Result;
 
 /**
