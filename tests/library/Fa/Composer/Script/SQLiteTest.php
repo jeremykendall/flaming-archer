@@ -77,7 +77,7 @@ class SQLiteTest extends \ComposerScriptTestCase
         $output = array(
             'Reviewing your Flaming Archer database . . .',
             'Creating new database . . .',
-            "Done! Please browse to http://your-flaming-archer-site.com/setup to complete set up."
+            "Done!"
         );
 
         // Configure expectations

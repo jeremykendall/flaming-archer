@@ -51,7 +51,7 @@ class SQLite
             } catch (\PDOException $e) {
                 throw $e;
             }
-            $io->write("Done! Please browse to http://your-flaming-archer-site.com/setup to complete set up.", true);
+            $io->write("Done!", true);
         } else {
             $io->write('Database found.', true);
         }
