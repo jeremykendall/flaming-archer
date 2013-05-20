@@ -64,7 +64,7 @@ $config = array(
         )
     ),
     'login.url' => '/login',
-    'security.urls' => array(
+    'secured.urls' => array(
         array('path' => '/admin'),
         array('path' => '/admin/.+')
     ),

@@ -59,7 +59,7 @@ class Authentication extends \Slim\Middleware
         $config = $this->config;
 
         $checkAuth = function () use ($app, $auth, $req, $config) {
-            $securedUrls = isset($config['security.urls']) ? $config['security.urls'] : array();
+            $securedUrls = isset($config['secured.urls']) ? $config['secured.urls'] : array();
             foreach ($securedUrls as $url) {
                 $urlPattern = '@^' . $url['path'] . '$@';
                 if (preg_match($urlPattern, $req->getPathInfo()) === 1 && $auth->hasIdentity() === false) {

@@ -22,7 +22,7 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
         $config = array(
             'login.url' => '/login',
-            'security.urls' => array(
+            'secured.urls' => array(
                 array('path' => '/admin'),
                 array('path' => '/admin/.+')
             )
