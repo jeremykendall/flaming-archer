@@ -10,6 +10,7 @@ use Fa\Dao\ImageDao;
 use Fa\Dao\UserDao;
 use Fa\Middleware\Authentication;
 use Fa\Middleware\Navigation;
+use Fa\Middleware\Profile;
 use Fa\Service\FlickrService;
 use Fa\Service\FlickrServiceCache;
 use Fa\Service\ImageService;
@@ -51,6 +52,7 @@ $auth = new AuthenticationService();
 $storage = new EncryptedCookie($app);
 $auth->setStorage($storage);
 
+$app->add(new Profile($config));
 $app->add(new Navigation($auth));
 $app->add(new Authentication($auth, $config));
 

@@ -33,6 +33,14 @@ $config = array(
         'cipher' => MCRYPT_RIJNDAEL_256,
         'cipher_mode' => MCRYPT_MODE_CBC
     ),
+    'profile' => array(
+        'brand' => 'BRAND',
+        'site_name' => 'SITE NAME',
+        'flickr_username' => 'YOUR FLICKR USERNAME',
+        'photographer' => 'PHOTOGRAPHER',
+        'title' => 'TITLE',
+        'external_url' => 'http://EXTERNAL_URL',
+    ),
     'flickr.api.key' => 'API KEY',
     'database' => $sqlite,
     'pdo' => array(
