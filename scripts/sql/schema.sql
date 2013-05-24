@@ -7,7 +7,13 @@ CREATE TABLE IF NOT EXISTS `images` (
 
 CREATE TABLE IF NOT EXISTS `users` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `firstName` TEXT NOT NULL,
+  `lastName` TEXT NOT NULL,
   `email` TEXT NOT NULL,
-  `password_hash` TEXT NOT NULL,
-  `last_login` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+  `emailCanonical` TEXT NOT NULL,
+  `flickrUsername` TEXT NOT NULL,
+  `flickrApiKey` TEXT NOT NULL,
+  `externalUrl` TEXT NOT NULL,
+  `passwordHash` TEXT NOT NULL,
+  `lastLogin` timestamp NULL
 );

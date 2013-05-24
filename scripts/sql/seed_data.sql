@@ -9,5 +9,6 @@ INSERT INTO `images` VALUES (8, 8, 7906973070, '2012-10-30 08:15:35');
 INSERT INTO `images` VALUES (9, 9, 7249204674, '2012-11-09 04:29:07');
 INSERT INTO `images` VALUES (10, 10, 7623533156, '2012-11-09 12:19:54');
 
-INSERT INTO `users` (`id`, `email`, `password_hash`, `last_login`) VALUES
-(1, 'user@example.com', '$2y$12$pZg9j8DBSIP2R/vfDzTQOeIt5n57r5VigCUl/HH.FrBOadi3YhdPS', NULL);
+-- password == 'password'
+INSERT INTO `users` (`id`, `firstName`, `lastName`, `email`, `emailCanonical`, `flickrUsername`, `flickrApiKey`, `externalUrl`, `passwordHash`, `lastLogin`) VALUES
+(1, 'Jeremy', 'Kendall', 'user@example.com', 'user@example.com', 'jeremykendall', 'BLANK', 'http://about.me/jeremykendall', '$2y$12$pZg9j8DBSIP2R/vfDzTQOeIt5n57r5VigCUl/HH.FrBOadi3YhdPS', NULL);
