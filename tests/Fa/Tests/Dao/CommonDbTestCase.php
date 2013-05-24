@@ -30,7 +30,8 @@ class CommonDbTestCase extends \PHPUnit_Framework_TestCase
             \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC
         );
         $this->db = new \PDO($dsn, null, null, $options);
-        $this->db->exec(file_get_contents(APPLICATION_PATH . '/tests/_files/flaming_archer.sql'));
+        $this->db->exec(file_get_contents(APPLICATION_PATH . '/scripts/sql/schema.sql'));
+        $this->db->exec(file_get_contents(APPLICATION_PATH . '/scripts/sql/seed_data.sql'));
     }
     
     protected function tearDown()
