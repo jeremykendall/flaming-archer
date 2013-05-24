@@ -18,6 +18,8 @@ use Slim\Extras\Views\Twig;
 use Zend\Authentication\AuthenticationService;
 use Zend\Cache\StorageFactory;
 
+date_default_timezone_set('UTC');
+
 try {
     $db = new PDO(
         $config['pdo']['dsn'],
