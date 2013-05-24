@@ -10,6 +10,8 @@
 
 namespace Fa\Dao;
 
+use Fa\Entity\User;
+
 /**
  * User Dao
  */
@@ -37,43 +39,133 @@ class UserDao
      * Find user by email address
      *
      * @param  string $email User's email address
-     * @return array  User record
+     * @return mixed  User is query successful, false otherwise
      */
     public function findByEmail($email)
     {
-        $sql = 'SELECT * FROM users WHERE email = :email';
+        $sql = 'SELECT * FROM users WHERE emailCanonical = :emailCanonical';
         $stmt = $this->db->prepare($sql);
-        $stmt->bindValue(':email', $email, \PDO::PARAM_STR);
+        $stmt->bindValue(':emailCanonical', strtolower($email), \PDO::PARAM_STR);
         $stmt->execute();
-        $user = $stmt->fetch();
+        $result = $stmt->fetch();
 
-        return $user;
+        if ($result === false) {
+            return $result;
+        }
+
+        return new User($result);
     }
 
     /**
      * Returns all users in the database
      *
-     * @return array Users
+     * @return array Array of User objects
      */
     public function findAll()
     {
         $sql = 'SELECT * FROM users';
+        $result = $this->db->query($sql)->fetchAll();
 
-        return $this->db->query($sql)->fetchAll();
+        $userArray = array();
+
+        foreach ($result as $data) {
+            $userArray[] = new User($data);
+        }
+
+        return $userArray;
+    }
+
+    /**
+     * Saves a user
+     *
+     * @param  User $user
+     * @return User Saved user
+     */
+    public function save(User $user)
+    {
+        if ($this->findByEmail($user->getEmailCanonical())) {
+            return $this->update($user);
+        } else {
+            return $this->insert($user);
+        }
+    }
+
+    private function insert(User $user)
+    {
+        $sql = "INSERT INTO `users` (`id`, `firstName`, `lastName`, `email`, `emailCanonical`, `flickrUsername`, `flickrApiKey`, `externalUrl`, `passwordHash`, `lastLogin`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        $statement = $this->db->prepare($sql);
+
+        $params = array(
+            $user->getId(),
+            $user->getFirstName(),
+            $user->getLastName(),
+            $user->getEmail(),
+            $user->getEmailCanonical(),
+            $user->getFlickrUsername(),
+            $user->getFlickrApiKey(),
+            $user->getExternalUrl(),
+            $user->getPasswordHash(),
+            $lastLogin = ($user->getLastLogin()) ? $user->getLastLogin()->format('Y-m-d H:i:s') : null,
+        );
+
+        $statement->execute($params);
+
+        return $this->findByEmail($user->getEmailCanonical());
+    }
+
+    private function update(User $user) 
+    {
+        $sql = "UPDATE `users` SET "
+            . "`firstName` = ?, "
+            . "`lastName` = ?, "
+            . "`email` = ?, "
+            . "`emailCanonical` = ?, "
+            . "`flickrUsername` = ?, "
+            . "`flickrApiKey` = ?, "
+            . "`externalUrl` = ?, "
+            . "`passwordHash` = ?, "
+            . "`lastLogin` = ? "
+            . "WHERE `id` = ?";
+
+        $statement = $this->db->prepare($sql);
+            
+        $params = array(
+            $user->getFirstName(),
+            $user->getLastName(),
+            $user->getEmail(),
+            $user->getEmailCanonical(),
+            $user->getFlickrUsername(),
+            $user->getFlickrApiKey(),
+            $user->getExternalUrl(),
+            $user->getPasswordHash(),
+            $lastLogin = ($user->getLastLogin()) ? $user->getLastLogin()->format('Y-m-d H:i:s') : null,
+            $user->getId(),
+        );
+
+        $statement->execute($params);
+
+        return $this->findByEmail($user->getEmailCanonical());
     }
 
     /**
      * Updates login timestamp
      *
-     * @param  string $email User's email address
-     * @return bool   True on success, false on failure
+     * @param  string     $email User's email address
+     * @throws \Exception If user doesn't exist
+     * @return User       The updated User
      */
     public function recordLogin($email)
     {
-        $sql = "UPDATE users SET last_login = datetime('now') WHERE email = :email";
-        $stmt = $this->db->prepare($sql);
+        $user = $this->findByEmail($email);
 
-        return $stmt->execute(array('email' => $email));
+        if (!$user) {
+            throw new \InvalidArgumentException($email . ' does not exist');
+        }
+
+        $user->setLastLogin(new \DateTime('now'));
+
+        return $this->save($user);
     }
 
 }
