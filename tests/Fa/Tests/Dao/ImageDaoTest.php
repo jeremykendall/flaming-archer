@@ -59,7 +59,7 @@ class ImageDaoTest extends CommonDbTestCase
     {
         $result = $this->dao->findAll();
         $this->assertInternalType('array', $result);
-        $this->assertEquals(7, count($result));
+        $this->assertEquals(10, count($result));
     }
 
     /**
@@ -80,10 +80,10 @@ class ImageDaoTest extends CommonDbTestCase
      */
     public function testDelete()
     {
-        $this->assertEquals(7, count($this->dao->findAll()));
+        $this->assertEquals(10, count($this->dao->findAll()));
         $this->assertEquals(1, $this->dao->delete(1));
         $this->assertFalse($this->dao->find(1));
-        $this->assertEquals(6, count($this->dao->findAll()));
+        $this->assertEquals(9, count($this->dao->findAll()));
     }
 
 }
