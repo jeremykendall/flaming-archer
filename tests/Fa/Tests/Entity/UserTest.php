@@ -82,6 +82,13 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($lastLogin, $user->getLastLogin());
     }
 
+    public function testDateTimeExceptionUnsetsLastLoginArrayKeyAndDoesNotAttemptToSetLastLogin()
+    {
+        $this->userData['lastLogin'] = base64_encode('\DateTime will throw an \Exception on this');
+        $user = new User($this->userData);
+        $this->assertNull($user->getLastLogin());
+    }
+
     public function testGetSetNameProperties()
     {
         $firstName = 'Arthur';
