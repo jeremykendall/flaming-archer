@@ -1,7 +1,18 @@
 <?php
 
+/**
+ * Flaming Archer
+ *
+ * @link      http://github.com/jeremykendall/flaming-archer for the canonical source repository
+ * @copyright Copyright (c) 2012 Jeremy Kendall (http://about.me/jeremykendall)
+ * @license   http://github.com/jeremykendall/flaming-archer/blob/master/LICENSE MIT License
+ */
+
 namespace Fa\Entity;
 
+/**
+ * User entity
+ */
 class User
 {
     /**
@@ -277,7 +288,7 @@ class User
     {
         $this->flickrApiKey = $flickrApiKey;
     }
-    
+
     /**
      * Get externalUrl
      *
@@ -287,7 +298,7 @@ class User
     {
         return $this->externalUrl;
     }
-    
+
     /**
      * Set externalUrl
      *
