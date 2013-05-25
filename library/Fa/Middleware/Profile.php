@@ -38,8 +38,7 @@ class Profile extends Middleware
     }
 
     /**
-     * Constructs array of navigation items and appends them to the view. Navigation
-     * items differ if user is authenticated or not.
+     * Collects details from configuration to include in site templates
      */
     public function call()
     {
