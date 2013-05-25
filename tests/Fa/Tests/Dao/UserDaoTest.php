@@ -57,12 +57,12 @@ class UserDaoTest extends CommonDbTestCase
         parent::tearDown();
     }
 
-    public function testFindByEmail()
+    public function testFindByEmailCanonical()
     {
         $user = new User($this->userData);
         $this->dao->save($user);
 
-        $user = $this->dao->findByEmail($this->userData['email']);
+        $user = $this->dao->findByEmailCanonical($this->userData['email']);
 
         $this->assertNotNull($user);
         $this->assertInstanceOf('Fa\Entity\User', $user);
@@ -71,7 +71,7 @@ class UserDaoTest extends CommonDbTestCase
 
     public function testFindByEmailUserNotExist()
     {
-        $user = $this->dao->findByEmail('snoop@lion.com');
+        $user = $this->dao->findByEmailCanonical('snoop@lion.com');
         $this->assertFalse($user);
     }
 
@@ -89,7 +89,7 @@ class UserDaoTest extends CommonDbTestCase
         $result = $this->dao->save(new User($this->userData));
         $this->assertInstanceOf('Fa\Entity\User', $result);
 
-        $user = $this->dao->findByEmail($this->userData['email']);
+        $user = $this->dao->findByEmailCanonical($this->userData['email']);
 
         $this->assertInternalType('int', $user->getId());
         $this->assertEquals($this->userData['firstName'], $user->getFirstName());
@@ -110,7 +110,7 @@ class UserDaoTest extends CommonDbTestCase
         $user = $this->dao->save($user);
         $this->assertEquals($newApiKey, $user->getFlickrApiKey());
     }
-    
+
     public function testRecordLogin()
     {
         $user = $this->dao->save(new User($this->userData));
@@ -126,5 +126,29 @@ class UserDaoTest extends CommonDbTestCase
         $email = 'user@does-not-exist.com';
         $this->setExpectedException('\InvalidArgumentException',  $email . ' does not exist');
         $this->dao->recordLogin($email);
+    }
+
+    public function testFormatTimestamp()
+    {
+        $format = 'Y-m-d H:i:s';
+        $expected = '2020-10-02 10:00:00';
+        $timestamp = \DateTime::createFromFormat($format, $expected);
+        $actual = $this->dao->formatTimestamp($timestamp);
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function testFormatTimestampWhenTimestampNull()
+    {
+        $timestamp = null;
+        $output = $this->dao->formatTimestamp($timestamp);
+        $this->assertNull($output);
+    }
+
+    public function testGetSetFormat()
+    {
+        // Default format
+        $this->assertEquals('Y-m-d H:i:s', $this->dao->getFormat());
+        $this->dao->setFormat(\DateTime::ISO8601);
+        $this->assertEquals(\DateTime::ISO8601, $this->dao->getFormat());
     }
 }

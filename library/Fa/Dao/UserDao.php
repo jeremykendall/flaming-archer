@@ -17,13 +17,19 @@ use Fa\Entity\User;
  */
 class UserDao
 {
-
     /**
      * Database connection
      *
      * @var \PDO
      */
     protected $db;
+
+    /**
+     * DateTime format
+     *
+     * @var string
+     */
+    protected $format = 'Y-m-d H:i:s';
 
     /**
      * Public constructor
@@ -36,12 +42,12 @@ class UserDao
     }
 
     /**
-     * Find user by email address
+     * Find user by canonical email address
      *
      * @param  string $email User's email address
      * @return mixed  User is query successful, false otherwise
      */
-    public function findByEmail($email)
+    public function findByEmailCanonical($email)
     {
         $sql = 'SELECT * FROM users WHERE emailCanonical = :emailCanonical';
         $stmt = $this->db->prepare($sql);
@@ -83,13 +89,19 @@ class UserDao
      */
     public function save(User $user)
     {
-        if ($this->findByEmail($user->getEmailCanonical())) {
+        if ($this->findByEmailCanonical($user->getEmailCanonical())) {
             return $this->update($user);
         } else {
             return $this->insert($user);
         }
     }
 
+    /**
+     * Inserts a User
+     *
+     * @param  User $user User entity
+     * @return User Persited user entity
+     */
     private function insert(User $user)
     {
         $sql = "INSERT INTO `users` (`id`, `firstName`, `lastName`, `email`, `emailCanonical`, `flickrUsername`, `flickrApiKey`, `externalUrl`, `passwordHash`, `lastLogin`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -106,15 +118,21 @@ class UserDao
             $user->getFlickrApiKey(),
             $user->getExternalUrl(),
             $user->getPasswordHash(),
-            $lastLogin = ($user->getLastLogin()) ? $user->getLastLogin()->format('Y-m-d H:i:s') : null,
+            $this->formatTimestamp($user->getLastLogin()),
         );
 
         $statement->execute($params);
 
-        return $this->findByEmail($user->getEmailCanonical());
+        return $this->findByEmailCanonical($user->getEmailCanonical());
     }
 
-    private function update(User $user) 
+    /**
+     * Updates a User
+     *
+     * @param User User entity
+     * @return User Updated user entity
+     */
+    private function update(User $user)
     {
         $sql = "UPDATE `users` SET "
             . "`firstName` = ?, "
@@ -129,7 +147,7 @@ class UserDao
             . "WHERE `id` = ?";
 
         $statement = $this->db->prepare($sql);
-            
+
         $params = array(
             $user->getFirstName(),
             $user->getLastName(),
@@ -139,13 +157,13 @@ class UserDao
             $user->getFlickrApiKey(),
             $user->getExternalUrl(),
             $user->getPasswordHash(),
-            $lastLogin = ($user->getLastLogin()) ? $user->getLastLogin()->format('Y-m-d H:i:s') : null,
+            $this->formatTimestamp($user->getLastLogin()),
             $user->getId(),
         );
 
         $statement->execute($params);
 
-        return $this->findByEmail($user->getEmailCanonical());
+        return $this->findByEmailCanonical($user->getEmailCanonical());
     }
 
     /**
@@ -157,7 +175,7 @@ class UserDao
      */
     public function recordLogin($email)
     {
-        $user = $this->findByEmail($email);
+        $user = $this->findByEmailCanonical($email);
 
         if (!$user) {
             throw new \InvalidArgumentException($email . ' does not exist');
@@ -168,4 +186,18 @@ class UserDao
         return $this->save($user);
     }
 
+    public function formatTimestamp(\DateTime $timestamp = null)
+    {
+        return ($timestamp) ? $timestamp->format($this->format) : null;
+    }
+
+    public function getFormat()
+    {
+        return $this->format;
+    }
+
+    public function setFormat($format)
+    {
+        $this->format = $format;
+    }
 }
