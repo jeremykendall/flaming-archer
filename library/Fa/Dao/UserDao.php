@@ -11,6 +11,7 @@
 namespace Fa\Dao;
 
 use Fa\Entity\User;
+use Fa\Exception\UserLimitException;
 
 /**
  * User Dao
@@ -42,6 +43,24 @@ class UserDao
     }
 
     /**
+     * Finds user by id
+     *
+     * @param  int   $id User's id
+     * @return mixed The user identified by id or false if user not found
+     */
+    public function find($id)
+    {
+        $sql = 'SELECT * FROM users WHERE id = :id';
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindValue(':id', $id, \PDO::PARAM_INT);
+        $stmt->execute();
+        $stmt->setFetchMode(\PDO::FETCH_INTO, new User());
+        $result = $stmt->fetch();
+
+        return $result;
+    }
+
+    /**
      * Find user by canonical email address
      *
      * @param  string $email User's email address
@@ -53,13 +72,10 @@ class UserDao
         $stmt = $this->db->prepare($sql);
         $stmt->bindValue(':emailCanonical', strtolower($email), \PDO::PARAM_STR);
         $stmt->execute();
+        $stmt->setFetchMode(\PDO::FETCH_INTO, new User());
         $result = $stmt->fetch();
 
-        if ($result === false) {
-            return $result;
-        }
-
-        return new User($result);
+        return $result;
     }
 
     /**
@@ -89,7 +105,7 @@ class UserDao
      */
     public function save(User $user)
     {
-        if ($this->findByEmailCanonical($user->getEmailCanonical())) {
+        if ($this->find($user->getId())) {
             return $this->update($user);
         } else {
             return $this->insert($user);
@@ -99,11 +115,16 @@ class UserDao
     /**
      * Inserts a User
      *
-     * @param  User $user User entity
-     * @return User Persited user entity
+     * @param  User               $user User entity
+     * @return User               Persited user entity
+     * @throws UserLimitException If an attempt to persist a second user occurs
      */
     private function insert(User $user)
     {
+        if ($this->userExists()) {
+            throw new UserLimitException('No more than one user is allowed.');
+        }
+
         $sql = "INSERT INTO `users` (`id`, `firstName`, `lastName`, `email`, `emailCanonical`, `flickrUsername`, `flickrApiKey`, `externalUrl`, `passwordHash`, `lastLogin`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         $statement = $this->db->prepare($sql);
@@ -123,7 +144,7 @@ class UserDao
 
         $statement->execute($params);
 
-        return $this->findByEmailCanonical($user->getEmailCanonical());
+        return $this->find($this->db->lastInsertId());
     }
 
     /**
@@ -163,7 +184,7 @@ class UserDao
 
         $statement->execute($params);
 
-        return $this->findByEmailCanonical($user->getEmailCanonical());
+        return $this->find($user->getId());
     }
 
     /**
@@ -199,5 +220,23 @@ class UserDao
     public function setFormat($format)
     {
         $this->format = $format;
+    }
+
+    public function userExists()
+    {
+        $sql = 'SELECT COUNT(`id`) FROM `users`';
+        $result = $this->db->query($sql)->fetch(\PDO::FETCH_COLUMN);
+
+        return ($result) ? true : false;
+    }
+
+    /**
+     * Gets db
+     *
+     * @return \PDO Database instance
+     */
+    public function getDb()
+    {
+        return $this->db;
     }
 }

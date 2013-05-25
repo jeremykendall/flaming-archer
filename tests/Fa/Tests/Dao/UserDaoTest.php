@@ -16,11 +16,6 @@ class UserDaoTest extends CommonDbTestCase
     protected $dao;
 
     /**
-     * @var User User
-     */
-    protected $user;
-
-    /**
      * @var array
      */
     protected $userData;
@@ -32,19 +27,19 @@ class UserDaoTest extends CommonDbTestCase
     protected function setUp()
     {
         parent::setUp();
+        $this->db->exec("DELETE FROM `users`");
         $this->dao = new UserDao($this->db);
         $this->userData = array(
             'id' => 42,
             'firstName' => 'Zaphod',
             'lastName' => 'Beeblebrox',
-            'email' => 'Test@Example.COM',
+            'email' => 'Zaphod@Beeblebrox.com',
             'flickrUsername' => 'trillian',
             'flickrApiKey' => '12342342',
             'externalUrl' => 'http://en.wikipedia.org/wiki/The_Hitchhiker%27s_Guide_to_the_Galaxy_(novel)',
             'passwordHash' => 'fjdkslfjdlksjfkljlksjlsdj',
             'lastLogin' => new \DateTime('now'),
         );
-        $this->user = new User($this->userData);
     }
 
     /**
@@ -57,16 +52,34 @@ class UserDaoTest extends CommonDbTestCase
         parent::tearDown();
     }
 
+    public function testFind()
+    {
+        $newUser = $this->dao->save(new User($this->userData));
+
+        $id = $this->dao->getDb()->lastInsertId();
+
+        $user = $this->dao->find($id);
+        $this->assertEquals($newUser, $user);
+    }
+
+    public function testFindUserReturnsFalseIfUserDoesNotExist()
+    {
+        $this->assertFalse($this->dao->find(123412341423));
+    }
+
+    public function testGetDb()
+    {
+        $this->assertInstanceOf('PDO', $this->dao->getDb());
+    }
+
     public function testFindByEmailCanonical()
     {
-        $user = new User($this->userData);
-        $this->dao->save($user);
+        $newUser = $this->dao->save(new User($this->userData));
+        $foundUser = $this->dao->findByEmailCanonical($this->userData['email']);
 
-        $user = $this->dao->findByEmailCanonical($this->userData['email']);
-
-        $this->assertNotNull($user);
-        $this->assertInstanceOf('Fa\Entity\User', $user);
-        $this->assertEquals($this->user, $user);
+        $this->assertNotNull($foundUser);
+        $this->assertInstanceOf('Fa\Entity\User', $foundUser);
+        $this->assertEquals($newUser, $foundUser);
     }
 
     public function testFindByEmailUserNotExist()
@@ -77,11 +90,11 @@ class UserDaoTest extends CommonDbTestCase
 
     public function testFindAll()
     {
-        $this->dao->save(new User($this->userData));
+        $user = $this->dao->save(new User($this->userData));
         $result = $this->dao->findAll();
         $this->assertInternalType('array', $result);
-        $this->assertEquals(2, count($result));
-        $this->assertEquals($this->user, $result[1]);
+        $this->assertEquals(1, count($result));
+        $this->assertEquals($user, $result[0]);
     }
 
     public function testSaveNewUser()
@@ -109,6 +122,18 @@ class UserDaoTest extends CommonDbTestCase
         $user->setFlickrApiKey($newApiKey);
         $user = $this->dao->save($user);
         $this->assertEquals($newApiKey, $user->getFlickrApiKey());
+    }
+
+    public function testCannotSaveMoreThanOneUser()
+    {
+        $this->setExpectedException(
+            'Fa\Exception\UserLimitException', 
+            'No more than one user is allowed.'
+        );
+        $this->dao->save(new User($this->userData));
+        $this->userData['id'] = 9999;
+        $this->userData['email'] = 'zaphod@hotmail.com';
+        $this->dao->save(new User($this->userData));
     }
 
     public function testRecordLogin()
@@ -150,5 +175,11 @@ class UserDaoTest extends CommonDbTestCase
         $this->assertEquals('Y-m-d H:i:s', $this->dao->getFormat());
         $this->dao->setFormat(\DateTime::ISO8601);
         $this->assertEquals(\DateTime::ISO8601, $this->dao->getFormat());
+    }
+
+    public function testUserExists()
+    {
+        $this->dao->save(new User($this->userData));
+        $this->assertTrue($this->dao->userExists());
     }
 }
