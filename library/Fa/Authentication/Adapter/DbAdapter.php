@@ -10,25 +10,28 @@
 
 namespace Fa\Authentication\Adapter;
 
-use \Zend\Authentication\Result;
+use Fa\Dao\UserDao;
+use Phpass\Hash as Hasher;
+use Zend\Authentication\Adapter\AdapterInterface;
+use Zend\Authentication\Result;
 
 /**
  * Database auththentication adapter
  */
-class DbAdapter implements \Zend\Authentication\Adapter\AdapterInterface
+class DbAdapter implements AdapterInterface
 {
 
     /**
      * User Dao
      *
-     * @var \Fa\Dao\UserDao
+     * @var Fa\Dao\UserDao
      */
     private $dao;
 
     /**
      * Password hasher
      *
-     * @var \Phpass\Hash
+     * @var Phpass\Hash
      */
     private $hasher;
 
@@ -49,10 +52,10 @@ class DbAdapter implements \Zend\Authentication\Adapter\AdapterInterface
     /**
      * Public constructor
      *
-     * @param \Fa\Dao\UserDao $dao    User Dao
-     * @param \Phpass\Hash    $hasher Password hasher
+     * @param UserDao $dao    User Dao
+     * @param Hasher  $hasher Password hasher
      */
-    public function __construct(\Fa\Dao\UserDao $dao, \Phpass\Hash $hasher)
+    public function __construct(UserDao $dao, Hasher $hasher)
     {
         $this->dao = $dao;
         $this->hasher = $hasher;
@@ -73,19 +76,19 @@ class DbAdapter implements \Zend\Authentication\Adapter\AdapterInterface
     /**
      * Performs authentication
      *
-     * @return \Zend\Authentication\Result Authentication result
+     * @return Result Authentication result
      */
     public function authenticate()
     {
-        $user = $this->dao->findByEmail($this->email);
+        $user = $this->dao->findByEmailCanonical($this->email);
 
         if ($user === false) {
             return new Result(Result::FAILURE_IDENTITY_NOT_FOUND, array(), array('Invalid username or password provided'));
         }
 
-        if ($this->hasher->checkPassword($this->password, $user['password_hash'])) {
-            unset($user['password_hash']);
-            $this->dao->recordLogin($user['email']);
+        if ($this->hasher->checkPassword($this->password, $user->getPasswordHash())) {
+            $user->setPasswordHash(null);
+            $this->dao->recordLogin($user->getEmail());
 
             return new Result(Result::SUCCESS, $user, array());
         } else {
