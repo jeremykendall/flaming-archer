@@ -105,19 +105,9 @@ class User
      */
     public function setFromArray(array $data)
     {
-        if (isset($data['lastLogin']) && is_string($data['lastLogin'])) {
-            try {
-                $data['lastLogin'] = new \DateTime($data['lastLogin']);
-            } catch (\Exception $e) {
-                unset($data['lastLogin']);
-            }
-        }
 
         foreach ($data as $property => $value) {
-            $setter = 'set' . ucfirst($property);
-            if (method_exists($this, $setter)) {
-                $this->$setter($value);
-            }
+            $this->__set($property, $value);
         }
     }
 
@@ -327,5 +317,22 @@ class User
     public function setLastLogin(\DateTime $lastLogin = null)
     {
         $this->lastLogin = $lastLogin;
+    }
+
+    public function __set($name, $value)
+    {
+        $setter = 'set' . ucfirst($name);
+
+        if ($name == 'lastLogin' && is_string($value)) {
+            try {
+                $value = new \DateTime($value);
+            } catch (\Exception $e) {
+                $value = null;
+            }
+        }
+
+        if (method_exists($this, $setter)) {
+            $this->$setter($value);
+        }
     }
 }
