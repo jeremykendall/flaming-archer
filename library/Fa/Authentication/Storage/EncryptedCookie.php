@@ -10,18 +10,21 @@
 
 namespace Fa\Authentication\Storage;
 
+use Slim\Slim;
+use Zend\Authentication\Storage\StorageInterface;
+
 /**
  * Encrypted Cookie authentication storage
  *
  * Wrapper around Slim PHP's encrypted cookie
  */
-class EncryptedCookie implements \Zend\Authentication\Storage\StorageInterface
+class EncryptedCookie implements StorageInterface
 {
 
     /**
      * Instance of Slim application
      *
-     * @var \Slim\Slim
+     * @var Slim
      */
     private $app;
 
@@ -42,10 +45,10 @@ class EncryptedCookie implements \Zend\Authentication\Storage\StorageInterface
     /**
      * Public constructor
      *
-     * @param \Slim\Slim $app
+     * @param Slim $app
      * @param string     $cookieName
      */
-    public function __construct(\Slim\Slim $app, $cookieName = 'identity')
+    public function __construct(Slim $app, $cookieName = 'identity')
     {
         $this->app = $app;
         $this->cookieName = $cookieName;
