@@ -2,6 +2,7 @@
 
 namespace Fa\Tests\Authentication\Adapter;
 
+use \DateTime;
 use Fa\Authentication\Adapter\DbAdapter;
 use Fa\Entity\User;
 use Zend\Authentication\Result;
@@ -45,7 +46,8 @@ class DbAdapterTest extends \PHPUnit_Framework_TestCase
             'id' => '1',
             'email' => 'user@example.com',
             'passwordHash' => '$2y$12$pZg9j8DBSIP2R/vfDzTQOeIt5n57r5VigCUl/HH.FrBOadi3YhdPS',
-            'lastLogin' => null
+            'flickrApiKey' => '12341234',
+            'lastLogin' => null,
         ));
 
         $this->adapter = new DbAdapter($this->dao, $this->hasher);
@@ -73,6 +75,11 @@ class DbAdapterTest extends \PHPUnit_Framework_TestCase
                 ->with($this->user->getEmail())
                 ->will($this->returnValue($this->user));
 
+        $this->dao->expects($this->once())
+                ->method('recordLogin')
+                ->with($this->user->getEmail())
+                ->will($this->returnValue(new DateTime('now')));
+        
         $this->hasher->expects($this->once())
                 ->method('checkPassword')
                 ->with('password', $this->user->getPasswordHash())
@@ -81,10 +88,10 @@ class DbAdapterTest extends \PHPUnit_Framework_TestCase
         $this->adapter->setCredentials($this->user->getEmail(), 'password');
         $result = $this->adapter->authenticate();
         
-        $this->user->setPasswordHash(null);
-
         $this->assertInstanceOf('Zend\Authentication\Result', $result);
-        $this->assertEquals($this->user, $result->getIdentity());
+        $this->assertSame($this->user, $result->getIdentity());
+        $this->assertNull($this->user->getPasswordHash());
+        $this->assertNull($this->user->getFlickrApiKey());
         $this->assertEquals(Result::SUCCESS, $result->getCode());
         $this->assertEquals(array(), $result->getMessages());
     }
