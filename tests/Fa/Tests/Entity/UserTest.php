@@ -2,6 +2,7 @@
 
 namespace Fa\Tests\Entity;
 
+use \DateTime;
 use Fa\Entity\User;
 
 class UserTest extends \PHPUnit_Framework_TestCase
@@ -29,7 +30,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
             'flickrApiKey' => '12342342',
             'externalUrl' => 'http://en.wikipedia.org/wiki/The_Hitchhiker%27s_Guide_to_the_Galaxy_(novel)',
             'passwordHash' => 'fjdkslfjdlksjfkljlksjlsdj',
-            'lastLogin' => new \DateTime('now'),
+            'lastLogin' => new DateTime('now'),
         );
     }
 
@@ -76,7 +77,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
     public function testPassingDateStringToLastLoginInSetFromArraySetsLastLoginProperly()
     {
         $this->userData['lastLogin'] = '2121-11-15 08:20:12';
-        $lastLogin = new \DateTime($this->userData['lastLogin']);
+        $lastLogin = new DateTime($this->userData['lastLogin']);
 
         $user = new User($this->userData);
         $this->assertEquals($lastLogin, $user->getLastLogin());
@@ -84,7 +85,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
 
     public function testDateTimeExceptionUnsetsLastLoginArrayKeyAndDoesNotAttemptToSetLastLogin()
     {
-        $this->userData['lastLogin'] = base64_encode('\DateTime will throw an \Exception on this');
+        $this->userData['lastLogin'] = base64_encode('DateTime will throw an \Exception on this');
         $user = new User($this->userData);
         $this->assertNull($user->getLastLogin());
     }
@@ -164,8 +165,8 @@ class UserTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSetLastLogin()
     {
-        $now = new \DateTime('now');
-        $notNow = new \DateTime('2021-03-22 18:12:22');
+        $now = new DateTime('now');
+        $notNow = new DateTime('2021-03-22 18:12:22');
 
         $this->assertNull($this->user->getLastLogin());
 
@@ -174,5 +175,16 @@ class UserTest extends \PHPUnit_Framework_TestCase
 
         $this->user->setLastLogin($notNow);
         $this->assertSame($notNow, $this->user->getLastLogin());
+    }
+
+    public function testSerializeUnserialize()
+    {
+        $user = new User($this->userData);
+
+        $serialized = serialize($user);
+        $unserialized = unserialize($serialized);
+
+        $this->assertEquals($user, $unserialized);
+        $this->assertNotSame($user, $unserialized);
     }
 }

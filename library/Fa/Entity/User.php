@@ -10,10 +10,14 @@
 
 namespace Fa\Entity;
 
+use \DateTime;
+use \DateTimeZone;
+use \Serializable;
+
 /**
  * User entity
  */
-class User
+class User implements Serializable
 {
     /**
      * User id
@@ -81,7 +85,7 @@ class User
     /**
      * DateTime when user last logged in
      *
-     * @var \DateTime
+     * @var DateTime
      */
     private $lastLogin;
 
@@ -105,7 +109,6 @@ class User
      */
     public function setFromArray(array $data)
     {
-
         foreach ($data as $property => $value) {
             $this->__set($property, $value);
         }
@@ -302,7 +305,7 @@ class User
     /**
      * Get DateTime when user last logged in
      *
-     * @return \DateTime lastLogin
+     * @return DateTime lastLogin
      */
     public function getLastLogin()
     {
@@ -312,9 +315,9 @@ class User
     /**
      * Set lastLogin
      *
-     * @param \DateTime $lastLogin When user last logged in
+     * @param DateTime $lastLogin When user last logged in
      */
-    public function setLastLogin(\DateTime $lastLogin = null)
+    public function setLastLogin(DateTime $lastLogin = null)
     {
         $this->lastLogin = $lastLogin;
     }
@@ -325,7 +328,7 @@ class User
 
         if ($name == 'lastLogin' && is_string($value)) {
             try {
-                $value = new \DateTime($value);
+                $value = new DateTime($value);
             } catch (\Exception $e) {
                 $value = null;
             }
@@ -334,5 +337,42 @@ class User
         if (method_exists($this, $setter)) {
             $this->$setter($value);
         }
+
+    }
+
+    public function serialize()
+    {
+        $data = array(
+            'id' => $this->getId(),
+            'firstName' => $this->getFirstName(),
+            'lastName' => $this->getLastName(),
+            'email' => $this->getEmail(),
+            'passwordHash' => $this->getPasswordHash(),
+            'flickrUsername' => $this->getFlickrUsername(),
+            'flickrApiKey' => $this->getFlickrApiKey(),
+            'externalUrl' => $this->getExternalUrl(),
+            'lastLogin' => ($this->getLastLogin()) ? $this->getLastLogin()->format('Y-m-d H:i:s') : null,
+            'timeZone' => ($this->getLastLogin()) ? $this->getLastLogin()->format('e') : null,
+        );
+
+        return serialize($data);
+    }
+
+    public function unserialize($serialized)
+    {
+        $data = unserialize($serialized);
+
+        $time = $data['lastLogin'];
+        $timezone = $data['timeZone'];
+
+        if (!$time === null && !$timezone === null) {
+            $lastLogin = DateTime::createFromFormat(
+                'Y-m-d H:i:s',
+                $time,
+                new DateTimeZone($timezone)
+            );
+        }
+
+        $this->setFromArray($data);
     }
 }
