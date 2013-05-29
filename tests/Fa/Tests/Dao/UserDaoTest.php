@@ -2,6 +2,7 @@
 
 namespace Fa\Tests\Dao;
 
+use \DateTime;
 use Fa\Dao\UserDao;
 use Fa\Entity\User;
 
@@ -38,7 +39,7 @@ class UserDaoTest extends CommonDbTestCase
             'flickrApiKey' => '12342342',
             'externalUrl' => 'http://en.wikipedia.org/wiki/The_Hitchhiker%27s_Guide_to_the_Galaxy_(novel)',
             'passwordHash' => 'fjdkslfjdlksjfkljlksjlsdj',
-            'lastLogin' => new \DateTime('now'),
+            'lastLogin' => new DateTime('now'),
         );
     }
 
@@ -141,7 +142,7 @@ class UserDaoTest extends CommonDbTestCase
         $user = $this->dao->save(new User($this->userData));
         $user = $this->dao->recordLogin($user->getEmailCanonical());
         $this->assertNotNull($user->getLastLogin());
-        $now = new \DateTime('now');
+        $now = new DateTime('now');
         $interval = $now->diff($user->getLastLogin());
         $this->assertLessThanOrEqual(3, $interval->s, "lastLogin wasn't updated within the last 3 seconds.");
     }
@@ -157,7 +158,7 @@ class UserDaoTest extends CommonDbTestCase
     {
         $format = 'Y-m-d H:i:s';
         $expected = '2020-10-02 10:00:00';
-        $timestamp = \DateTime::createFromFormat($format, $expected);
+        $timestamp = DateTime::createFromFormat($format, $expected);
         $actual = $this->dao->formatTimestamp($timestamp);
         $this->assertEquals($expected, $actual);
     }
@@ -173,8 +174,8 @@ class UserDaoTest extends CommonDbTestCase
     {
         // Default format
         $this->assertEquals('Y-m-d H:i:s', $this->dao->getFormat());
-        $this->dao->setFormat(\DateTime::ISO8601);
-        $this->assertEquals(\DateTime::ISO8601, $this->dao->getFormat());
+        $this->dao->setFormat(DateTime::ISO8601);
+        $this->assertEquals(DateTime::ISO8601, $this->dao->getFormat());
     }
 
     public function testUserExists()
