@@ -10,6 +10,7 @@
 
 namespace Fa\Dao;
 
+use \DateTime;
 use Fa\Entity\User;
 use Fa\Exception\UserLimitException;
 
@@ -202,12 +203,12 @@ class UserDao
             throw new \InvalidArgumentException($email . ' does not exist');
         }
 
-        $user->setLastLogin(new \DateTime('now'));
+        $user->setLastLogin(new DateTime('now'));
 
         return $this->save($user);
     }
 
-    public function formatTimestamp(\DateTime $timestamp = null)
+    public function formatTimestamp(DateTime $timestamp = null)
     {
         return ($timestamp) ? $timestamp->format($this->format) : null;
     }
