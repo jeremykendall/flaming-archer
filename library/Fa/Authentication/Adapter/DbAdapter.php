@@ -88,6 +88,7 @@ class DbAdapter implements AdapterInterface
 
         if ($this->hasher->checkPassword($this->password, $user->getPasswordHash())) {
             $user->setPasswordHash(null);
+            $user->setFlickrApiKey(null);
             $this->dao->recordLogin($user->getEmail());
 
             return new Result(Result::SUCCESS, $user, array());
