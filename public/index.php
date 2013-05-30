@@ -1,13 +1,16 @@
 <?php
 
-require '../vendor/autoload.php';
+$loader = require '../vendor/autoload.php';
 
 $config = require_once __DIR__ . '/../config.php';
 
+use Doctrine\Common\Annotations\AnnotationRegistry;
 use Fa\Authentication\Adapter\DbAdapter;
 use Fa\Authentication\Storage\EncryptedCookie;
 use Fa\Dao\ImageDao;
 use Fa\Dao\UserDao;
+use Fa\Entity\User;
+use Fa\Form\UserForm;
 use Fa\Middleware\Authentication;
 use Fa\Middleware\Navigation;
 use Fa\Middleware\Profile;
@@ -15,6 +18,8 @@ use Fa\Service\FlickrService;
 use Fa\Service\FlickrServiceCache;
 use Fa\Service\ImageService;
 use Slim\Extras\Views\Twig;
+use Symfony\Component\Validator\Validation;
+use Symfony\Component\Form\Forms;
 use Zend\Authentication\AuthenticationService;
 use Zend\Cache\StorageFactory;
 
@@ -58,11 +63,54 @@ $app->add(new Profile($config));
 $app->add(new Navigation($auth));
 $app->add(new Authentication($auth, $config));
 
+// Form stuff
+use Symfony\Bridge\Twig\Extension\FormExtension;
+use Symfony\Bridge\Twig\Extension\TranslationExtension;
+use Symfony\Bridge\Twig\Form\TwigRenderer;
+use Symfony\Bridge\Twig\Form\TwigRendererEngine;
+use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
+use Symfony\Component\Translation\Translator;
+
+$formEngine = new TwigRendererEngine($config['twig']['defaultThemes']);
+$formExtension = new FormExtension(new TwigRenderer($formEngine));
+
+$translator = new Translator('en');
+$translationExtension = new TranslationExtension($translator);
+
 // Prepare view
-Twig::$twigOptions = $config['twig'];
+Twig::$twigOptions = $config['twig']['environmentOptions'];
+Twig::$twigTemplateDirs = $config['twig']['templatePaths'];
+Twig::$twigExtensions = array(
+    $formExtension,
+    $translationExtension,
+);
 $app->view(new Twig());
 
 // Define routes
+$app->map('/setup', function() use ($app, $loader) {
+    AnnotationRegistry::registerLoader(array($loader, 'loadClass'));
+    $validator = Validation::createValidatorBuilder()
+        ->enableAnnotationMapping()
+        ->getValidator();
+    $formFactory = Forms::createFormFactoryBuilder()
+        ->addExtension(new ValidatorExtension($validator))
+        ->getFormFactory();
+    $form = $formFactory->create(new UserForm());
+
+    if ($app->request()->isPost()) {
+        $post = $app->request()->post();
+        $form->bind($post['user']);
+
+        if ($form->isValid()) {
+            var_dump('VALID!');
+            die();
+        }
+    }
+    
+    $app->render('setup.html', array('form' => $form->createView()));
+
+})->via('GET', 'POST');
+
 $app->get('/', function () use ($app, $service) {
     $images = $service->findAll();
     $app->render('index.html', array('images' => $images));
@@ -145,14 +193,3 @@ $app->get('/logout', function() use ($app, $auth) {
 
 // Run app
 $app->run();
-
-function d($expression)
-{
-    var_dump($expression);
-}
-
-function dd($expression)
-{
-    d($expression);
-    die();
-}

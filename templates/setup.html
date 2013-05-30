@@ -9,34 +9,15 @@
         {% if flash.error %}
         <p style="color: red;">{{flash.error}}</p>
         {% endif %}
-        <form name="setup" id="setup" class="well" method="post">
-            <label for="firstName">First name</label>
-            <input type="text" name="firstName" id="firstName" value="{{ user.firstName }}" required>
-            
-            <label for="lastName">Last name</label>
-            <input type="text" name="lastName" id="lastName" value="{{ user.lastName }}" required>
-
-            <label for="email">Email</label>
-            <input type="email" name="email" id="email" value="{{ user.email }}" required>
-
-            <label for="password">Password</label>
-            <input type="password" name="password" id="password" required> 
-            
-            <label for="confirmPassword">Password again</label>
-            <input type="password" name="confirmPassword" id="confirmPassword" required>
-
-            <label for="flickrUsername">Flickr username</label>
-            <input type="text" name="flickrUsername" id="flickrUsername" value="{{ user.flickrUsername }}" required>
-
-            <label for="flickrApiKey">Flickr API key</label>
-            <input type="text" name="flickrApiKey" id="flickrApiKey" value="{{ user.flickrApiKey }}" required>
-            <span class="help-block">Get your Flickr API key <a href="http://www.flickr.com/services/api/misc.api_keys.html" target="_blank">here</a></span>
-
-            <label for="externalUrl">Your website</label>
-            <input type="text" name="externalUrl" id="externalUrl" value="{{ user.externalUrl }}" >
-            <span class="help-block">Your portfolio, Facebook, Flickr, Twitter, or whatever</span>
-            
-            <br />
+        {% form_theme form 'form/fields.html.twig' %}
+        <form name="setup" id="setup" class="well" method="post" {{ form_enctype(form) }} novalidate>
+            {{ form_row(form.firstName) }}
+            {{ form_row(form.lastName) }}
+            {{ form_row(form.email) }}
+            {{ form_row(form.passwordHash) }}
+            {{ form_row(form.flickrUsername) }}
+            {{ form_row(form.flickrApiKey) }}
+            {{ form_row(form.externalUrl) }}
             <button type="submit" class="btn">Submit</button>
         </form>
     </div>
@@ -50,7 +31,7 @@
 {% block javascript %}
 <script type="text/javascript">
     $(function() {
-        $("#firstName").focus();
+        $("#user_firstName").focus();
     }
 );
 </script>
