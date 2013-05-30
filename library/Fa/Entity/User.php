@@ -381,7 +381,7 @@ class User implements Serializable
         $time = $data['lastLogin'];
         $timezone = $data['timeZone'];
 
-        if (!$time === null && !$timezone === null) {
+        if (!$time == null && !$timezone == null) {
             $lastLogin = DateTime::createFromFormat(
                 'Y-m-d H:i:s',
                 $time,
