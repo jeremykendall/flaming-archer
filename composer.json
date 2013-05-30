@@ -26,7 +26,11 @@
         "zendframework/zend-cache": "2.1.*",
         "zendframework/zend-serializer": "2.1.*",
         "zendframework/zend-inputfilter": "2.1.*",
-        "rych/phpass": "2.1.x-dev"
+        "rych/phpass": "2.1.x-dev",
+        "symfony/form": "2.2.*",
+        "symfony/twig-bridge": "2.2.*",
+        "symfony/validator": "2.2.*",
+        "doctrine/common": "2.3.*"
     },
     "require-dev": {
         "composer/composer": "1.0.*@dev",
