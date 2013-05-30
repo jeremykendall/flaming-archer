@@ -13,6 +13,7 @@ namespace Fa\Entity;
 use \DateTime;
 use \DateTimeZone;
 use \Serializable;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * User entity
@@ -23,6 +24,7 @@ class User implements Serializable
      * User id
      *
      * @var int
+     * @Assert\Type(type = "int")
      */
     private $id;
 
@@ -30,6 +32,8 @@ class User implements Serializable
      * User's first name
      *
      * @var string
+     * @Assert\NotBlank
+     * @Assert\Length(min = 2)
      */
     private $firstName;
 
@@ -37,6 +41,8 @@ class User implements Serializable
      * User's last name
      *
      * @var string
+     * @Assert\NotBlank
+     * @Assert\Length(min = 1)
      */
     private $lastName;
 
@@ -44,6 +50,8 @@ class User implements Serializable
      * User's email address. Doubles as username
      *
      * @var string
+     * @Assert\NotBlank
+     * @Assert\Email
      */
     private $email;
 
@@ -51,6 +59,8 @@ class User implements Serializable
      * User's email normalized to lower case
      *
      * @var string
+     * @Assert\NotBlank
+     * @Assert\Email
      */
     private $emailCanonical;
 
@@ -58,6 +68,8 @@ class User implements Serializable
      * Password hash
      *
      * @var string
+     * @Assert\NotBlank
+     * @Assert\Length(min = 8)
      */
     private $passwordHash;
 
@@ -65,6 +77,7 @@ class User implements Serializable
      * Flickr username
      *
      * @var string
+     * @Assert\NotBlank
      */
     private $flickrUsername;
 
@@ -72,6 +85,7 @@ class User implements Serializable
      * Flickr API key
      *
      * @var string
+     * @Assert\NotBlank
      */
     private $flickrApiKey;
 
@@ -79,6 +93,7 @@ class User implements Serializable
      * Photographer's homepage, portfolio, Flickr profile, or other.
      *
      * @var string
+     * @Assert\Url
      */
     private $externalUrl;
 
@@ -86,6 +101,7 @@ class User implements Serializable
      * DateTime when user last logged in
      *
      * @var DateTime
+     * @Assert\DateTime
      */
     private $lastLogin;
 

@@ -4,6 +4,7 @@ namespace Fa\Tests\Entity;
 
 use \DateTime;
 use Fa\Entity\User;
+use Symfony\Component\Validator\Validation;
 
 class UserTest extends \PHPUnit_Framework_TestCase
 {
@@ -186,5 +187,28 @@ class UserTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($user, $unserialized);
         $this->assertNotSame($user, $unserialized);
+    }
+
+    public function testValidateUserAllFieldsInvalid()
+    {
+        $user = new User();
+        $violations = $this->validate($user);
+        $this->assertEquals(7, count($violations));
+    }
+
+    public function testValidateUserAllFieldsValid()
+    {
+        $user = new User($this->userData);
+        $violations = $this->validate($user);
+        $this->assertEquals(0, count($violations));
+    }
+
+    private function validate(User $user)
+    {
+        $validator = Validation::createValidatorBuilder()
+            ->enableAnnotationMapping()
+            ->getValidator();
+        $violations = $validator->validate($user);
+        return $violations;
     }
 }
