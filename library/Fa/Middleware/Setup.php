@@ -41,8 +41,8 @@ class Setup extends Middleware
         $dao = $this->dao;
 
         $checkSetup = function () use ($app, $dao) {
-            if ($this->dao->userExists() === false) {
-                return $this->app->redirect('/setup');
+            if ($dao->userExists() === false) {
+                return $app->redirect('/setup');
             }
         };
         
