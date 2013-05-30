@@ -1,0 +1,28 @@
+{% extends 'form_div_layout.html.twig' %}
+{# Inspired by http://www.yewchube.com/2011/08/symfony-2-bootstrap-css-form-templates/ #}
+ 
+{% block field_errors %}
+{% spaceless %}
+    <span class="help-inline">
+        {% if errors|length > 0 %}
+            {% for error in errors %}
+                {{ error.messageTemplate|trans(error.messageParameters, 'validators') }}<br />
+            {% endfor %}
+        {% endif %}
+    </span>
+{% endspaceless %}
+{% endblock field_errors %}
+ 
+{% block field_row %}
+    <div class="control-group {% if errors|length > 0 %}error{% endif %}">
+        {{ form_label(form, label, { 'label_attr': { 'class': 'control-label' }}) }}
+        <div class="controls">
+            {% set class = '' %}
+            {% if errors|length > 0 %}
+                {% set class = 'error' %}
+            {% endif %}
+            {{ form_widget(form, { 'attr': { 'class': class } }) }}
+            {{ form_errors(form) }}
+        </div>
+    </div>
+{% endblock field_row %}
