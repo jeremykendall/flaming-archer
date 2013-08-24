@@ -6,12 +6,12 @@ $sqlite = __DIR__ . '/db/flaming-archer.db';
 $config = array(
     'slim' => array(
         'templates.path' => __DIR__ . '/templates',
-        'log.level' => Slim\Log::DEBUG,
+        'log.level' => Slim\Log::ERROR,
         'log.enabled' => true,
         'log.writer' => new Slim\Extras\Log\DateTimeFileWriter(
             array(
                 'path' => __DIR__ . '/logs',
-                'name_format' => 'y-m-d'
+                'name_format' => 'Y-m-d'
             )
         )
     ),
