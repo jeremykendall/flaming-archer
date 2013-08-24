@@ -119,26 +119,28 @@ $app->post('/admin/delete-photo', function() use ($app, $service, $cache) {
 });
 
 $app->map('/login', function() use ($app, $auth, $authAdapter) {
-    if ($app->request()->isGet()) {
-        $app->render('login.html');
-    }
+
+    $email = null;
 
     if ($app->request()->isPost()) {
 
         $post = $app->request()->post();
 
-        $authAdapter->setCredentials($post['email'], $post['password']);
+        $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+
+        $authAdapter->setCredentials($email, $post['password']);
         $auth->setAdapter($authAdapter);
         $result = $auth->authenticate();
 
         if (!$result->isValid()) {
             $messages = $result->getMessages();
-            $app->flash('error', $messages[0]);
-            $app->redirect('/login');
+            $app->flashNow('error', $messages[0]);
         } else {
             $app->redirect('/');
         }
     }
+
+    $app->render('login.html', array('email' => $email));
 })->via('GET', 'POST');
 
 $app->get('/logout', function() use ($app, $auth) {
