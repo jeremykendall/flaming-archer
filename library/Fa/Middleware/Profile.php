@@ -15,13 +15,12 @@ use Slim\Middleware;
 /**
  * Site Profile Middleware
  *
- * Collects details from configuration to include in site templates
+ * Collects profile info from configuration to include in site templates
  */
 class Profile extends Middleware
 {
-
     /**
-     * Array
+     * Config array
      *
      * @var array
      */
@@ -38,8 +37,7 @@ class Profile extends Middleware
     }
 
     /**
-     * Constructs array of navigation items and appends them to the view. Navigation
-     * items differ if user is authenticated or not.
+     * Constructs array of profile items and appends them to the view.
      */
     public function call()
     {
