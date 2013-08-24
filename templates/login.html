@@ -11,10 +11,10 @@
         {% endif %}
         <form name="login" id="login" class="well" method="post">
             <label for="email">Email</label>
-            <input type="text" name="email" id="email" value="{{ email }}" />
+            <input type="email" name="email" id="email" value="{{ email }}" required/>
 
             <label for="password">Password</label>
-            <input type="password" name="password" id="password" />
+            <input type="password" name="password" id="password" required/>
             <br />
             <button class="btn">Log in</button>
         </form>

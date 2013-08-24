@@ -7,8 +7,8 @@
     <div class="span4">
         <h2>Add a photo</h2>
         <form name="add-photo" id="add-photo" class="well form-inline" method="post" action="/admin/add-photo">
-            <input type="text" id="day" class="span1" name="day" placeholder="Day"/>
-            <input type="text" id="photo_id" class="span2" name="photo_id" placeholder="Flickr photo id" />
+            <input type="number" min="1" max="366" id="day" class="span1" name="day" placeholder="Day" required />
+            <input type="number" id="photo_id" class="span2" name="photo_id" placeholder="Flickr photo id" required />
             <button type="submit" class="btn">Submit</button>
         </form>
     </div>
