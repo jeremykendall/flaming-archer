@@ -15,7 +15,6 @@ namespace Fa\Dao;
  */
 class UserDao
 {
-
     /**
      * Database connection
      *
@@ -75,5 +74,4 @@ class UserDao
 
         return $stmt->execute(array('email' => $email));
     }
-
 }
