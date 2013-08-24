@@ -19,13 +19,14 @@
     "require": {
         "php": ">=5.3.10",
         "ext-mcrypt": "*",
-        "slim/slim": "2.2.0",
-        "slim/extras": "2.0.3",
-        "twig/twig": "1.13.0",
-        "zendframework/zend-authentication": "2.1.*",
-        "zendframework/zend-cache": "2.1.*",
-        "zendframework/zend-serializer": "2.1.*",
-        "zendframework/zend-inputfilter": "2.1.*",
+        "slim/slim": "2.3.*",
+        "slim/extras": "2.0.*",
+        "slim/views": "0.1.*",
+        "twig/twig": "1.13.*",
+        "zendframework/zend-authentication": "2.2.*",
+        "zendframework/zend-cache": "2.2.*",
+        "zendframework/zend-serializer": "2.2.*",
+        "zendframework/zend-inputfilter": "2.2.*",
         "rych/phpass": "2.1.x-dev"
     },
     "require-dev": {

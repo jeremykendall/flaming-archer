@@ -14,7 +14,10 @@ use Fa\Middleware\Profile;
 use Fa\Service\FlickrService;
 use Fa\Service\FlickrServiceCache;
 use Fa\Service\ImageService;
-use Slim\Extras\Views\Twig;
+use Slim\Middleware\SessionCookie;
+use Slim\Slim;
+use Slim\Views\Twig;
+use Slim\Views\TwigExtension;
 use Zend\Authentication\AuthenticationService;
 use Zend\Cache\StorageFactory;
 
@@ -40,7 +43,7 @@ $flickrServiceCache = new FlickrServiceCache($flickrService, $cache);
 $service = new ImageService(new ImageDao($db), $flickrServiceCache);
 
 // Prepare app
-$app = new Slim\Slim($config['slim']);
+$app = new Slim($config['slim']);
 
 $app->configureMode('development', function() {
     error_reporting(-1);
@@ -55,10 +58,12 @@ $auth->setStorage($storage);
 $app->add(new Profile($config));
 $app->add(new Navigation($auth));
 $app->add(new Authentication($auth, $config));
+$app->add(new SessionCookie($config['cookies']));
 
 // Prepare view
-Twig::$twigOptions = $config['twig'];
 $app->view(new Twig());
+$app->view->parserOptions = $config['twig'];
+$app->view->parserExtensions = array(new TwigExtension());
 
 // Define routes
 $app->get('/', function () use ($app, $service) {
