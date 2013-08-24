@@ -124,11 +124,9 @@ $app->map('/login', function() use ($app, $auth, $authAdapter) {
 
     if ($app->request()->isPost()) {
 
-        $post = $app->request()->post();
-
         $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
 
-        $authAdapter->setCredentials($email, $post['password']);
+        $authAdapter->setCredentials($email, $_POST['password']);
         $auth->setAdapter($authAdapter);
         $result = $auth->authenticate();
 
@@ -136,7 +134,7 @@ $app->map('/login', function() use ($app, $auth, $authAdapter) {
             $messages = $result->getMessages();
             $app->flashNow('error', $messages[0]);
         } else {
-            $app->redirect('/');
+            $app->redirect('/admin');
         }
     }
 
