@@ -33,7 +33,7 @@
         </tr>
     </thead>
     <tbody>
-        {% for image in images %}
+        {% for image in paginator %}
         <tr>
             <td><a href="/day/{{image.day}}"><img src="{{image.sizes.size.0.source}}" width="{{image.sizes.size.0.width}}" height="{{image.sizes.size.0.height}}" /></a></td>
             <td>{{image.day}}</td>
@@ -52,4 +52,15 @@
     </tbody>
 </table>
 
+{% if pages.pageCount %}
+<div class="pagination">
+    <ul>
+        <li{% if pages.previous == false %} class="disabled"{% endif %}><a href="{{ baseUrl() }}/admin/page/{{ pages.previous }}">Prev</a></li>
+        {% for page in pages.pagesInRange %}
+        <li{% if page == pages.current %} class="active"{% endif %}><a href="{{ baseUrl() }}/admin/page/{{ page }}">{{ page }}</a></li>
+        {% endfor %}
+        <li{% if pages.next == false %} class="disabled"{% endif %}><a href="{{ baseUrl() }}/admin/page/{{ pages.next }}">Next</a></li>
+    </ul>
+</div>
+{% endif %}
 {% endblock %}

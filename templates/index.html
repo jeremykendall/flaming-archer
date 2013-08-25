@@ -1,7 +1,7 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-{% for image in images %}
+{% for image in paginator %}
 <div class="row">
     <div class="span6">
         <h2><a href="/day/{{image.day}}">{{image.day}}/365</a></h2>
@@ -9,7 +9,20 @@
         <p>Posted {{image.posted|date("m/d/Y")}}</p>
     </div>
 </div>
+
 {% else %}
 <p>No images in project</p>
 {% endfor %}
+
+{% if pages.pageCount %}
+<div class="pagination">
+    <ul>
+        <li{% if pages.previous == false %} class="disabled"{% endif %}><a href="{{ baseUrl() }}/page/{{ pages.previous }}">Prev</a></li>
+        {% for page in pages.pagesInRange %}
+        <li{% if page == pages.current %} class="active"{% endif %}><a href="{{ baseUrl() }}/page/{{ page }}">{{ page }}</a></li>
+        {% endfor %}
+        <li{% if pages.next == false %} class="disabled"{% endif %}><a href="{{ baseUrl() }}/page/{{ pages.next }}">Next</a></li>
+    </ul>
+</div>
+{% endif %}
 {% endblock %}

@@ -1,5 +1,8 @@
 <?php
 
+    error_reporting(-1);
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
 require '../vendor/autoload.php';
 
 $config = require_once __DIR__ . '/../config.php';
@@ -11,6 +14,7 @@ use Fa\Dao\UserDao;
 use Fa\Middleware\Authentication;
 use Fa\Middleware\Navigation;
 use Fa\Middleware\Profile;
+use Fa\Pagination;
 use Fa\Service\FlickrService;
 use Fa\Service\FlickrServiceCache;
 use Fa\Service\ImageService;
@@ -30,8 +34,10 @@ try {
     );
 } catch (PDOException $e) {
     error_log('Database connection error in ' . $e->getFile() . ' on line ' . $e->getLine() . ': ' . $e->getMessage());
-    die('Database connection error. Please check error logs.');
+    die('Database connection error. Please check php error log.');
 }
+
+$pagination = new Pagination();
 
 $userDao = new UserDao($db);
 $authAdapter = new DbAdapter($userDao, new Phpass\Hash());
@@ -45,6 +51,7 @@ $service = new ImageService(new ImageDao($db), $flickrServiceCache);
 // Prepare app
 $app = new Slim($config['slim']);
 
+// Dev mode settings
 $app->configureMode('development', function() {
     error_reporting(-1);
     ini_set('display_errors', 1);
@@ -55,6 +62,7 @@ $auth = new AuthenticationService();
 $storage = new EncryptedCookie($app);
 $auth->setStorage($storage);
 
+// Add Middleware
 $app->add(new Profile($config));
 $app->add(new Navigation($auth));
 $app->add(new Authentication($auth, $config));
@@ -66,9 +74,18 @@ $app->view->parserOptions = $config['twig'];
 $app->view->parserExtensions = array(new TwigExtension());
 
 // Define routes
-$app->get('/', function () use ($app, $service) {
+$app->get('/', function ($page = 1) use ($app, $service, $pagination) {
     $images = $service->findAll();
-    $app->render('index.html', array('images' => $images));
+    $paginator = $pagination->newPaginator($images, $page, 10);
+
+    $app->render('index.html', array('paginator' => $paginator, 'pages' => $paginator->getPages()));
+});
+
+$app->get('/page/:page', function ($page = 1) use ($app, $service, $pagination) {
+    $images = $service->findAll();
+    $paginator = $pagination->newPaginator($images, $page, 10);
+
+    $app->render('index.html', array('paginator' => $paginator, 'pages' => $paginator->getPages()));
 });
 
 $app->get('/day/:day', function($day) use ($app, $service) {
@@ -99,9 +116,11 @@ $app->post('/admin/clear-cache', function() use ($app, $cache) {
     $app->redirect('/admin');
 });
 
-$app->get('/admin', function() use ($app, $service) {
+$app->get('/admin(/page/:page)', function ($page = 1) use ($app, $service, $pagination) {
     $images = $service->findAll();
-    $app->render('admin/index.html', array('images' => $images));
+    $paginator = $pagination->newPaginator($images, $page, 10);
+
+    $app->render('admin/index.html', array('images' => $images, 'paginator' => $paginator, 'pages' => $paginator->getPages()));
 });
 
 $app->post('/admin/add-photo', function() use ($app, $service, $cache) {
