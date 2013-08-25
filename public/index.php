@@ -78,14 +78,16 @@ $app->get('/', function ($page = 1) use ($app, $service, $pagination) {
     $images = $service->findAll();
     $paginator = $pagination->newPaginator($images, $page, 10);
 
-    $app->render('index.html', array('paginator' => $paginator, 'pages' => $paginator->getPages()));
+    $app->render('index.html', array('paginator' => $paginator, 'pages' => $paginator->getPages(), 'home' => true));
 });
 
 $app->get('/page/:page', function ($page = 1) use ($app, $service, $pagination) {
     $images = $service->findAll();
     $paginator = $pagination->newPaginator($images, $page, 10);
 
-    $app->render('index.html', array('paginator' => $paginator, 'pages' => $paginator->getPages()));
+    $home = ($page == 1) ? true : false;
+
+    $app->render('index.html', array('paginator' => $paginator, 'pages' => $paginator->getPages(), 'home' => $home));
 });
 
 $app->get('/day/:day', function($day) use ($app, $service) {

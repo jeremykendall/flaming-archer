@@ -4,38 +4,44 @@
 
 {% block content %}
 <div class="row">
-    <div class="span4">
-        <h2>Add a photo</h2>
-        <form name="add-photo" id="add-photo" class="well form-inline" method="post" action="/admin/add-photo">
-            <input type="number" min="1" max="366" id="day" class="span1" name="day" placeholder="Day" required />
-            <input type="number" id="photo_id" class="span2" name="photo_id" placeholder="Flickr photo id" required />
-            <button type="submit" class="btn">Submit</button>
+    <div class="col-md-7">
+        <h3>Add a photo</h3>
+        <form name="add-photo" id="add-photo" class="form-inline well well-sm" role="form" method="post" action="/admin/add-photo">
+            <div class="form-group col-md-3">
+                <label class="sr-only" for="day">Day</label>
+                <input type="number" class="form-control" min="1" max="366" id="day" name="day" placeholder="Day" required />
+            </div>
+            <div class="form-group col-md-6">
+                <label class="sr-only" for="photo_id">Photo ID</label>
+                <input type="number" class="form-control" id="photo_id" name="photo_id" placeholder="Flickr photo id" required />
+            </div>
+            <button type="submit" class="btn btn-default">Add Photo</button>
         </form>
     </div>
-    <div class="span4">
-        <h2>Clear photo cache</h2>
+    <div class="col-md-4 col-md-offset-1 text-right">
+        <h3>&nbsp;</h3>
         {% if flash.cleared %}
         <p>{{flash.cleared}}</p>
         {% endif %}
         <form name="clear-cache" id="clear-cache" action="/admin/clear-cache" method="post">
             <input type="hidden" name="clear" value="1" />
-            <button class="btn btn-danger btn-large" type="submit">
-                <i class="icon-trash icon-white"></i> Clear cache
+            <button class="btn btn-danger btn-lg" type="submit">
+                <span class="glyphicon glyphicon-trash"></span> Clear Photo Cache
             </button>
         </form>
     </div>
 </div>
 
-<table class="table table-striped">
+<table class="admin table table-striped">
     <thead>
         <tr>
-            <th>Photo</th><th>Day</th><th>Photo Id</th><th>Posted</th><th></th>
+            <th>&nbsp;</th><th>Day</th><th>Photo Id</th><th>Posted</th><th>&nbsp;</th>
         </tr>
     </thead>
     <tbody>
         {% for image in paginator %}
         <tr>
-            <td><a href="/day/{{image.day}}"><img src="{{image.sizes.size.0.source}}" width="{{image.sizes.size.0.width}}" height="{{image.sizes.size.0.height}}" /></a></td>
+            <td class="text-center"><a href="/day/{{image.day}}"><img class="img-responsive img-thumbnail" src="{{image.sizes.size.0.source}}" width="{{image.sizes.size.0.width}}" height="{{image.sizes.size.0.height}}" /></a></td>
             <td>{{image.day}}</td>
             <td>{{image.photo_id}}</td>
             <td>{{image.posted|date("m/d/Y")}}</td>
@@ -53,8 +59,8 @@
 </table>
 
 {% if pages.pageCount %}
-<div class="pagination">
-    <ul>
+<div class="text-center">
+    <ul class="pagination">
         <li{% if pages.previous == false %} class="disabled"{% endif %}><a href="{{ baseUrl() }}/admin/page/{{ pages.previous }}">Prev</a></li>
         {% for page in pages.pagesInRange %}
         <li{% if page == pages.current %} class="active"{% endif %}><a href="{{ baseUrl() }}/admin/page/{{ page }}">{{ page }}</a></li>

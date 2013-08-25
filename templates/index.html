@@ -2,21 +2,24 @@
 
 {% block content %}
 {% for image in paginator %}
-<div class="row">
-    <div class="span6">
-        <h2><a href="/day/{{image.day}}">{{image.day}}/365</a></h2>
-        <p><a href="/day/{{image.day}}"><img src="{{image.sizes.size.5.source}}" /></a></p>
-        <p>Posted {{image.posted|date("m/d/Y")}}</p>
+<div class="row photo">
+    <div class="col-md-2">
+        <p class="text-right text-muted">
+            <em><a href="/day/{{ image.day }}">{{ image.posted|date("d F Y") }}</a></em><br>
+            <em>Day {{ image.day }}</em>
+        </p>
+    </div>
+    <div class="col-md-10">
+        <a href="/day/{{ image.day }}"><img src="{{ image.sizes.size.6.source }}" class="img-responsive img-thumbnail text-center" /></a>
     </div>
 </div>
-
 {% else %}
 <p>No images in project</p>
 {% endfor %}
 
 {% if pages.pageCount %}
-<div class="pagination">
-    <ul>
+<div class="text-center">
+    <ul class="pagination">
         <li{% if pages.previous == false %} class="disabled"{% endif %}><a href="{{ baseUrl() }}/page/{{ pages.previous }}">Prev</a></li>
         {% for page in pages.pagesInRange %}
         <li{% if page == pages.current %} class="active"{% endif %}><a href="{{ baseUrl() }}/page/{{ page }}">{{ page }}</a></li>

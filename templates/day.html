@@ -1,16 +1,14 @@
 {% extends 'layout.html' %}
 
-{% block page_title %}{{ parent() }} | Day {{day}}{% endblock %}
+{% block page_title %}{{ parent() }} | Day {{ day }}{% endblock %}
 
 {% block content %}
-<h2><a href="/day/{{day}}">{{day}}/365</a></h2>
+<div class="text-right">
+    <h4><em>{{ posted|date("d F Y") }}, Day {{ day }}</em></h4>
+</div>
 <p>
-    <img src="{{sizes.size.7.source}}" />
-</p>
-<p>
-    Posted: {{posted|date("m/d/Y")}}
-</p>
-<p>
-    <a href="http://flickr.com/photos/{{ profile.flickr_username }}/{{photo_id}}/lightbox" target="_blank">View on Flickr</a>
+    <a href="http://flickr.com/photos/{{ profile.flickr_username }}/{{ photo_id }}/lightbox" target="_blank" title="View on Flickr">
+        <img class="img-responsive img-thumbnail" src="{{ sizes.size.7.source }}" />
+    </a>
 </p>
 {% endblock %}
