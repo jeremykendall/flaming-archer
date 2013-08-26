@@ -89,4 +89,11 @@ class ImageDao
         return $stmt->execute();
     }
 
+    public function countImages()
+    {
+        $sql = 'SELECT COUNT(id) FROM images';
+        $stmt = $this->db->prepare($sql);
+
+        return $stmt->execute();
+    }
 }
