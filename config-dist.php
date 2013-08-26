@@ -4,6 +4,15 @@
 $sqlite = __DIR__ . '/db/flaming-archer.db';
 
 $config = array(
+    'profile' => array(
+        'brand' => 'BRAND',
+        'site_name' => 'SITE NAME',
+        'flickr_username' => 'YOUR FLICKR USERNAME',
+        'photographer' => 'PHOTOGRAPHER',
+        'title' => 'TITLE',
+        'external_url' => 'http://EXTERNAL_URL',
+    ),
+    'flickr.api.key' => 'API KEY',
     'slim' => array(
         'templates.path' => __DIR__ . '/templates',
         'log.level' => Slim\Log::ERROR,
@@ -19,7 +28,7 @@ $config = array(
         'charset' => 'utf-8',
         'cache' => realpath(__DIR__ . '/templates/cache'),
         'auto_reload' => true,
-        'strict_variables' => false,
+        'strict_variables' => true,
         'autoescape' => true
     ),
     'cookies' => array(
@@ -33,15 +42,6 @@ $config = array(
         'cipher' => MCRYPT_RIJNDAEL_256,
         'cipher_mode' => MCRYPT_MODE_CBC
     ),
-    'profile' => array(
-        'brand' => 'BRAND',
-        'site_name' => 'SITE NAME',
-        'flickr_username' => 'YOUR FLICKR USERNAME',
-        'photographer' => 'PHOTOGRAPHER',
-        'title' => 'TITLE',
-        'external_url' => 'http://EXTERNAL_URL',
-    ),
-    'flickr.api.key' => 'API KEY',
     'database' => $sqlite,
     'pdo' => array(
         'dsn' => 'sqlite:' . $sqlite,
