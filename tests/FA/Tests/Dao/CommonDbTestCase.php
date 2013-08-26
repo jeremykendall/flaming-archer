@@ -2,22 +2,14 @@
 
 namespace FA\Tests\Dao;
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+use PDO;
 
-/**
- * Description of CommonDbTestCase
- *
- * @author jkendall
- */
 class CommonDbTestCase extends \PHPUnit_Framework_TestCase
 {
     /**
      * Database connection
      * 
-     * @var \PDO
+     * @var PDO
      */
     protected $db;
     
@@ -26,11 +18,12 @@ class CommonDbTestCase extends \PHPUnit_Framework_TestCase
         parent::setUp();
         $dsn = 'sqlite::memory:';
         $options = array(
-            \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
-            \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
         );
-        $this->db = new \PDO($dsn, null, null, $options);
-        $this->db->exec(file_get_contents(APPLICATION_PATH . '/tests/_files/flaming_archer.sql'));
+        $this->db = new PDO($dsn, null, null, $options);
+        $this->db->exec(file_get_contents(APPLICATION_PATH . '/scripts/sql/schema.sql'));
+        $this->db->exec(file_get_contents(APPLICATION_PATH . '/scripts/sql/seed_data.sql'));
     }
     
     protected function tearDown()
