@@ -33,7 +33,8 @@
     "require-dev": {
         "composer/composer": "1.0.*@dev",
         "mikey179/vfsStream": "1.2.*",
-        "jeremykendall/phpctagger": "dev-master"
+        "jeremykendall/phpctagger": "dev-master",
+        "phpunit/phpunit": "3.7.*"
     },
     "autoload": {
         "psr-0": 
