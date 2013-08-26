@@ -19,11 +19,10 @@ use Composer\Script\Event;
  */
 class Config
 {
-
     /**
      * Creates config file if it does not already exist
      *
-     * @param  \Composer\Script\Event $event
+     * @param Event $event
      */
     public static function create(Event $event)
     {
@@ -44,5 +43,4 @@ class Config
             $io->write('Found config.php.', true);
         }
     }
-
 }

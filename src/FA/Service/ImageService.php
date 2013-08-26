@@ -10,6 +10,9 @@
 
 namespace FA\Service;
 
+use FA\Dao\ImageDao;
+use FA\Service\FlickrInterface;
+
 /**
  * Image service abstracts application requests for image data
  */
@@ -18,24 +21,24 @@ class ImageService
     /**
      * Image Dao
      *
-     * @var \FA\Dao\ImageDao
+     * @var ImageDao
      */
     private $dao;
 
     /**
-     * Instance of object honoring the \FA\Service\FlickrInterface
+     * Instance of object honoring the FlickrInterface
      *
-     * @var \FA\Service\FlickrInterface
+     * @var FlickrInterface
      */
     private $flickr;
 
     /**
      * Public constructor
      *
-     * @param \FA\Dao\ImageDao            $dao
-     * @param \FA\Service\FlickrInterface $flickr
+     * @param ImageDao        $dao
+     * @param FlickrInterface $flickr
      */
-    public function __construct(\FA\Dao\ImageDao $dao, \FA\Service\FlickrInterface $flickr)
+    public function __construct(ImageDao $dao, FlickrInterface $flickr)
     {
         $this->dao = $dao;
         $this->flickr = $flickr;
