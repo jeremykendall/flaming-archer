@@ -63,6 +63,24 @@ class ImageDaoTest extends CommonDbTestCase
     }
 
     /**
+     * @covers FA\Dao\ImageDao::save
+     */
+    public function testSaveDuplicateDayThrowsException()
+    {
+        $this->setExpectedException('PDOException', 'SQLSTATE[23000]: Integrity constraint violation: 19 column day is not unique');
+        $this->dao->save(array('day' => 7, 'photo_id' => 9627527264));
+    }
+
+    /**
+     * @covers FA\Dao\ImageDao::save
+     */
+    public function testSaveDuplicatePhotoIdThrowsException()
+    {
+        $this->setExpectedException('PDOException', 'SQLSTATE[23000]: Integrity constraint violation: 19 column photo_id is not unique');
+        $this->dao->save(array('day' => 11, 'photo_id' => 7512338326));
+    }
+
+    /**
      * @covers FA\Dao\ImageDao::delete
      */
     public function testDelete()
@@ -84,5 +102,22 @@ class ImageDaoTest extends CommonDbTestCase
         $this->dao->delete(3);
         $this->dao->delete(4);
         $this->assertEquals(6, $this->dao->countImages());
+    }
+
+    /**
+     * @covers FA\Dao\ImageDao::findFirstImage
+     */
+    public function testFindFirstImage()
+    {
+        $expected = array(
+            'id' => 1,
+            'day' => 1,
+            'photo_id' => 7606616668,
+            'posted' => '2012-07-29 15:31:56',
+        );
+
+        $actual = $this->dao->findFirstImage();
+
+       $this->assertEquals($actual, $expected); 
     }
 }
