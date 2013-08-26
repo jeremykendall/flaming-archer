@@ -20,6 +20,8 @@
         <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.6.2/html5shiv.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.2.0/respond.js"></script>
         <![endif]-->
+
+        {% block stylesheets %}{% endblock %}
     </head>
 
     <body>
@@ -31,17 +33,14 @@
                     <li class="{{link.class}}"><a href="{{link.href}}">{{link.caption}}</a></li>
                     {% endfor %}
                 </ul>
-                <h3 class="text-muted">{{ profile.brand }}</h3>
+                <h3 class="text-muted">{{ profile.photographer }}</h3>
             </div>
 
             {% if home %}
             <div class="jumbotron">
                 <h1>{{ profile.site_name }}</h1>
                 <p class="lead">
-                    Cras justo odio, dapibus ac facilisis in, egestas eget
-                    quam. Fusce dapibus, tellus ac cursus commodo, tortor
-                    mauris condimentum nibh, ut fermentum massa justo sit amet
-                    risus.
+                    {{ profile.tagline }}
                 </p>
             </div>
             {% endif %}
@@ -59,7 +58,6 @@
                 </p>
             </div>
         </div>
-
 
         <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
         <!-- Latest compiled and minified JavaScript -->

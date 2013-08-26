@@ -62,6 +62,12 @@ body {
 
 table.admin tbody tr td {
     vertical-align: middle;
+    text-align: center;
+}
+
+table.admin thead tr th {
+    vertical-align: middle;
+    text-align: center;
 }
 
 /* Responsive: Portrait tablets and up */

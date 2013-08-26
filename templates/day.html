@@ -3,12 +3,10 @@
 {% block page_title %}{{ parent() }} | Day {{ day }}{% endblock %}
 
 {% block content %}
-<div class="text-right">
-    <h4><em>{{ posted|date("d F Y") }}, Day {{ day }}</em></h4>
-</div>
-<p>
+<div class="day-photo text-center">
+    <p class="lead"><em>{{ posted|date("d F Y") }}, Day {{ day }}</em></p>
     <a href="http://flickr.com/photos/{{ profile.flickr_username }}/{{ photo_id }}/lightbox" target="_blank" title="View on Flickr">
         <img class="img-responsive img-thumbnail" src="{{ sizes.size.7.source }}" />
     </a>
-</p>
+</div>
 {% endblock %}
