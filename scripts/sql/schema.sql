@@ -3,7 +3,8 @@ CREATE TABLE IF NOT EXISTS `images` (
   `day` INT unsigned NOT NULL,
   `photo_id` INT unsigned NOT NULL,
   `posted` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-   UNIQUE (`photo_id`) ON CONFLICT FAIL
+   UNIQUE (`day`),
+   UNIQUE (`photo_id`)
 );
 
 CREATE TABLE IF NOT EXISTS `users` (
@@ -11,5 +12,5 @@ CREATE TABLE IF NOT EXISTS `users` (
   `email` TEXT NOT NULL,
   `password_hash` TEXT NOT NULL,
   `last_login` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-   UNIQUE (`email`) ON CONFLICT FAIL
+   UNIQUE (`email`)
 );
