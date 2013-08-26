@@ -38,7 +38,7 @@
     "autoload": {
         "psr-0": 
         {
-            "Fa": "library/"
+            "Fa": "src/"
         }
     },
     "scripts": {

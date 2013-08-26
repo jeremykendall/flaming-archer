@@ -11,7 +11,7 @@
         <target>./build/docs</target>
     </transformer>
     <files>
-        <directory>./library</directory>
+        <directory>./src</directory>
     </files>
     <transformations>
         <template name="responsive"/>
