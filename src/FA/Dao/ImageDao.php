@@ -96,4 +96,13 @@ class ImageDao
 
         return $stmt->execute();
     }
+
+    public function findFirstImage()
+    {
+        $sql = 'SELECT * FROM images ORDER BY posted ASC LIMIT 1';
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+
+        return $stmt->fetch();
+    }
 }
