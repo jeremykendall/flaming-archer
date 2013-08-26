@@ -1,8 +1,8 @@
 <?php
 
-namespace Fa\Tests\Dao;
+namespace FA\Tests\Dao;
 
-use Fa\Dao\ImageDao;
+use FA\Dao\ImageDao;
 
 /**
  * Test class for ImageDao.
@@ -38,11 +38,11 @@ class ImageDaoTest extends CommonDbTestCase
     
     public function testConstruct()
     {
-        $this->assertInstanceOf('\Fa\Dao\ImageDao', $this->dao);
+        $this->assertInstanceOf('\FA\Dao\ImageDao', $this->dao);
     }
 
     /**
-     * @covers Fa\Dao\ImageDao::find
+     * @covers FA\Dao\ImageDao::find
      */
     public function testFind()
     {
@@ -53,7 +53,7 @@ class ImageDaoTest extends CommonDbTestCase
     }
 
     /**
-     * @covers Fa\Dao\ImageDao::findAll
+     * @covers FA\Dao\ImageDao::findAll
      */
     public function testFindAll()
     {
@@ -63,7 +63,7 @@ class ImageDaoTest extends CommonDbTestCase
     }
 
     /**
-     * @covers Fa\Dao\ImageDao::save
+     * @covers FA\Dao\ImageDao::save
      */
     public function testSave()
     {
@@ -76,13 +76,13 @@ class ImageDaoTest extends CommonDbTestCase
     }
 
     /**
-     * @covers Fa\Dao\ImageDao::delete
+     * @covers FA\Dao\ImageDao::delete
      */
     public function testDelete()
     {
         $this->assertEquals(7, count($this->dao->findAll()));
         $this->assertEquals(1, $this->dao->delete(1));
-        $this->assertFalse($this->dao->find(1));
+        $this->assertFAlse($this->dao->find(1));
         $this->assertEquals(6, count($this->dao->findAll()));
     }
 

@@ -8,7 +8,7 @@
  * @license   http://github.com/jeremykendall/flaming-archer/blob/master/LICENSE MIT License
  */
 
-namespace Fa\Service;
+namespace FA\Service;
 
 /**
  * Image service abstracts application requests for image data
@@ -18,24 +18,24 @@ class ImageService
     /**
      * Image Dao
      *
-     * @var \Fa\Dao\ImageDao
+     * @var \FA\Dao\ImageDao
      */
     private $dao;
 
     /**
-     * Instance of object honoring the \Fa\Service\FlickrInterface
+     * Instance of object honoring the \FA\Service\FlickrInterface
      *
-     * @var \Fa\Service\FlickrInterface
+     * @var \FA\Service\FlickrInterface
      */
     private $flickr;
 
     /**
      * Public constructor
      *
-     * @param \Fa\Dao\ImageDao            $dao
-     * @param \Fa\Service\FlickrInterface $flickr
+     * @param \FA\Dao\ImageDao            $dao
+     * @param \FA\Service\FlickrInterface $flickr
      */
-    public function __construct(\Fa\Dao\ImageDao $dao, \Fa\Service\FlickrInterface $flickr)
+    public function __construct(\FA\Dao\ImageDao $dao, \FA\Service\FlickrInterface $flickr)
     {
         $this->dao = $dao;
         $this->flickr = $flickr;

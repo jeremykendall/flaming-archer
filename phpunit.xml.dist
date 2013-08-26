@@ -2,12 +2,12 @@
 <phpunit bootstrap="tests/bootstrap.php" colors="true">
 
     <testsuite name="all-tests">
-        <directory>tests/Fa</directory>
+        <directory>tests/FA</directory>
     </testsuite>
 
     <testsuite name="travis-ci">
-        <directory>tests/Fa</directory>
-        <exclude>tests/Fa/Tests/Service/FlickrServiceTest.php</exclude>
+        <directory>tests/FA</directory>
+        <exclude>tests/FA/Tests/Service/FlickrServiceTest.php</exclude>
     </testsuite>
 
     <filter>

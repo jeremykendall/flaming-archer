@@ -8,7 +8,7 @@
  * @license   http://github.com/jeremykendall/flaming-archer/blob/master/LICENSE MIT License
  */
 
-namespace Fa\Authentication\Storage;
+namespace FA\Authentication\Storage;
 
 /**
  * Encrypted Cookie authentication storage

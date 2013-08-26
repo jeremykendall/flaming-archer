@@ -8,7 +8,7 @@
  * @license   http://github.com/jeremykendall/flaming-archer/blob/master/LICENSE MIT License
  */
 
-namespace Fa\Service;
+namespace FA\Service;
 
 /**
  * Flickr service

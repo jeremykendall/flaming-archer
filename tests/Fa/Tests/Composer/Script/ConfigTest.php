@@ -1,8 +1,8 @@
 <?php
 
-namespace Fa\Tests\Composer\Script;
+namespace FA\Tests\Composer\Script;
 
-use Fa\Composer\Script\Config;
+use FA\Composer\Script\Config;
 use org\bovigo\vfs\vfsStream;
 
 /**
@@ -44,7 +44,7 @@ class ConfigTest extends ComposerScriptTestCase
     public function testCreateConfigNotFound()
     {
         // Confirm mock filesystem doesn't contain config.php
-        $this->assertFalse($this->root->hasChild('config.php'));
+        $this->assertFAlse($this->root->hasChild('config.php'));
 
         $output = array(
             'Reviewing your Flaming Archer environment . . .',

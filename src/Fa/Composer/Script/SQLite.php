@@ -8,7 +8,7 @@
  * @license   http://github.com/jeremykendall/flaming-archer/blob/master/LICENSE MIT License
  */
 
-namespace Fa\Composer\Script;
+namespace FA\Composer\Script;
 
 use Composer\Script\Event;
 
@@ -24,7 +24,7 @@ class SQLite
      * Checks for database and configures database if it does not exist
      *
      * @param  \Composer\Script\Event           $event
-     * @throws \Fa\Composer\Script\PDOException
+     * @throws \FA\Composer\Script\PDOException
      */
     public static function prepare(Event $event)
     {

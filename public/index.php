@@ -7,17 +7,17 @@ require '../vendor/autoload.php';
 
 $config = require_once __DIR__ . '/../config.php';
 
-use Fa\Authentication\Adapter\DbAdapter;
-use Fa\Authentication\Storage\EncryptedCookie;
-use Fa\Dao\ImageDao;
-use Fa\Dao\UserDao;
-use Fa\Middleware\Authentication;
-use Fa\Middleware\Navigation;
-use Fa\Middleware\Profile;
-use Fa\Pagination;
-use Fa\Service\FlickrService;
-use Fa\Service\FlickrServiceCache;
-use Fa\Service\ImageService;
+use FA\Authentication\Adapter\DbAdapter;
+use FA\Authentication\Storage\EncryptedCookie;
+use FA\Dao\ImageDao;
+use FA\Dao\UserDao;
+use FA\Middleware\Authentication;
+use FA\Middleware\Navigation;
+use FA\Middleware\Profile;
+use FA\Pagination;
+use FA\Service\FlickrService;
+use FA\Service\FlickrServiceCache;
+use FA\Service\ImageService;
 use Slim\Middleware\SessionCookie;
 use Slim\Slim;
 use Slim\Views\Twig;

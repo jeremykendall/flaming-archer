@@ -8,7 +8,7 @@
  * @license   http://github.com/jeremykendall/flaming-archer/blob/master/LICENSE MIT License
  */
 
-namespace Fa\Authentication\Adapter;
+namespace FA\Authentication\Adapter;
 
 use \Zend\Authentication\Result;
 
@@ -21,7 +21,7 @@ class DbAdapter implements \Zend\Authentication\Adapter\AdapterInterface
     /**
      * User Dao
      *
-     * @var \Fa\Dao\UserDao
+     * @var \FA\Dao\UserDao
      */
     private $dao;
 
@@ -49,10 +49,10 @@ class DbAdapter implements \Zend\Authentication\Adapter\AdapterInterface
     /**
      * Public constructor
      *
-     * @param \Fa\Dao\UserDao $dao    User Dao
+     * @param \FA\Dao\UserDao $dao    User Dao
      * @param \Phpass\Hash    $hasher Password hasher
      */
-    public function __construct(\Fa\Dao\UserDao $dao, \Phpass\Hash $hasher)
+    public function __construct(\FA\Dao\UserDao $dao, \Phpass\Hash $hasher)
     {
         $this->dao = $dao;
         $this->hasher = $hasher;

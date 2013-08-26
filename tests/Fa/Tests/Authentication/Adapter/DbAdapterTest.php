@@ -1,8 +1,8 @@
 <?php
 
-namespace Fa\Tests\Authentication\Adapter;
+namespace FA\Tests\Authentication\Adapter;
 
-use Fa\Authentication\Adapter\DbAdapter;
+use FA\Authentication\Adapter\DbAdapter;
 use Zend\Authentication\Result;
 
 /**
@@ -22,7 +22,7 @@ class DbAdapterTest extends \PHPUnit_Framework_TestCase
     protected $hasher;
 
     /**
-     * @var Fa\Dao\UserDao
+     * @var FA\Dao\UserDao
      */
     protected $dao;
     
@@ -38,7 +38,7 @@ class DbAdapterTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->dao = $this->getMock('Fa\Dao\UserDao', array('findByEmail', 'recordLogin'), array(), '', false);
+        $this->dao = $this->getMock('FA\Dao\UserDao', array('findByEmail', 'recordLogin'), array(), '', false);
         $this->hasher = $this->getMock('\Phpass\Hash');
         $this->adapter = new DbAdapter($this->dao, $this->hasher);
         
@@ -62,11 +62,11 @@ class DbAdapterTest extends \PHPUnit_Framework_TestCase
 
     public function testCreation()
     {
-        $this->assertInstanceOf('Fa\Authentication\Adapter\DbAdapter', $this->adapter);
+        $this->assertInstanceOf('FA\Authentication\Adapter\DbAdapter', $this->adapter);
     }
 
     /**
-     * @covers Fa\Authentication\Adapter\DbAdapter::authenticate
+     * @covers FA\Authentication\Adapter\DbAdapter::authenticate
      */
     public function testAuthenticateSuccess()
     {
@@ -92,9 +92,9 @@ class DbAdapterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Fa\Authentication\Adapter\DbAdapter::authenticate
+     * @covers FA\Authentication\Adapter\DbAdapter::authenticate
      */
-    public function testAuthenticateFailure()
+    public function testAuthenticateFAilure()
     {
         $this->dao->expects($this->once())
                 ->method('findByEmail')

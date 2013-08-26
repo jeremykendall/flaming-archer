@@ -8,7 +8,7 @@
  * @license   http://github.com/jeremykendall/flaming-archer/blob/master/LICENSE MIT License
  */
 
-namespace Fa\Composer\Script;
+namespace FA\Composer\Script;
 
 use Composer\Script\Event;
 

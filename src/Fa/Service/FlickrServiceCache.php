@@ -8,7 +8,7 @@
  * @license   http://github.com/jeremykendall/flaming-archer/blob/master/LICENSE MIT License
  */
 
-namespace Fa\Service;
+namespace FA\Service;
 
 use \Zend\Cache\Storage\Adapter\AbstractAdapter;
 
@@ -21,9 +21,9 @@ class FlickrServiceCache implements FlickrInterface
 {
 
     /**
-     * Instance of object honoring the \Fa\Service\FlickrInterface
+     * Instance of object honoring the \FA\Service\FlickrInterface
      *
-     * @var \Fa\Service\FlickrInterface
+     * @var \FA\Service\FlickrInterface
      */
     private $flickr;
 
@@ -37,7 +37,7 @@ class FlickrServiceCache implements FlickrInterface
     /**
      * Public constructor
      *
-     * @param \Fa\Service\FlickrInterface                 $flickr
+     * @param \FA\Service\FlickrInterface                 $flickr
      * @param \Zend\Cache\Storage\Adapter\AbstractAdapter $adapter
      */
     public function __construct(FlickrInterface $flickr, AbstractAdapter $adapter)

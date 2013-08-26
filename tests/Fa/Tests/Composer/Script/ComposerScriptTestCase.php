@@ -1,6 +1,6 @@
 <?php
 
-namespace Fa\Tests\Composer\Script;
+namespace FA\Tests\Composer\Script;
 
 /*
  * To change this template, choose Tools | Templates

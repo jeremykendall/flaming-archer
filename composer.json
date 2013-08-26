@@ -38,17 +38,17 @@
     "autoload": {
         "psr-0": 
         {
-            "Fa": "src/"
+            "FA": "src/"
         }
     },
     "scripts": {
         "post-install-cmd": [
-            "Fa\\Composer\\Script\\Config::create",
-            "Fa\\Composer\\Script\\SQLite::prepare"
+            "FA\\Composer\\Script\\Config::create",
+            "FA\\Composer\\Script\\SQLite::prepare"
         ],
         "post-update-cmd": [
-            "Fa\\Composer\\Script\\Config::create",
-            "Fa\\Composer\\Script\\SQLite::prepare"
+            "FA\\Composer\\Script\\Config::create",
+            "FA\\Composer\\Script\\SQLite::prepare"
         ]
     }
 }

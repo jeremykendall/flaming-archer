@@ -8,7 +8,7 @@
  * @license   http://github.com/jeremykendall/flaming-archer/blob/master/LICENSE MIT License
  */
 
-namespace Fa\Middleware;
+namespace FA\Middleware;
 
 use Zend\Authentication\AuthenticationService;
 

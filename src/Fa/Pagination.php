@@ -1,6 +1,6 @@
 <?php
 
-namespace Fa;
+namespace FA;
 
 use Zend\Paginator\Adapter\ArrayAdapter;
 use Zend\Paginator\Paginator;

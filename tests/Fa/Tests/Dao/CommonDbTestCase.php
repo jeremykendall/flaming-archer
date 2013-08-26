@@ -1,6 +1,6 @@
 <?php
 
-namespace Fa\Tests\Dao;
+namespace FA\Tests\Dao;
 
 /*
  * To change this template, choose Tools | Templates

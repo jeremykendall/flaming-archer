@@ -41,7 +41,7 @@
             command="phpdoc
                 -d ${project.basedir}/src
                 -t ${project.basedir}/build/api
-                --defaultpackagename=Fa
+                --defaultpackagename=FA
                 --title='Flaming Archer'
                 --force" />
     </target>

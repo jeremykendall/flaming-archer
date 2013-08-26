@@ -1,8 +1,8 @@
 <?php
 
-namespace Fa\Tests;
+namespace FA\Tests;
 
-use Fa\Pagination;
+use FA\Pagination;
 use Zend\Paginator\Paginator;
 
 class PaginationTest extends \PHPUnit_Framework_TestCase
