@@ -20,7 +20,6 @@ use Zend\Authentication\AuthenticationService;
  */
 class Authentication extends \Slim\Middleware
 {
-
     /**
      * Authentication service
      *
@@ -72,5 +71,4 @@ class Authentication extends \Slim\Middleware
 
         $this->next->call();
     }
-
 }
