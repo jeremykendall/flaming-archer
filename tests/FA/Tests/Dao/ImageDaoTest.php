@@ -96,7 +96,9 @@ class ImageDaoTest extends CommonDbTestCase
      */
     public function testCountImages()
     {
-        $this->assertEquals(10, $this->dao->countImages());
+        $count = $this->dao->countImages();
+        $this->assertInternalType('int', $count);
+        $this->assertEquals(10, $count);
         $this->dao->delete(1);
         $this->dao->delete(2);
         $this->dao->delete(3);
@@ -113,11 +115,21 @@ class ImageDaoTest extends CommonDbTestCase
             'id' => 1,
             'day' => 1,
             'photo_id' => 7606616668,
-            'posted' => '2012-07-29 15:31:56',
+            'posted' => '2013-04-29 15:31:56',
         );
 
         $actual = $this->dao->findFirstImage();
 
        $this->assertEquals($actual, $expected); 
+    }
+
+    /**
+     * @covers FA\Dao\ImageDao::findFirstImage
+     */
+    public function testFindFirstImageNoImagesInDatabase()
+    {
+        // Make sure the table is empty
+        $this->db->exec('DELETE FROM images');
+        $this->assertFalse($this->dao->findFirstImage()); 
     }
 }

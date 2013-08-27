@@ -98,8 +98,9 @@ class ImageDao
     {
         $sql = 'SELECT COUNT(id) FROM images';
         $stmt = $this->db->prepare($sql);
+        $stmt->execute();
 
-        return $stmt->execute();
+        return (int) $stmt->fetchColumn();
     }
 
     /**
