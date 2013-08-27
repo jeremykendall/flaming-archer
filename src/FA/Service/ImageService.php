@@ -131,6 +131,11 @@ class ImageService
         return $daysElapsed + 1;
     }
 
+    /**
+     * Gets a count of all images in database
+     *
+     * @return int Count of images
+     */
     public function countImages()
     {
         return $this->dao->countImages();
