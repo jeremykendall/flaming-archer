@@ -89,6 +89,11 @@ class ImageDao
         return $stmt->execute();
     }
 
+    /**
+     * Counts images in project
+     *
+     * @return int Count of images in project
+     */
     public function countImages()
     {
         $sql = 'SELECT COUNT(id) FROM images';
@@ -97,6 +102,11 @@ class ImageDao
         return $stmt->execute();
     }
 
+    /**
+     * Finds the first image (oldest date) added to the project
+     *
+     * @return array First image added to the project
+     */
     public function findFirstImage()
     {
         $sql = 'SELECT * FROM images ORDER BY posted ASC LIMIT 1';

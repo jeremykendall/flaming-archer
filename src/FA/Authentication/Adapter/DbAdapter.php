@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Flaming Archer
  *
@@ -10,18 +9,19 @@
 
 namespace FA\Authentication\Adapter;
 
-use \Zend\Authentication\Result;
+use FA\Dao\UserDao;
+use Zend\Authentication\Adapter\AdapterInterface;
+use Zend\Authentication\Result;
 
 /**
  * Database auththentication adapter
  */
-class DbAdapter implements \Zend\Authentication\Adapter\AdapterInterface
+class DbAdapter implements AdapterInterface
 {
-
     /**
      * User Dao
      *
-     * @var \FA\Dao\UserDao
+     * @var UserDao
      */
     private $dao;
 
@@ -52,7 +52,7 @@ class DbAdapter implements \Zend\Authentication\Adapter\AdapterInterface
      * @param \FA\Dao\UserDao $dao    User Dao
      * @param \Phpass\Hash    $hasher Password hasher
      */
-    public function __construct(\FA\Dao\UserDao $dao, \Phpass\Hash $hasher)
+    public function __construct(UserDao $dao, \Phpass\Hash $hasher)
     {
         $this->dao = $dao;
         $this->hasher = $hasher;
@@ -73,7 +73,7 @@ class DbAdapter implements \Zend\Authentication\Adapter\AdapterInterface
     /**
      * Performs authentication
      *
-     * @return \Zend\Authentication\Result Authentication result
+     * @return Result Authentication result
      */
     public function authenticate()
     {
@@ -92,5 +92,4 @@ class DbAdapter implements \Zend\Authentication\Adapter\AdapterInterface
             return new Result(Result::FAILURE_CREDENTIAL_INVALID, array(), array('Invalid username or password provided'));
         }
     }
-
 }
