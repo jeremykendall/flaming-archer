@@ -1,0 +1,46 @@
+{% extends 'layout.html' %}
+
+{% block page_title %}{{ parent() }} | Admin{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <h3>&nbsp;</h3>
+        {% if flash.cacheSuccess %}
+        <div class="alert alert-success alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            {{ flash.cacheSuccess }}
+        </div>       
+        {% endif %}
+        {% if flash.cacheFailure %}
+        <div class="alert alert-danger">
+            <p>{{ flash.cacheFailure }}</p>
+        </div>
+        {% endif %}
+        <form name="clear-cache" id="clear-cache" action="/admin/clear-cache" method="post">
+            <input type="hidden" name="clear" value="1" />
+            <button class="btn btn-primary btn-lg" type="submit">
+                <span class="glyphicon glyphicon-refresh"></span> Refresh Photo Cache
+            </button>
+        </form>
+    </div>
+    <div class="col-md-8">
+        <form role="form" method="post" action="/admin/user" name="user-form" id="user-form">
+            <div class="form-group">
+                <label for="email">Email address</label>
+                <input type="email" class="form-control" id="email" placeholder="Enter email" value="{{ user.email }}">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" name="password" class="form-control" placeholder="Password">
+                <p class="help-block">Leave these blank unless you want to change your password.</p>
+            </div>
+            <div class="form-group">
+                <label for="confirm-password">Confirm your password</label>
+                <input type="password" name="confirm-password" class="form-control" placeholder="Confirm your password">
+            </div>
+            <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
