@@ -10,6 +10,7 @@
 
 namespace FA\Service;
 
+use DateTime;
 use FA\Dao\ImageDao;
 use FA\Service\FlickrInterface;
 
@@ -100,5 +101,26 @@ class ImageService
     public function delete($day)
     {
         return $this->dao->delete($day);
+    }
+
+    /**
+     * Determines what project day it is by diffing project start and current date
+     *
+     * @return int Project day (n of 365)
+     */
+    public function getProjectDay(DateTime $today = null)
+    {
+        if ($today === null) {
+            $today = new DateTime(time());
+        }
+
+        $firstImage = $this->dao->findFirstImage();
+        $firstPostedDate = DateTime::createFromFormat('Y-m-d H:i:s', $firstImage['posted']);
+        $firstPostedDate->setTime(0, 0, 0);
+        $interval = $today->diff($firstPostedDate, true);
+        $daysElapsed = $interval->format('%a');
+        $projectDay = $daysElapsed + 1;
+
+        return $projectDay;
     }
 }
