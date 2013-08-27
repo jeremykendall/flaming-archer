@@ -111,16 +111,28 @@ class ImageService
     public function getProjectDay(DateTime $today = null)
     {
         if ($today === null) {
-            $today = new DateTime(time());
+            $today = new DateTime();
         }
 
+        $today->setTime(0, 0, 0);
+
         $firstImage = $this->dao->findFirstImage();
+
+        if (false === $firstImage) {
+            return 1;
+        }
+
         $firstPostedDate = DateTime::createFromFormat('Y-m-d H:i:s', $firstImage['posted']);
         $firstPostedDate->setTime(0, 0, 0);
+
         $interval = $today->diff($firstPostedDate, true);
         $daysElapsed = $interval->format('%a');
-        $projectDay = $daysElapsed + 1;
 
-        return $projectDay;
+        return $daysElapsed + 1;
+    }
+
+    public function countImages()
+    {
+        return $this->dao->countImages();
     }
 }

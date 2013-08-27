@@ -161,6 +161,19 @@ class ImageServiceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($projectDay, $this->service->getProjectDay($date));
     }
 
+    /**
+     * @covers FA\Service\ImageService::getProjectDay
+     * @dataProvider getProjectDayDataProvider
+     */
+    public function testGetProjectDayWhenNoImagesExist()
+    {
+        $this->dao->expects($this->once())
+                ->method('findFirstImage')
+                ->will($this->returnValue(false));
+
+        $this->assertEquals(1, $this->service->getProjectDay());
+    }
+
     public function getProjectDayDataProvider()
     {
         return array(
