@@ -92,3 +92,7 @@ table.admin thead tr th {
 .photo {
     padding-bottom: 30px;
 }
+
+input#day.form-control {
+    width: 40%;
+}
