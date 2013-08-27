@@ -107,22 +107,40 @@ $app->post('/admin/clear-cache', function() use ($app, $cache) {
 
     if ($clear == 1) {
         if ($cache->flush()) {
-            $cleared = 'Cache was successfully cleared!';
+            $app->flash('cacheSuccess', 'Cache cleared.');
         } else {
-            $cleared = 'Cache was not cleared!';
+            $app->flash('cacheFailure', 'Problem clearing cache!');
             $log->error('Cache not cleared');
         }
     }
 
-    $app->flash('cleared', $cleared);
-    $app->redirect('/admin');
+    $app->redirect('/admin/settings');
 });
 
 $app->get('/admin(/page/:page)', function ($page = 1) use ($app, $service, $pagination) {
     $images = $service->findAll();
-    $paginator = $pagination->newPaginator($images, $page, 10);
+    $paginator = $pagination->newPaginator($images, $page, 25);
+    $projectDay = $service->getProjectDay();
+    $daysLeft = 365 - $projectDay;
+    $photoCount = $service->countImages();
+    $percentage = ($photoCount / $projectDay) * 100;
 
-    $app->render('admin/index.html', array('images' => $images, 'paginator' => $paginator, 'pages' => $paginator->getPages()));
+    $viewData = array(
+        'images' => $images, 
+        'paginator' => $paginator, 
+        'pages' => $paginator->getPages(),
+        'projectDay' => $projectDay,
+        'photoCount' => $photoCount,
+        'percentage' => $percentage,
+        'daysLeft' => $daysLeft,
+    );
+
+    $app->render('admin/index.html', $viewData);
+});
+
+$app->get('/admin/settings', function () use ($app) {
+    $user = json_decode($app->getCookie('identity'), true);
+    $app->render('admin/settings.html', array('user' => $user));
 });
 
 $app->post('/admin/add-photo', function() use ($app, $service, $cache) {
