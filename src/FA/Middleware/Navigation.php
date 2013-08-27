@@ -46,11 +46,12 @@ class Navigation extends \Slim\Middleware
     {
         $home = array('caption' => 'Home', 'href' => '/');
         $admin = array('caption' => 'Admin', 'href' => '/admin');
+        $settings = array('caption' => 'Settings', 'href' => '/admin/settings');
         $login = array('caption' => 'Login', 'href' => '/login');
         $logout = array('caption' => 'Logout', 'href' => '/logout');
 
         if ($this->auth->hasIdentity()) {
-            $navigation = array($home, $admin, $logout);
+            $navigation = array($home, $admin, $settings, $logout);
         } else {
             $navigation = array($home, $login);
         }
