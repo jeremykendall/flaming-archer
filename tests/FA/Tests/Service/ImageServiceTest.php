@@ -24,8 +24,13 @@ class ImageServiceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->dao = $this->getMock('FA\Dao\ImageDao', array('find', 'findAll', 'save', 'delete', 'findFirstImage', 'countImages'), array(), '', false);
-        $this->flickr = $this->getMock('FA\Service\FlickrService', array('getSizes'), array(), '', false);
+        $this->dao = $this->getMockBuilder('FA\Dao\ImageDao')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->flickr = $this->getMockBuilder('FA\Service\FlickrService')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->service = new ImageService($this->dao, $this->flickr);
     }
 
