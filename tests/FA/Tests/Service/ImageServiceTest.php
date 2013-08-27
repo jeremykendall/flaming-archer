@@ -24,7 +24,7 @@ class ImageServiceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->dao = $this->getMock('FA\Dao\ImageDao', array('find', 'findAll', 'save', 'delete', 'findFirstImage'), array(), '', false);
+        $this->dao = $this->getMock('FA\Dao\ImageDao', array('find', 'findAll', 'save', 'delete', 'findFirstImage', 'countImages'), array(), '', false);
         $this->flickr = $this->getMock('FA\Service\FlickrService', array('getSizes'), array(), '', false);
         $this->service = new ImageService($this->dao, $this->flickr);
     }
@@ -172,6 +172,14 @@ class ImageServiceTest extends \PHPUnit_Framework_TestCase
                 ->will($this->returnValue(false));
 
         $this->assertEquals(1, $this->service->getProjectDay());
+    }
+
+    public function testCountImages()
+    {
+        $this->dao->expects($this->once())
+            ->method('countImages');
+        
+        $this->service->countImages();
     }
 
     public function getProjectDayDataProvider()
