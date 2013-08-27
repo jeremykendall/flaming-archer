@@ -27,7 +27,7 @@ class EncryptedCookieTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->app = $this->getMock('\Slim\Slim', array('getEncryptedCookie', 'setEncryptedCookie', 'deleteCookie'), array(), '', false);
+        $this->app = $this->getMock('\Slim\Slim', array('getCookie', 'setCookie', 'deleteCookie'), array(), '', false);
         $this->cookie = new EncryptedCookie($this->app, 'cookieName');
     }
 
@@ -45,7 +45,7 @@ class EncryptedCookieTest extends \PHPUnit_Framework_TestCase
     public function testIsEmptyTrue()
     {
         $this->app->expects($this->once())
-                ->method('getEncryptedCookie')
+                ->method('getCookie')
                 ->with('cookieName')
                 ->will($this->returnValue(false));
         $this->assertTrue($this->cookie->isEmpty());
@@ -54,7 +54,7 @@ class EncryptedCookieTest extends \PHPUnit_Framework_TestCase
     public function testIsEmptyFAlse()
     {
         $this->app->expects($this->once())
-                ->method('getEncryptedCookie')
+                ->method('getCookie')
                 ->with('cookieName')
                 ->will($this->returnValue($this->cookieContents));
         $this->assertFAlse($this->cookie->isEmpty());
@@ -63,7 +63,7 @@ class EncryptedCookieTest extends \PHPUnit_Framework_TestCase
     public function testRead()
     {
         $this->app->expects($this->once())
-                ->method('getEncryptedCookie')
+                ->method('getCookie')
                 ->with('cookieName')
                 ->will($this->returnValue($this->cookieContents));
         $contents = $this->cookie->read();
@@ -73,7 +73,7 @@ class EncryptedCookieTest extends \PHPUnit_Framework_TestCase
     public function testWrite()
     {
         $this->app->expects($this->once())
-                ->method('setEncryptedCookie')
+                ->method('setCookie')
                 ->with('cookieName', json_encode(array("I'm a cookie")), '1 day');
         $this->cookie->setTime('1 day');
         $this->cookie->write(array("I'm a cookie"));

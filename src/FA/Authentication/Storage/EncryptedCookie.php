@@ -61,7 +61,7 @@ class EncryptedCookie implements \Zend\Authentication\Storage\StorageInterface
      */
     public function isEmpty()
     {
-        if ($this->app->getEncryptedCookie($this->cookieName)) {
+        if ($this->app->getCookie($this->cookieName)) {
             return false;
         }
 
@@ -79,7 +79,7 @@ class EncryptedCookie implements \Zend\Authentication\Storage\StorageInterface
      */
     public function read()
     {
-        $value = $this->app->getEncryptedCookie($this->cookieName);
+        $value = $this->app->getCookie($this->cookieName);
 
         return json_decode($value, true);
     }
@@ -95,7 +95,7 @@ class EncryptedCookie implements \Zend\Authentication\Storage\StorageInterface
     public function write($contents)
     {
         $value = json_encode($contents);
-        $this->app->setEncryptedCookie($this->cookieName, $value, $this->time);
+        $this->app->setCookie($this->cookieName, $value, $this->time);
     }
 
     /**
