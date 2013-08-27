@@ -21,7 +21,8 @@ $config = array(
                 'path' => __DIR__ . '/logs',
                 'name_format' => 'Y-m-d'
             )
-        )
+        ),
+        'cookies.encrypt' => true,
     ),
     'twig' => array(
         'charset' => 'utf-8',
