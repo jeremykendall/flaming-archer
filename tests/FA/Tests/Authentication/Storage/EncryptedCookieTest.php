@@ -14,12 +14,12 @@ class EncryptedCookieTest extends \PHPUnit_Framework_TestCase
      * @var EncryptedCookie
      */
     protected $cookie;
-    
+
     /**
      * @var \Slim\Slim
      */
     protected $app;
-    
+
     /**
      * @var string JSON contents of cookie
      */
@@ -35,13 +35,13 @@ class EncryptedCookieTest extends \PHPUnit_Framework_TestCase
     {
         $this->cookie = null;
     }
-    
+
     public function testConstuction()
     {
         $this->assertInstanceOf('FA\Authentication\Storage\EncryptedCookie', $this->cookie);
         $this->assertInstanceOf('\Zend\Authentication\Storage\StorageInterface', $this->cookie);
     }
-    
+
     public function testIsEmptyTrue()
     {
         $this->app->expects($this->once())
@@ -50,7 +50,7 @@ class EncryptedCookieTest extends \PHPUnit_Framework_TestCase
                 ->will($this->returnValue(false));
         $this->assertTrue($this->cookie->isEmpty());
     }
-    
+
     public function testIsEmptyFAlse()
     {
         $this->app->expects($this->once())

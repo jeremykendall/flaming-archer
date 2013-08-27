@@ -17,14 +17,14 @@ class SQLiteTest extends ComposerScriptTestCase
 
     /**
      * Webroot path
-     * 
+     *
      * @var string Webroot path
      */
     protected $rootPath;
 
     /**
      * Path to db
-     * 
+     *
      * @var string Path to db
      */
     protected $dbFile;
@@ -42,7 +42,7 @@ class SQLiteTest extends ComposerScriptTestCase
         // Copy the application config over the test directory
         copy(APPLICATION_PATH . '/config-dist.php', $this->rootPath . '/config.php');
         $this->assertFileExists($this->rootPath . '/config.php', 'Application config was not copied correctly during setup.');
-        
+
         // Get application config and ensure path to db exists
         $this->applicationConfig = include $this->rootPath . '/config.php';
         $this->dbFile = $this->applicationConfig['database'];
@@ -52,7 +52,7 @@ class SQLiteTest extends ComposerScriptTestCase
         $filesystem->ensureDirectoryExists($this->rootPath . '/scripts/sql');
         copy(APPLICATION_PATH . '/scripts/sql/schema.sql', $this->rootPath . '/scripts/sql/schema.sql');
         $this->assertFileExists($this->rootPath . '/scripts/sql/schema.sql', 'Database schema file was not copied correctly during setup.');
-        
+
         parent::setUp();
 
         // Create Composer config
@@ -96,12 +96,12 @@ class SQLiteTest extends ComposerScriptTestCase
         SQLite::prepare($this->event);
         $this->assertTrue(file_exists($this->dbFile));
     }
-    
+
     public function testPrepareExists()
     {
         // First ensure the database exists
         $config = $this->applicationConfig;
-        
+
         try {
             $db = new \PDO(
                 $config['pdo']['dsn'],
@@ -116,7 +116,7 @@ class SQLiteTest extends ComposerScriptTestCase
         } catch (PDOException $e) {
             throw $e;
         }
-        
+
         $output = array(
             'Reviewing your Flaming Archer database . . .',
             'Database found.'

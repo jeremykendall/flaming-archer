@@ -14,7 +14,7 @@ class UserDaoTest extends CommonDbTestCase
      * @var UserDao
      */
     protected $dao;
-    
+
     /**
      * @var array User
      */
@@ -53,17 +53,17 @@ class UserDaoTest extends CommonDbTestCase
     public function testFindByEmail()
     {
         $user = $this->dao->findByEmail('user@example.com');
-        
+
         $this->assertNotNull($user);
         $this->assertEquals($this->user, $user);
     }
-    
+
     public function testFindByEmailUserNotExist()
     {
         $user = $this->dao->findByEmail('snoop@lion.com');
         $this->assertFAlse($user);
     }
-    
+
     public function testFindAll()
     {
         $result = $this->dao->findAll();

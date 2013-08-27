@@ -27,17 +27,17 @@ class ProfileTest extends \PHPUnit_Framework_TestCase
     {
         $app = new Slim();
         $app->view(new SlimView());
-        
+
         $mw = new Profile($this->config);
         $mw->setApplication($app);
         $mw->setNextMiddleware($app);
         $mw->call();
-        
+
         $data = $app->view()->getData('profile');
-        
+
         $this->assertNotNull($data);
         $this->assertInternalType('array', $data);
-        
+
         $this->assertEquals('jeremykendall', $data['flickr_username']);
         $this->assertEquals('Project 365', $data['brand']);
         $this->assertEquals('365 Days of Photography', $data['site_name']);
@@ -49,12 +49,12 @@ class ProfileTest extends \PHPUnit_Framework_TestCase
     {
         $app = new Slim();
         $app->view(new SlimView());
-        
+
         $mw = new Profile(array());
         $mw->setApplication($app);
         $mw->setNextMiddleware($app);
         $mw->call();
-        
+
         $data = $app->view()->getData('profile');
         $this->assertEmpty($data);
     }

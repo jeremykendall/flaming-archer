@@ -8,11 +8,11 @@ class CommonDbTestCase extends \PHPUnit_Framework_TestCase
 {
     /**
      * Database connection
-     * 
+     *
      * @var PDO
      */
     protected $db;
-    
+
     protected function setUp()
     {
         parent::setUp();
@@ -25,7 +25,7 @@ class CommonDbTestCase extends \PHPUnit_Framework_TestCase
         $this->db->exec(file_get_contents(APPLICATION_PATH . '/scripts/sql/schema.sql'));
         $this->db->exec(file_get_contents(APPLICATION_PATH . '/scripts/sql/seed_data.sql'));
     }
-    
+
     protected function tearDown()
     {
         $this->db = null;

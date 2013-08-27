@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Flaming Archer
  *

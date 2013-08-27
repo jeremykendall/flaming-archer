@@ -17,15 +17,15 @@ class ConfigTest extends ComposerScriptTestCase
         $this->root = vfsStream::setup('dev.flaming-archer');
         vfsStream::create(
             array(
-                'config-dist.php' => 'config without secure data', 
+                'config-dist.php' => 'config without secure data',
                 'vendor' => array()
-            ), 
+            ),
             $this->root
         );
         $webroot = vfsStream::url('dev.flaming-archer');
-        
+
         parent::setUp();
-        
+
         // Replacing default vendor directory with mocked filesystem
         $this->composerConfig->merge(
             array('config' => array('vendor-dir' => $webroot . '/vendor'))
@@ -62,7 +62,7 @@ class ConfigTest extends ComposerScriptTestCase
         $result = Config::create($this->event);
         $this->assertTrue($this->root->hasChild('config.php'));
     }
-    
+
     public function testCreateConfigFound()
     {
         // Confirm mock filesystem contains config.php

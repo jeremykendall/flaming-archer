@@ -100,21 +100,21 @@ class ImageServiceTest extends \PHPUnit_Framework_TestCase
                 ->will($this->returnValue($imageData));
 
         $expected = array();
-        
+
         // The Flickr service should be called as many times as there are
         // data elements returned from the dao
         foreach ($imageData as $index => $image) {
-            
+
             $expected[] = array_merge($image, $imageSizes[$index]);
-            
+
             $this->flickr->expects($this->at($index))
                     ->method('getSizes')
                     ->with($image['photo_id'])
                     ->will($this->returnValue($imageSizes[$index]));
         }
-        
+
         $result = $this->service->findAll();
-        
+
         $this->assertEquals($expected, $result);
     }
 
@@ -127,7 +127,7 @@ class ImageServiceTest extends \PHPUnit_Framework_TestCase
                 ->method('save')
                 ->with(array('day' => 200, 'photo_id' => 999999))
                 ->will($this->returnValue(1));
-        
+
         $this->assertEquals(1, $this->service->save(array('day' => 200, 'photo_id' => 999999)));
     }
 
@@ -140,7 +140,7 @@ class ImageServiceTest extends \PHPUnit_Framework_TestCase
                 ->method('delete')
                 ->with(200)
                 ->will($this->returnValue(1));
-        
+
         $this->assertEquals(1, $this->service->delete(200));
     }
 
@@ -156,7 +156,7 @@ class ImageServiceTest extends \PHPUnit_Framework_TestCase
             'photo_id' => 7606616668,
             'posted' => '2012-07-29 15:31:56',
         );
-        
+
         $date = new DateTime($testDate);
 
         $this->dao->expects($this->once())
@@ -183,7 +183,7 @@ class ImageServiceTest extends \PHPUnit_Framework_TestCase
     {
         $this->dao->expects($this->once())
             ->method('countImages');
-        
+
         $this->service->countImages();
     }
 

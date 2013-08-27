@@ -15,7 +15,7 @@ class DbAdapterTest extends \PHPUnit_Framework_TestCase
      * @var DbAdapter
      */
     protected $adapter;
-    
+
     /**
      * @var \Phpass\Hash
      */
@@ -25,7 +25,7 @@ class DbAdapterTest extends \PHPUnit_Framework_TestCase
      * @var FA\Dao\UserDao
      */
     protected $dao;
-    
+
     /**
      * @var array
      */
@@ -41,7 +41,7 @@ class DbAdapterTest extends \PHPUnit_Framework_TestCase
         $this->dao = $this->getMock('FA\Dao\UserDao', array('findByEmail', 'recordLogin'), array(), '', false);
         $this->hasher = $this->getMock('\Phpass\Hash');
         $this->adapter = new DbAdapter($this->dao, $this->hasher);
-        
+
         $this->user = array(
             'id' => '1',
             'email' => 'user@example.com',
@@ -79,10 +79,10 @@ class DbAdapterTest extends \PHPUnit_Framework_TestCase
                 ->method('checkPassword')
                 ->with('password', $this->user['password_hash'])
                 ->will($this->returnValue(true));
-        
+
         $this->adapter->setCredentials('user@example.com', 'password');
         $result = $this->adapter->authenticate();
-        
+
         unset($this->user['password_hash']);
 
         $this->assertInstanceOf('\Zend\Authentication\Result', $result);
@@ -100,7 +100,7 @@ class DbAdapterTest extends \PHPUnit_Framework_TestCase
                 ->method('findByEmail')
                 ->with($this->user['email'])
                 ->will($this->returnValue($this->user));
-        
+
         $this->hasher->expects($this->once())
                 ->method('checkPassword')
                 ->with('badpassword', $this->user['password_hash'])
@@ -114,17 +114,17 @@ class DbAdapterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(Result::FAILURE_CREDENTIAL_INVALID, $result->getCode());
         $this->assertEquals(array('Invalid username or password provided'), $result->getMessages());
     }
-    
+
     public function testAuthenticationUserNotFound()
     {
         $this->dao->expects($this->once())
                 ->method('findByEmail')
                 ->with('user@example.org')
                 ->will($this->returnValue(false));
-        
+
         $this->adapter->setCredentials('user@example.org', 'userdoesnotexist');
         $result = $this->adapter->authenticate();
-        
+
         $this->assertInstanceOf('\Zend\Authentication\Result', $result);
         $this->assertEquals(array(), $result->getIdentity());
         $this->assertEquals(Result::FAILURE_IDENTITY_NOT_FOUND, $result->getCode());

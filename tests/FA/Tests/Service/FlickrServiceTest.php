@@ -14,12 +14,12 @@ class FlickrServiceTest extends \PHPUnit_Framework_TestCase
      * @var FlickrService
      */
     protected $service;
-    
+
     /**
      * @var array
      */
     protected static $config;
-    
+
     public static function setUpBeforeClass()
     {
         parent::setUpBeforeClass();
@@ -43,7 +43,7 @@ class FlickrServiceTest extends \PHPUnit_Framework_TestCase
     {
         $this->service = null;
     }
-    
+
     public function testCreation()
     {
         $this->assertInstanceOf('FA\Service\FlickrService', $this->service);

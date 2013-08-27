@@ -22,7 +22,7 @@ class ImageDaoTest extends CommonDbTestCase
         $this->dao = null;
         parent::tearDown();
     }
-    
+
     public function testConstruct()
     {
         $this->assertInstanceOf('\FA\Dao\ImageDao', $this->dao);
@@ -120,7 +120,7 @@ class ImageDaoTest extends CommonDbTestCase
 
         $actual = $this->dao->findFirstImage();
 
-       $this->assertEquals($actual, $expected); 
+       $this->assertEquals($actual, $expected);
     }
 
     /**
@@ -130,6 +130,6 @@ class ImageDaoTest extends CommonDbTestCase
     {
         // Make sure the table is empty
         $this->db->exec('DELETE FROM images');
-        $this->assertFalse($this->dao->findFirstImage()); 
+        $this->assertFalse($this->dao->findFirstImage());
     }
 }

@@ -63,10 +63,10 @@ class Authentication extends \Slim\Middleware
                 $urlPattern = '@^' . $url['path'] . '$@';
                 if (preg_match($urlPattern, $req->getPathInfo()) === 1 && $auth->hasIdentity() === false) {
                     return $app->redirect($config['login.url']);
-                }             
+                }
             }
         };
-        
+
         $this->app->hook('slim.before.router', $checkAuth);
 
         $this->next->call();
