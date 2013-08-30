@@ -17,11 +17,6 @@ class DbAdapterTest extends \PHPUnit_Framework_TestCase
     protected $adapter;
 
     /**
-     * @var \Phpass\Hash
-     */
-    protected $hasher;
-
-    /**
      * @var FA\Dao\UserDao
      */
     protected $dao;
@@ -39,8 +34,7 @@ class DbAdapterTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $this->dao = $this->getMock('FA\Dao\UserDao', array('findByEmail', 'recordLogin'), array(), '', false);
-        $this->hasher = $this->getMock('\Phpass\Hash');
-        $this->adapter = new DbAdapter($this->dao, $this->hasher);
+        $this->adapter = new DbAdapter($this->dao);
 
         $this->user = array(
             'id' => '1',
@@ -75,11 +69,6 @@ class DbAdapterTest extends \PHPUnit_Framework_TestCase
                 ->with($this->user['email'])
                 ->will($this->returnValue($this->user));
 
-        $this->hasher->expects($this->once())
-                ->method('checkPassword')
-                ->with('password', $this->user['password_hash'])
-                ->will($this->returnValue(true));
-
         $this->adapter->setCredentials('user@example.com', 'password');
         $result = $this->adapter->authenticate();
 
@@ -94,17 +83,12 @@ class DbAdapterTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers FA\Authentication\Adapter\DbAdapter::authenticate
      */
-    public function testAuthenticateFAilure()
+    public function testAuthenticateFailure()
     {
         $this->dao->expects($this->once())
                 ->method('findByEmail')
                 ->with($this->user['email'])
                 ->will($this->returnValue($this->user));
-
-        $this->hasher->expects($this->once())
-                ->method('checkPassword')
-                ->with('badpassword', $this->user['password_hash'])
-                ->will($this->returnValue(false));
 
         $this->adapter->setCredentials('user@example.com', 'badpassword');
         $result = $this->adapter->authenticate();

@@ -19,7 +19,7 @@
     "require": {
         "php": ">=5.3.10",
         "ext-mcrypt": "*",
-        "rych/phpass": "2.1.x-dev",
+        "ircmaxell/password-compat": "1.*",
         "slim/extras": "2.0.*",
         "slim/slim": "2.3.*",
         "slim/views": "0.1.*",

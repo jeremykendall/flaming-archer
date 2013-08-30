@@ -26,13 +26,6 @@ class DbAdapter implements AdapterInterface
     private $dao;
 
     /**
-     * Password hasher
-     *
-     * @var \Phpass\Hash
-     */
-    private $hasher;
-
-    /**
      * User email address
      *
      * @var string Email address
@@ -49,13 +42,11 @@ class DbAdapter implements AdapterInterface
     /**
      * Public constructor
      *
-     * @param \FA\Dao\UserDao $dao    User Dao
-     * @param \Phpass\Hash    $hasher Password hasher
+     * @param UserDao $dao User Dao
      */
-    public function __construct(UserDao $dao, \Phpass\Hash $hasher)
+    public function __construct(UserDao $dao)
     {
         $this->dao = $dao;
-        $this->hasher = $hasher;
     }
 
     /**
@@ -83,7 +74,7 @@ class DbAdapter implements AdapterInterface
             return new Result(Result::FAILURE_IDENTITY_NOT_FOUND, array(), array('Invalid username or password provided'));
         }
 
-        if ($this->hasher->checkPassword($this->password, $user['password_hash'])) {
+        if (password_verify($this->password, $user['password_hash'])) {
             unset($user['password_hash']);
             $this->dao->recordLogin($user['email']);
 
