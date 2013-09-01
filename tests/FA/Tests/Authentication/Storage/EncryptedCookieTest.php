@@ -41,27 +41,27 @@ class EncryptedCookieTest extends \PHPUnit_Framework_TestCase
     public function testIsEmptyTrue()
     {
         $this->app->expects($this->once())
-                ->method('getCookie')
-                ->with('cookieName')
-                ->will($this->returnValue(false));
+            ->method('getCookie')
+            ->with('cookieName')
+            ->will($this->returnValue(false));
         $this->assertTrue($this->cookie->isEmpty());
     }
 
     public function testIsEmptyFAlse()
     {
         $this->app->expects($this->once())
-                ->method('getCookie')
-                ->with('cookieName')
-                ->will($this->returnValue($this->cookieContents));
+            ->method('getCookie')
+            ->with('cookieName')
+            ->will($this->returnValue($this->cookieContents));
         $this->assertFAlse($this->cookie->isEmpty());
     }
 
     public function testRead()
     {
         $this->app->expects($this->once())
-                ->method('getCookie')
-                ->with('cookieName')
-                ->will($this->returnValue($this->cookieContents));
+            ->method('getCookie')
+            ->with('cookieName')
+            ->will($this->returnValue($this->cookieContents));
         $contents = $this->cookie->read();
         $this->assertEquals(json_decode($this->cookieContents, true), $contents);
     }
@@ -69,8 +69,8 @@ class EncryptedCookieTest extends \PHPUnit_Framework_TestCase
     public function testWrite()
     {
         $this->app->expects($this->once())
-                ->method('setCookie')
-                ->with('cookieName', json_encode(array("I'm a cookie")), '1 day');
+            ->method('setCookie')
+            ->with('cookieName', json_encode(array("I'm a cookie")), '1 day');
         $this->cookie->setTime('1 day');
         $this->cookie->write(array("I'm a cookie"));
     }
@@ -87,18 +87,17 @@ class EncryptedCookieTest extends \PHPUnit_Framework_TestCase
         unset($withoutHash['password_hash']);
 
         $this->app->expects($this->once())
-                ->method('setCookie')
-                ->with('cookieName', json_encode($withoutHash), '1 day');
+            ->method('setCookie')
+            ->with('cookieName', json_encode($withoutHash), '1 day');
         $this->cookie->setTime('1 day');
         $this->cookie->write($withHash);
     }
 
-
     public function testClear()
     {
         $this->app->expects($this->once())
-                ->method('deleteCookie')
-                ->with('cookieName');
+            ->method('deleteCookie')
+            ->with('cookieName');
         $this->cookie->clear();
     }
 }
