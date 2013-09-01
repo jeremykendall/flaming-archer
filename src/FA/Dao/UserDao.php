@@ -33,6 +33,22 @@ class UserDao
     }
 
     /**
+     * Find user by id
+     *
+     * @param  int   $id User id
+     * @return array User data
+     */
+    public function find($id)
+    {
+        $sql = 'SELECT * FROM users WHERE id = :id';
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindValue(':id', $id);
+        $stmt->execute();
+
+        return $stmt->fetch();
+    }
+
+    /**
      * Find user by email address
      *
      * @param  string $email User's email address
@@ -44,9 +60,40 @@ class UserDao
         $stmt = $this->db->prepare($sql);
         $stmt->bindValue(':email', $email, \PDO::PARAM_STR);
         $stmt->execute();
-        $user = $stmt->fetch();
 
-        return $user;
+        return $stmt->fetch();
+    }
+
+    /**
+     * Updates user email address
+     *
+     * @param  int    $id    User id
+     * @param  string $email New email address
+     * @return array  Updated user
+     */
+    public function updateEmail($id, $email)
+    {
+        $sql = 'UPDATE users SET email = :email WHERE id = :id';
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(array('email' => $email, 'id' => $id));
+
+        return $this->find($id);
+    }
+
+    /**
+     * Changes user password
+     *
+     * @param  int    $id              User id
+     * @param  string $newPasswordHash New password hash
+     * @return array  Updated user
+     */
+    public function changePassword($id, $newPasswordHash)
+    {
+        $sql = 'UPDATE users SET password_hash = :password_hash WHERE id = :id';
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(array('password_hash' => $newPasswordHash, 'id' => $id));
+
+        return $this->find($id);
     }
 
     /**
@@ -56,9 +103,7 @@ class UserDao
      */
     public function findAll()
     {
-        $sql = 'SELECT * FROM users';
-
-        return $this->db->query($sql)->fetchAll();
+        return $this->db->query('SELECT * FROM users')->fetchAll();
     }
 
     /**
