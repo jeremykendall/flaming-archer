@@ -94,6 +94,10 @@ class EncryptedCookie implements \Zend\Authentication\Storage\StorageInterface
      */
     public function write($contents)
     {
+        if (isset($contents['password_hash'])) {
+            unset($contents['password_hash']);
+        }
+
         $value = json_encode($contents);
         $this->app->setCookie($this->cookieName, $value, $this->time);
     }
