@@ -3,44 +3,54 @@
 // SQLite database file
 $sqlite = __DIR__ . '/db/flaming-archer.db';
 
+// Slim configuration
+$slim = array(
+    'templates.path' => __DIR__ . '/templates',
+    'log.level' => Slim\Log::ERROR,
+    'log.enabled' => true,
+    'log.writer' => new Slim\Extras\Log\DateTimeFileWriter(
+        array(
+            'path' => __DIR__ . '/logs',
+            'name_format' => 'Y-m-d'
+        )
+    ),
+    // Global, not SessionCookie, cookie settings
+    'cookies.encrypt' => false, // must be false until https://github.com/codeguy/Slim/pull/606 is merged
+    'cookies.secret_key' => 'CHANGE_ME',
+    'cookies.cipher' => MCRYPT_RIJNDAEL_256,
+    'cookies.cipher_mode' => MCRYPT_MODE_CBC,
+);
+
 $config = array(
+    'slim' => $slim,
     'profile' => array(
-        'brand' => 'BRAND',
+        'brand' => 'Flaming Archer',
         'site_name' => 'SITE NAME',
         'flickr_username' => 'YOUR FLICKR USERNAME',
-        'photographer' => 'PHOTOGRAPHER',
-        'external_url' => 'http://EXTERNAL_URL',
+        'photographer' => 'YOUR NAME',
+        'tagline' => "TAGLINE",
+        'external_url' => 'BLOG, FLICKR PROFILE, WHATEVER',
     ),
-    'flickr.api.key' => 'API KEY',
-    'slim' => array(
-        'templates.path' => __DIR__ . '/templates',
-        'log.level' => Slim\Log::ERROR,
-        'log.enabled' => true,
-        'log.writer' => new Slim\Extras\Log\DateTimeFileWriter(
-            array(
-                'path' => __DIR__ . '/logs',
-                'name_format' => 'Y-m-d'
-            )
-        ),
-        'cookies.encrypt' => true,
-    ),
+    'flickr.api.key' => 'YOUR FLICKR API KEY',
     'twig' => array(
-        'charset' => 'utf-8',
-        'cache' => realpath(__DIR__ . '/templates/cache'),
-        'auto_reload' => true,
-        'strict_variables' => true,
-        'autoescape' => true
+        'environment' => array(
+            'charset' => 'utf-8',
+            'cache' => realpath(__DIR__ . '/templates/cache'),
+            'auto_reload' => true,
+            'strict_variables' => true,
+            'autoescape' => true,
+        ),
     ),
-    'cookies' => array(
+    'session_cookies' => array(
         'expires' => '20 minutes',
         'path' => '/',
         'domain' => null,
-        'secure' => true,
+        'secure' => false,
         'httponly' => false,
         'name' => 'slim_session',
-        'secret' => 'CHANGE THIS SECRET',
-        'cipher' => MCRYPT_RIJNDAEL_256,
-        'cipher_mode' => MCRYPT_MODE_CBC
+        'secret' => $slim['cookies.secret_key'],
+        'cipher' => $slim['cookies.cipher'],
+        'cipher_mode' => $slim['cookies.cipher_mode'],
     ),
     'database' => $sqlite,
     'pdo' => array(
@@ -69,7 +79,7 @@ $config = array(
                 'throw_exceptions' => false
             ),
             'Serializer'
-        )
+        ),
     ),
     'login.url' => '/login',
     'secured.urls' => array(
