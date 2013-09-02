@@ -11,6 +11,53 @@ use Slim\Slim;
 $app = new Slim($config['slim']);
 $container = new Container($app, $config);
 
+$app->hook('slim.before.router', function () use ($app, $container) {
+    $users = count($container['userDao']->findAll());
+    $pathInfo = $app->request->getPathInfo();
+
+    if ($users < 1 && $pathInfo != '/setup') {
+        return $app->redirect('/setup');
+    }
+});
+
+$app->get('/setup', function () use ($app, $container) {
+    if (count($container['userDao']->findAll()) > 0) {
+        $app->halt(403);
+    }
+
+    $app->render('setup.html', array('email' => $email));
+});
+
+$app->post('/setup', function () use ($app, $container) {
+    if (count($container['userDao']->findAll()) > 0) {
+        $app->halt(403, 'NO MOAR USERS ALLOWED');
+    }
+
+    $params = $app->request()->post();
+
+    $email = filter_var($params['email'], FILTER_SANITIZE_EMAIL);
+    $email = filter_var($email, FILTER_VALIDATE_EMAIL);
+
+    if ($email) {
+        try {
+            $user = $container['userService']->createUser($email, $params['password'], $params['confirm-password']);
+            $app->log->info(sprintf('New user %s has been created', $user['email']));
+            $app->flash('joinSuccess', sprintf('Congrats %s! Now log in and get started!', $user['email']));
+            $app->redirect('/login');
+        } catch (\PDOException $p) {
+            $app->log->error(sprintf('Database error creating account for %s: %s', $email, $p->getMessage()));
+            $app->flash('error', sprintf("Database error creating your account. Stop doing whatever bad thing you're doing!", $email));
+        } catch (\Exception $e) {
+            $app->log->error(sprintf('Error creating account for %s: %s', $email, $e->getMessage()));
+            $app->flash('error', $e->getMessage());
+        }
+    } else {
+        $app->flash('error', sprintf("'%s' is not a valid email address", $params['email']));
+    }
+
+    $app->redirect('/setup');
+});
+
 // Define routes
 $app->get('/', function ($page = 1) use ($app, $container) {
     $images = $container['imageService']->findAll();

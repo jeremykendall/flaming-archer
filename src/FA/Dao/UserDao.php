@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Flaming Archer
  *
@@ -118,5 +117,25 @@ class UserDao
         $stmt = $this->db->prepare($sql);
 
         return $stmt->execute(array('email' => $email));
+    }
+
+    /**
+     * Creates a new user
+     *
+     * @param  string $email        Email address
+     * @param  string $passwordHash Hashed password
+     * @return array  User data
+     */
+    public function createUser($email, $passwordHash)
+    {
+        if (!$passwordHash) {
+            throw new \InvalidArgumentException('Password hash must not be null');
+        }
+
+        $sql = 'INSERT INTO users (email, password_hash) VALUES (:email, :password_hash)';
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(array('email' => $email, 'password_hash' => $passwordHash));
+
+        return $this->findByEmail($email);
     }
 }

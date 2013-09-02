@@ -7,6 +7,11 @@
 {% endblock %}
 
 {% block content %}
+{% if flash.joinSuccess %}
+<div class="alert alert-success form-signin">
+    {{ flash.joinSuccess }}
+</div>       
+{% endif %}
 <form class="form-signin well well-sm" role="form" name="login" id="login" method="post">
     <h2 class="form-signin-heading">Please log in</h2>
     {% if flash.error %}

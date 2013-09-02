@@ -102,6 +102,36 @@ class UserService
     }
 
     /**
+     * Creates a new user
+     *
+     * @param  string $email    Email address
+     * @param  string $password Password
+     * @param  string $confirm  Password confirmation
+     * @return array  User data
+     */
+    public function createUser($email, $password, $confirm)
+    {
+        if (!$password || !$confirm) {
+            throw new \InvalidArgumentException('Password and confirm password are both required.');
+        }
+
+        if ($password !== $confirm) {
+            throw new \InvalidArgumentException('Passwords must match.');
+        }
+
+        if (strlen($password) < 8) {
+            throw new \InvalidArgumentException('Password must be at least 8 characters in length.');
+        }
+
+        $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+
+        $user = $this->dao->createUser($email, $passwordHash);
+        unset($user['password_hash']);
+
+        return $user;
+    }
+
+    /**
      * Finds currently logged in user
      *
      * @return array User data

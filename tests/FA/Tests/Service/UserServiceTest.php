@@ -269,4 +269,38 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
 
         $this->assertNull($user);
     }
+
+    public function testCreateUserSucceeds()
+    {
+        $passwordHash = 'Corned beef password hash';
+
+        $this->dao->expects($this->once())
+            ->method('createUser')
+            ->with(
+                $this->user['email'], 
+                $this->matchesRegularExpression('/^\$2y\$10\$[a-zA-Z0-9\.\/]*$/')
+            )
+            ->will($this->returnValue($this->user));
+
+        $user = $this->service->createUser($this->user['email'], 'password', 'password');
+        $this->assertEquals($this->user, $user);
+    }
+
+    public function testCreateUserPasswordsNotProvided()
+    {
+        $this->setExpectedException('InvalidArgumentException', 'Password and confirm password are both required.');
+        $user = $this->service->createUser($this->user['email'], null, null);
+    }
+
+    public function testCreateUserPasswordsNotMatch()
+    {
+        $this->setExpectedException('InvalidArgumentException', 'Passwords must match.');
+        $user = $this->service->createUser($this->user['email'], 'blahblahblah', 'blahblahbla');
+    }
+
+    public function testCreateUserPasswordsTooShort()
+    {
+        $this->setExpectedException('InvalidArgumentException', 'Password must be at least 8 characters in length.');
+        $user = $this->service->createUser($this->user['email'], 'blah', 'blah');
+    }
 }

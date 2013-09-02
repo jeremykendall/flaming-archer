@@ -1,0 +1,41 @@
+{% extends 'layout.html' %}
+
+{% block page_title %}{{ parent() }} | Setup{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6">
+        <h2>Who Are You?</h2>
+        {% if flash.error %}
+        <div class="alert alert-danger alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            {{ flash.error }}
+        </div>
+        {% endif %}
+        <form role="form" method="post" action="/setup" name="setup-form" id="setup-form" class="well well-sm">
+            <div class="form-group">
+                <label for="email">Email address</label>
+                <input type="email" name="email" class="form-control" id="email" placeholder="Enter email" value="{{ email }}" autofocus required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" name="password" class="form-control" placeholder="Password" required>
+            </div>
+            <div class="form-group">
+                <label for="confirm-password">Confirm your password</label>
+                <input type="password" name="confirm-password" class="form-control" placeholder="Confirm your password" required>
+            </div>
+            <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+    </div>
+    <div class="col-md-6">
+        <h2>Don't Forget!</h2>
+        <p>There are still a few things to do . . .</p>
+        <ul>
+            <li>Edit the <code>$userConfig</code> array in <code>/config.php</code> to add your personal information.</li>
+            <li>You <em>must</em> have a Flickr API key to use Flaming Archer.</li>
+            <li>If you get stuck, documentation is available on <a href="http://github.com/jeremykendall/flaming-archer" target="_blank">GitHub</a></li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

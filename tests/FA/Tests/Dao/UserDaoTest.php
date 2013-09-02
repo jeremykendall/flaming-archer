@@ -110,4 +110,27 @@ class UserDaoTest extends CommonDbTestCase
         $updatedUser = $this->dao->changePassword($user['id'], $newPasswordHash);
         $this->assertEquals($newPasswordHash, $updatedUser['password_hash']);
     }
+
+    public function testCreateUser()
+    {
+        $email = 'arthur@example.com';
+        $passwordHash = 'Yet another fake password hash';
+        $users = count($this->dao->findAll());
+
+        $user = $this->dao->createUser($email, $passwordHash);
+
+        $this->assertEquals($users + 1, count($this->dao->findAll()));
+        $this->assertEquals(2, $user['id']);
+        $this->assertEquals($email, $user['email']);
+        $this->assertEquals($passwordHash, $user['password_hash']);
+    }
+
+    /**
+     * This should cover the possibility of a malfunciton in password_hash
+     */
+    public function testCreateUserFailsWithNullHash()
+    {
+        $this->setExpectedException('InvalidArgumentException', 'Password hash must not be null');
+        $user = $this->dao->createUser('test@example.com', null);
+    }
 }
