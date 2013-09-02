@@ -1,0 +1,139 @@
+{
+    "provider": {
+        "type": "local",
+        "os": "ubuntu",
+        "local": {
+            "url": "http:\/\/files.vagrantup.com\/precise64.box",
+            "name": "precise64",
+            "personal_name": "flaming-archer.dev",
+            "ip": "192.168.33.10",
+            "memory": "1024",
+            "port_forward": {
+                "host": "",
+                "guest": ""
+            },
+            "foldertype": "default",
+            "synced_folder": {
+                "source": ".\/",
+                "target": "\/var\/www"
+            }
+        },
+        "digitalocean": {
+            "name": "puphpet_digitalocean",
+            "size": "1GB",
+            "region": "New York 1",
+            "client_id": "DIGITAL_OCEAN_CLIENT_ID",
+            "api_key": "DIGITAL_OCEAN_API_KEY",
+            "private_key": "~\/.ssh\/id_rsa",
+            "synced_folder": {
+                "source": ".\/",
+                "target": "\/var\/www"
+            }
+        },
+        "rackspace": {
+            "name": "rackspace-server",
+            "size": "512MB",
+            "region": "DFW",
+            "username": "RACKSPACE_USERNAME",
+            "api_key": "RACKSPACE_API_KEY",
+            "private_key": "~\/.ssh\/id_rsa",
+            "public_key": "~\/.ssh\/id_rsa.pub",
+            "synced_folder": {
+                "source": ".\/",
+                "target": "\/var\/www"
+            }
+        }
+    },
+    "server": {
+        "packages": "build-essential,vim,curl,git-core",
+        "bashaliases": "if [ -f \/etc\/bash_completion ]; then\n    source \/etc\/bash_completion\nfi\n\n__has_parent_dir () {\n    # Utility function so we can test for things like .git\/.hg without firing\n    # up a separate process\n    test -d \"$1\" && return 0;\n\n    current=\".\"\n    while [ ! \"$current\" -ef \"$current\/..\" ]; do\n        if [ -d \"$current\/$1\" ]; then\n            return 0;\n        fi\n        current=\"$current\/..\";\n    done\n\n    return 1;\n}\n\n__vcs_name() {\n    if [ -d .svn ]; then\n        echo \"-[svn]\";\n    elif __has_parent_dir \".git\"; then\n        echo \"-[$(__git_ps1 'git %s')]\";\n    elif __has_parent_dir \".hg\"; then\n        echo \"-[hg $(hg branch)]\"\n    fi\n}\n\nblack=$(tput -Txterm setaf 0)\nred=$(tput -Txterm setaf 1)\ngreen=$(tput -Txterm setaf 2)\nyellow=$(tput -Txterm setaf 3)\ndk_blue=$(tput -Txterm setaf 4)\npink=$(tput -Txterm setaf 5)\nlt_blue=$(tput -Txterm setaf 6)\n\nbold=$(tput -Txterm bold)\nreset=$(tput -Txterm sgr0)\n\nexport PS1='\\n\\[$bold\\]\\[$black\\][\\[$dk_blue\\]\\@\\[$black\\]]-[\\[$green\\]\\u\\[$yellow\\]@\\[$green\\]\\h\\[$black\\]]-[\\[$pink\\]\\w\\[$black\\]]\\[\\033[0;33m\\]$(__vcs_name) \\[\\033[00m\\]\\[$reset\\]\\n\\[$reset\\]\\$ '\n\nalias ls='ls -F --color=always'\nalias dir='dir -F --color=always'\nalias ll='ls -l'\nalias cp='cp -iv'\nalias rm='rm -i'\nalias mv='mv -iv'\nalias grep='grep --color=auto -in'\nalias v='vim'\nalias ..='cd ..'\n"
+    },
+    "webserver": "apache",
+    "apache": {
+        "modules": [
+            "rewrite"
+        ],
+        "vhosts": {
+            "1": {
+                "servername": "flaming-archer.dev",
+                "serveraliases": "",
+                "docroot": "\/var\/www\/",
+                "port": "80",
+                "envvars": "APP_ENV develop"
+            }
+        }
+    },
+    "nginx": {
+        "vhosts": {
+            "1": {
+                "servername": "awesome.dev",
+                "serveraliases": "",
+                "docroot": "\/var\/www\/",
+                "port": "80",
+                "index_files": "index.html,index.htm,index.php",
+                "envvars": ""
+            }
+        }
+    },
+    "php": {
+        "version": "php54",
+        "modules": {
+            "composer": {
+                "installed": "1"
+            },
+            "php": [
+                "php5-cli",
+                "php5-curl",
+                "php5-intl",
+                "php5-mcrypt",
+                "php5-sqlite"
+            ],
+            "pear": {
+                "installed": "1"
+            },
+            "xdebug": {
+                "installed": "1"
+            },
+            "xhprof": {
+                "installed": "1"
+            }
+        },
+        "inilist": {
+            "xdebug": "xdebug.default_enable = 1,xdebug.remote_autostart = 0,xdebug.remote_connect_back = 1,xdebug.remote_enable = 1,xdebug.remote_handler = dbgp,xdebug.remote_port = 9000",
+            "php": {
+                "date.timezone": "America\/Chicago"
+            },
+            "custom": "display_errors = On,error_reporting = -1,display_startup_errors = 1"
+        }
+    },
+    "database": "mysql",
+    "mysql": {
+        "root": "",
+        "phpmyadmin": "1",
+        "dbuser": {
+            "1": {
+                "privileges": [
+                    "ALL"
+                ],
+                "user": "",
+                "password": "",
+                "dbname": "",
+                "host": "localhost",
+                "sql": ""
+            }
+        }
+    },
+    "postgresql": {
+        "root": "",
+        "dbuser": {
+            "1": {
+                "privileges": [
+                    "ALL"
+                ],
+                "user": "",
+                "password": "",
+                "dbname": ""
+            }
+        }
+    }
+}
