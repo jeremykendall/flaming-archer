@@ -61,8 +61,7 @@ class Container extends Pimple
             ));
 
             $config['twig']['debug'] = true;
-});
-
+        });
     }
 
     protected function configureContainer(Container $c)
