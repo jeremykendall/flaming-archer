@@ -36,7 +36,7 @@ class SQLiteTest extends ComposerScriptTestCase
         $filesystem->ensureDirectoryExists($this->rootPath);
 
         // Copy the application config over the test directory
-        copy(APPLICATION_PATH . '/config-dist.php', $this->rootPath . '/config.php');
+        copy(APPLICATION_PATH . '/config.dist.php', $this->rootPath . '/config.php');
         $this->assertFileExists($this->rootPath . '/config.php', 'Application config was not copied correctly during setup.');
 
         // Get application config and ensure path to db exists

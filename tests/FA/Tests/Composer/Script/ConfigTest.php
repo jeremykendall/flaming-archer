@@ -17,7 +17,7 @@ class ConfigTest extends ComposerScriptTestCase
         $this->root = vfsStream::setup('dev.flaming-archer');
         vfsStream::create(
             array(
-                'config-dist.php' => 'config without secure data',
+                'config.dist.php' => 'config without secure data',
                 'vendor' => array()
             ),
             $this->root
@@ -44,7 +44,7 @@ class ConfigTest extends ComposerScriptTestCase
 
         $output = array(
             'Reviewing your Flaming Archer environment . . .',
-            'Creating config.php by copying config-dist.php . . .',
+            'Creating config.php by copying config.dist.php . . .',
             "Done! Please edit config.php and add your Flickr API key to 'flickr.api.key' and change 'cookie['secret']'."
         );
 
