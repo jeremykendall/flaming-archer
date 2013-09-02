@@ -1,54 +1,20 @@
 <?php
 
+error_reporting(-1);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+
 require '../vendor/autoload.php';
 
 $config = require_once __DIR__ . '/../config.php';
 
-use FA\Authentication\Adapter\DbAdapter;
-use FA\Authentication\Storage\EncryptedCookie;
-use FA\Dao\ImageDao;
-use FA\Dao\UserDao;
-use FA\Middleware\Authentication;
-use FA\Middleware\Navigation;
-use FA\Middleware\Profile;
-use FA\Pagination;
-use FA\Service\FlickrService;
-use FA\Service\FlickrServiceCache;
-use FA\Service\ImageService;
-use FA\Service\UserService;
+use FA\DI\Container;
 use Slim\Log;
-use Slim\Middleware\SessionCookie;
 use Slim\Slim;
-use Slim\Views\Twig;
-use Slim\Views\TwigExtension;
-use Zend\Authentication\AuthenticationService;
-use Zend\Cache\StorageFactory;
-
-try {
-    $db = new PDO(
-        $config['pdo']['dsn'],
-        $config['pdo']['username'],
-        $config['pdo']['password'],
-        $config['pdo']['options']
-    );
-} catch (PDOException $e) {
-    error_log('Database connection error in ' . $e->getFile() . ' on line ' . $e->getLine() . ': ' . $e->getMessage());
-    die('Database connection error. Please check php error log.');
-}
-
-$pagination = new Pagination();
-
-$userDao = new UserDao($db);
-$authAdapter = new DbAdapter($userDao);
-
-$cache = StorageFactory::factory($config['cache']);
-$flickrService = new FlickrService($config['flickr.api.key']);
-$flickrServiceCache = new FlickrServiceCache($flickrService, $cache);
-
-$service = new ImageService(new ImageDao($db), $flickrServiceCache);
 
 // Prepare app
 $app = new Slim($config['slim']);
+$container = new Container($app, $config);
 
 // Dev mode settings
 $app->configureMode('development', function() use ($app, $config) {
@@ -64,43 +30,36 @@ $app->configureMode('development', function() use ($app, $config) {
     $config['twig']['debug'] = true;
 });
 
-$auth = new AuthenticationService();
-$storage = new EncryptedCookie($app);
-$auth->setStorage($storage);
-$auth->setAdapter($authAdapter);
-
-$userService = new UserService($userDao, $auth);
-
 // Add Middleware
-$app->add(new Profile($config));
-$app->add(new Navigation($auth));
-$app->add(new Authentication($auth, $config));
-$app->add(new SessionCookie($config['session_cookies']));
+$app->add($container['profileMiddleware']);
+$app->add($container['navigationMiddleware']);
+$app->add($container['authenticationMiddleware']);
+$app->add($container['sessionCookieMiddleware']);
 
 // Prepare view
-$app->view(new Twig());
+$app->view($container['twig']);
 $app->view->parserOptions = $config['twig'];
-$app->view->parserExtensions = array(new TwigExtension(), new Twig_Extension_Debug());
+$app->view->parserExtensions = array($container['slimTwigExtension'], $container['twigExtensionDebug']);
 
 // Define routes
-$app->get('/', function ($page = 1) use ($app, $service, $pagination) {
-    $images = $service->findAll();
-    $paginator = $pagination->newPaginator($images, $page, 10);
+$app->get('/', function ($page = 1) use ($app, $container) {
+    $images = $container['imageService']->findAll();
+    $paginator = $container['pagination']->newPaginator($images, $page, 10);
 
     $app->render('index.html', array('paginator' => $paginator, 'pages' => $paginator->getPages(), 'home' => true));
 });
 
-$app->get('/page/:page', function ($page = 1) use ($app, $service, $pagination) {
-    $images = $service->findAll();
-    $paginator = $pagination->newPaginator($images, $page, 10);
+$app->get('/page/:page', function ($page = 1) use ($app, $container) {
+    $images = $container['imageService']->findAll();
+    $paginator = $container['pagination']->newPaginator($images, $page, 10);
 
     $home = ($page == 1) ? true : false;
 
     $app->render('index.html', array('paginator' => $paginator, 'pages' => $paginator->getPages(), 'home' => $home));
 });
 
-$app->get('/day/:day', function($day) use ($app, $service) {
-    $image = $service->find($day);
+$app->get('/day/:day', function($day) use ($app, $container) {
+    $image = $container['imageService']->find($day);
 
     if (!$image) {
         $app->notFound();
@@ -109,13 +68,13 @@ $app->get('/day/:day', function($day) use ($app, $service) {
     $app->render('day.html', $image);
 })->conditions(array('day' => '([1-9]\d?|[12]\d\d|3[0-5]\d|36[0-6])'));
 
-$app->post('/admin/clear-cache', function() use ($app, $cache) {
+$app->post('/admin/clear-cache', function() use ($app, $container) {
     $log = $app->getLog();
     $cleared = null;
     $clear = $app->request()->post('clear');
 
     if ($clear == 1) {
-        if ($cache->flush()) {
+        if ($container['cache']->flush()) {
             $app->flash('cacheSuccess', 'Cache cleared.');
         } else {
             $app->flash('cacheFailure', 'Problem clearing cache!');
@@ -126,17 +85,17 @@ $app->post('/admin/clear-cache', function() use ($app, $cache) {
     $app->redirect('/admin/settings');
 });
 
-$app->get('/admin(/page/:page)', function ($page = 1) use ($app, $service, $pagination) {
-    $images = $service->findAll();
-    $paginator = $pagination->newPaginator($images, $page, 25);
-    $projectDay = $service->getProjectDay();
+$app->get('/admin(/page/:page)', function ($page = 1) use ($app, $container) {
+    $images = $container['imageService']->findAll();
+    $paginator = $container['pagination']->newPaginator($images, $page, 25);
+    $projectDay = $container['imageService']->getProjectDay();
     $daysLeft = 365 - $projectDay;
-    $photoCount = $service->countImages();
+    $photoCount = $container['imageService']->countImages();
     $percentage = ($photoCount / $projectDay) * 100;
 
     $viewData = array(
-        'images' => $images, 
-        'paginator' => $paginator, 
+        'images' => $images,
+        'paginator' => $paginator,
         'pages' => $paginator->getPages(),
         'projectDay' => $projectDay,
         'photoCount' => $photoCount,
@@ -152,14 +111,14 @@ $app->get('/admin/settings', function () use ($app) {
     $app->render('admin/settings.html', array('user' => $user));
 });
 
-$app->post('/admin/user', function () use ($app, $userService) {
+$app->post('/admin/user', function () use ($app, $container) {
     $user = json_decode($app->getCookie('identity'), true);
     $params = $app->request()->post();
 
     $email = filter_var($params['email'], FILTER_SANITIZE_EMAIL);
 
     if (filter_var($email, FILTER_VALIDATE_EMAIL) && ($email != $user['email'])) {
-        $userService->updateEmail($user, $email);
+        $container['userService']->updateEmail($user, $email);
         $app->log->info(sprintf('Email changed from %s to %s', $user['email'], $email));
         $app->flash('emailSuccess', 'Your email is now ' . $email);
     }
@@ -167,7 +126,7 @@ $app->post('/admin/user', function () use ($app, $userService) {
     if ($params['form-type'] == 'change-password' && $params['password']) {
         $app->log->info(sprintf('About to change password for %s', $user['email']));
         try {
-            $result = $userService->changePassword($user['email'], $params['password'], $params['new-password'], $params['confirm-password']);
+            $result = $container['userService']->changePassword($user['email'], $params['password'], $params['new-password'], $params['confirm-password']);
             $app->log->info(sprintf('Password changed for %s', $user['email']));
             $app->flash('passwordSuccess', 'Password changed!');
         } catch (\Exception $e) {
@@ -179,28 +138,28 @@ $app->post('/admin/user', function () use ($app, $userService) {
     $app->redirect('/admin/settings');
 });
 
-$app->post('/admin/add-photo', function() use ($app, $service, $cache) {
+$app->post('/admin/add-photo', function() use ($app, $container) {
     $data = $app->request()->post();
-    $service->save($data);
-    $cache->flush();
+    $container['imageService']->save($data);
+    $container['cache']->flush();
     $app->redirect('/admin');
 });
 
-$app->post('/admin/delete-photo', function() use ($app, $service, $cache) {
+$app->post('/admin/delete-photo', function() use ($app, $container) {
     $day = $app->request()->post('day');
-    $service->delete($day);
-    $cache->flush();
+    $container['imageService']->delete($day);
+    $container['cache']->flush();
     $app->redirect('/admin');
 });
 
-$app->map('/login', function() use ($app, $userService) {
+$app->map('/login', function() use ($app, $container) {
 
     $email = null;
 
     if ($app->request()->isPost()) {
 
         $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
-        $result = $userService->authenticate($email, $_POST['password']);
+        $result = $container['userService']->authenticate($email, $_POST['password']);
 
         if (!$result->isValid()) {
             $messages = $result->getMessages();
@@ -213,8 +172,8 @@ $app->map('/login', function() use ($app, $userService) {
     $app->render('login.html', array('email' => $email));
 })->via('GET', 'POST');
 
-$app->get('/logout', function() use ($app, $userService) {
-    $userService->clearIdentity();
+$app->get('/logout', function() use ($app, $container) {
+    $container['userService']->clearIdentity();
     $app->redirect('/');
 });
 
