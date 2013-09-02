@@ -20,6 +20,12 @@
     </div>
     <div class="col-md-6">
         <h2>Add a photo</h2>
+        {% if flash.addPhotoError %}
+        <div class="alert alert-danger alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            {{ flash.addPhotoError }}
+        </div>
+        {% endif %}
         <form name="add-photo" id="add-photo" class="well" role="form" method="post" action="/admin/add-photo">
             <div class="form-group">
                 <label for="day">Day</label>

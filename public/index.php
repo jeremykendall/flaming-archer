@@ -157,8 +157,22 @@ $app->post('/admin/user', function () use ($app, $container) {
 
 $app->post('/admin/add-photo', function() use ($app, $container) {
     $data = $app->request()->post();
-    $container['imageService']->save($data);
-    $container['cache']->flush();
+    try {
+        $container['imageService']->save($data);
+        $container['cache']->flush();
+    } catch (\PDOException $p) {
+        $data = json_encode($data);
+        if ($p->getCode() == 23000) {
+            $app->flash('addPhotoError', "Whoops, something bad happened. Make sure the Day and Photo Id you're adding are unique.");
+        } else {
+            $app->flash('addPhotoError', "Database error trying to add a photo. Try again?");
+        }
+        $app->log->error(sprintf('Database error adding a photo with data %s: %s', $data, $p->getMessage()));
+    } catch (\Exception $e) {
+        $data = json_encode($data);
+        $app->flash('addPhotoError', "Error trying to add a photo. Try again?");
+        $app->log->error(sprintf('Error adding a photo with data: %s: %s', $data, $e->getMessage()));
+    }
     $app->redirect('/admin');
 });
 
