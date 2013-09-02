@@ -25,7 +25,7 @@ $app->get('/setup', function () use ($app, $container) {
         $app->halt(403);
     }
 
-    $app->render('setup.html', array('email' => $email));
+    $app->render('setup.html');
 });
 
 $app->post('/setup', function () use ($app, $container) {
