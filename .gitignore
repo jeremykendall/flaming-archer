@@ -1,12 +1,11 @@
+.vagrant
 /vendor/
 .DS_STORE
-/nbproject/private/
 *.un~
 config.php
-/tests/log/*
-.vagrant
 docs
 build
 tags
 composer.lock
 xhprof
+!Icons
