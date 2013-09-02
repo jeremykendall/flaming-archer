@@ -10,7 +10,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     public function testContainerCreation()
     {
         $app = new Slim();
-        $config = array();
+        $config = require APPLICATION_PATH . '/config-dist.php';
         $container = new Container($app, $config);
         $this->assertInstanceOf('Pimple', $container);
     }
