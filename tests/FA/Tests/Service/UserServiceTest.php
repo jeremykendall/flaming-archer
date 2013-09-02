@@ -242,4 +242,31 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
         $user = $this->service->changePassword($this->user['email'], 'password', 'not blank', 'not blank');
         $this->assertEquals($this->user, $user);
     }
+
+    public function testGetLoggedInUserReturnsLoggedInUser()
+    {
+        $this->auth->expects($this->once())
+            ->method('hasIdentity')
+            ->will($this->returnValue(true));
+
+        $this->auth->expects($this->once())
+            ->method('getIdentity')
+            ->will($this->returnValue($this->user));
+
+        $user = $this->service->getLoggedInUser();
+
+        $this->assertInternalType('array', $user);
+        $this->assertEquals($this->user, $user);
+    }
+
+    public function testGetLoggedInUserReturnsNullIfNoUserLoggedIn()
+    {
+        $this->auth->expects($this->once())
+            ->method('hasIdentity')
+            ->will($this->returnValue(false));
+
+        $user = $this->service->getLoggedInUser();
+
+        $this->assertNull($user);
+    }
 }

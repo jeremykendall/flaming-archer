@@ -102,6 +102,18 @@ class UserService
     }
 
     /**
+     * Finds currently logged in user
+     *
+     * @return array User data
+     */
+    public function getLoggedInUser()
+    {
+        if ($this->auth->hasIdentity()) {
+            return $this->auth->getIdentity();
+        }
+    }
+
+    /**
      * Authenticates user
      *
      * @param  string                                         $email    User email
