@@ -1,45 +1,15 @@
 <?php
 
-error_reporting(-1);
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-
 require '../vendor/autoload.php';
 
 $config = require_once __DIR__ . '/../config.php';
 
 use FA\DI\Container;
-use Slim\Log;
 use Slim\Slim;
 
 // Prepare app
 $app = new Slim($config['slim']);
 $container = new Container($app, $config);
-
-// Dev mode settings
-$app->configureMode('development', function() use ($app, $config) {
-    error_reporting(-1);
-    ini_set('display_errors', 1);
-    ini_set('display_startup_errors', 1);
-
-    $app->config(array(
-        'log.enabled' => true,
-        'log.level' => Log::DEBUG,
-    ));
-
-    $config['twig']['debug'] = true;
-});
-
-// Add Middleware
-$app->add($container['profileMiddleware']);
-$app->add($container['navigationMiddleware']);
-$app->add($container['authenticationMiddleware']);
-$app->add($container['sessionCookieMiddleware']);
-
-// Prepare view
-$app->view($container['twig']);
-$app->view->parserOptions = $config['twig'];
-$app->view->parserExtensions = array($container['slimTwigExtension'], $container['twigExtensionDebug']);
 
 // Define routes
 $app->get('/', function ($page = 1) use ($app, $container) {
@@ -161,11 +131,11 @@ $app->map('/login', function() use ($app, $container) {
         $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
         $result = $container['userService']->authenticate($email, $_POST['password']);
 
-        if (!$result->isValid()) {
+        if ($result->isValid()) {
+            $app->redirect('/admin');
+        } else {
             $messages = $result->getMessages();
             $app->flashNow('error', $messages[0]);
-        } else {
-            $app->redirect('/admin');
         }
     }
 
