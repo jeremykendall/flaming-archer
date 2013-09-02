@@ -43,19 +43,22 @@ $app->post('/setup', function () use ($app, $container) {
             $user = $container['userService']->createUser($email, $params['password'], $params['confirm-password']);
             $app->log->info(sprintf('New user %s has been created', $user['email']));
             $app->flash('joinSuccess', sprintf('Congrats %s! Now log in and get started!', $user['email']));
-            $app->redirect('/login');
+            $redirectTo = '/login';
         } catch (\PDOException $p) {
             $app->log->error(sprintf('Database error creating account for %s: %s', $email, $p->getMessage()));
             $app->flash('error', sprintf("Database error creating your account. Stop doing whatever bad thing you're doing!", $email));
+            $redirectTo = '/setup';
         } catch (\Exception $e) {
             $app->log->error(sprintf('Error creating account for %s: %s', $email, $e->getMessage()));
             $app->flash('error', $e->getMessage());
+            $redirectTo = '/setup';
         }
     } else {
         $app->flash('error', sprintf("'%s' is not a valid email address", $params['email']));
+        $redirectTo = '/setup';
     }
 
-    $app->redirect('/setup');
+    $app->redirect($redirectTo);
 });
 
 // Define routes
