@@ -78,9 +78,11 @@
             <a href="{{ baseUrl() }}/admin/page/{{ pages.previous }}">Prev</a>
         </li>
         {% endif %}
+
         {% for page in pages.pagesInRange %}
         <li{% if page == pages.current %} class="active"{% endif %}><a href="{{ baseUrl() }}/admin/page/{{ page }}">{{ page }}</a></li>
         {% endfor %}
+
         <li{% if pages.next == false %} class="disabled"{% endif %}>
             {% if pages.next == false %}
             <span>Next</span>

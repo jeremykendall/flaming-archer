@@ -3,10 +3,10 @@
 namespace FA\DI;
 
 use FA\Authentication\Adapter\DbAdapter;
-use FA\Authentication\Storage\EncryptedCookie;
 use FA\Dao\ImageDao;
 use FA\Dao\UserDao;
 use FA\Middleware\Authentication;
+use FA\Middleware\GoogleAnalytics;
 use FA\Middleware\Navigation;
 use FA\Middleware\Profile;
 use FA\Pagination;
@@ -79,14 +79,9 @@ class Container extends Pimple
 
         $this['auth'] = function () use ($c) {
             $auth = new AuthenticationService();
-            $auth->setStorage($c['encryptedCookie']);
             $auth->setAdapter($c['authAdapter']);
 
             return $auth;
-        };
-
-        $this['encryptedCookie'] = function () use ($c) {
-            return new EncryptedCookie($c['slim']);
         };
 
         $this['profileMiddleware'] = function () use ($c) {
@@ -103,6 +98,16 @@ class Container extends Pimple
 
         $this['sessionCookieMiddleware'] = function () use ($c) {
             return new SessionCookie($c['config']['session_cookies']);
+        };
+
+        $this['googleAnalyticsMiddleware'] = function () use ($c) {
+            if ($c['config']['googleAnalyticsTrackingId'] && $c['config']['googleAnalyticsDomain']) {
+                return new GoogleAnalytics(
+                    $c['auth'],
+                    $c['config']['googleAnalyticsTrackingId'],
+                    $c['config']['googleAnalyticsDomain']
+                );
+            }
         };
 
         $this['userService'] = function () use ($c) {

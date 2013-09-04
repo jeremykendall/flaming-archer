@@ -14,6 +14,9 @@
  */
 $userConfig = array(
     'flickr.api.key' => '@@@ Your Flickr API key @@@',
+    // Leave blank unless you'd like to use Google Analytics
+    'googleAnalyticsTrackingId' => '',
+    'googleAnalyticsDomain' => '',
     // Change these settings to whatever you like
     'profile' => array(
         'brand' => 'Flaming Archer',

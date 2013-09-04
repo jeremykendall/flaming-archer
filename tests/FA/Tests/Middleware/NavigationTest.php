@@ -20,13 +20,13 @@ class NavigationTest extends \PHPUnit_Framework_TestCase
             echo 'Success';
         });
 
-        $auththenticationService = $this->getMock('Zend\Authentication\AuthenticationService');
+        $auth = $this->getMock('Zend\Authentication\AuthenticationService');
 
-        $auththenticationService->expects($this->once())
+        $auth->expects($this->once())
                 ->method('hasIdentity')
                 ->will($this->returnValue(false));
 
-        $mw = new Navigation($auththenticationService);
+        $mw = new Navigation($auth);
         $mw->setApplication($app);
         $mw->setNextMiddleware($app);
         $mw->call();
@@ -61,13 +61,13 @@ class NavigationTest extends \PHPUnit_Framework_TestCase
             echo 'Success';
         });
 
-        $auththenticationService = $this->getMock('Zend\Authentication\AuthenticationService');
+        $auth = $this->getMock('Zend\Authentication\AuthenticationService');
 
-        $auththenticationService->expects($this->once())
+        $auth->expects($this->once())
                 ->method('hasIdentity')
                 ->will($this->returnValue(true));
 
-        $mw = new Navigation($auththenticationService);
+        $mw = new Navigation($auth);
         $mw->setApplication($app);
         $mw->setNextMiddleware($app);
         $mw->call();

@@ -63,5 +63,9 @@
         <!-- Latest compiled and minified JavaScript -->
         <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
         {% block javascript %} {% endblock %}
+
+        {% if ga is defined %}
+        {% include "includes/google-analytics.html" with { 'trackingId': ga.trackingId, 'domain': ga.domain } %}
+        {% endif %}
     </body>
 </html>

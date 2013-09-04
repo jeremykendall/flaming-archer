@@ -18,7 +18,7 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
     private $auth;
 
     /**
-     * @var EncryptedCookie Auth storage
+     * @var Zend\Authentication\Storage\StorageInterface Auth storage
      */
     private $storage;
 
@@ -56,7 +56,7 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->storage = $this->getMockBuilder('FA\Authentication\Storage\EncryptedCookie')
+        $this->storage = $this->getMockBuilder('Zend\Authentication\Storage\Session')
             ->disableOriginalConstructor()
             ->getMock();
 
