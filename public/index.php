@@ -4,12 +4,12 @@ require '../vendor/autoload.php';
 
 $config = require_once __DIR__ . '/../config.php';
 
-use FA\DI\Container;
+use FA\DI\SlimContainer;
 use Slim\Slim;
 
 // Prepare app
 $app = new Slim($config['slim']);
-$container = new Container($app, $config);
+$container = new SlimContainer($app, $config);
 
 $app->hook('slim.before.router', function () use ($app, $container) {
     $users = count($container['userDao']->findAll());

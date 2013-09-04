@@ -25,47 +25,18 @@ use Zend\Cache\StorageFactory;
 
 class Container extends Pimple
 {
-    public function __construct(Slim $app, array $config)
+    public function __construct(array $config)
     {
         parent::__construct();
+        $this['config'] = $config;
 
+        $this->configureContainer();
+    }
+
+    protected function configureContainer()
+    {
         $c = $this;
 
-        $this['config'] = $config;
-        $this['slim'] = $app;
-
-        $this->configureContainer($c);
-        $this->configureApp($app, $c);
-    }
-
-    protected function configureApp(Slim $app, Container $c)
-    {
-        // Add Middleware
-        $app->add($c['profileMiddleware']);
-        $app->add($c['navigationMiddleware']);
-        $app->add($c['authenticationMiddleware']);
-        $app->add($c['sessionCookieMiddleware']);
-
-        // Prepare view
-        $app->view($c['twig']);
-        $app->view->parserOptions = $this['config']['twig'];
-        $app->view->parserExtensions = array($c['slimTwigExtension'], $c['twigExtensionDebug']);
-
-        $config = $this['config'];
-
-        // Dev mode settings
-        $app->configureMode('development', function() use ($app, $config) {
-            $app->config(array(
-                'log.enabled' => true,
-                'log.level' => Log::DEBUG,
-            ));
-
-            $config['twig']['debug'] = true;
-        });
-    }
-
-    protected function configureContainer(Container $c)
-    {
         $this['db'] = $this->share(function () use ($c) {
             try {
                 $db = new \PDO(
