@@ -71,11 +71,23 @@
 {% if pages.pageCount %}
 <div class="text-center">
     <ul class="pagination">
-        <li{% if pages.previous == false %} class="disabled"{% endif %}><a href="{{ baseUrl() }}/admin/page/{{ pages.previous }}">Prev</a></li>
+        <li{% if pages.previous == false %} class="disabled"{% endif %}>
+            {% if pages.previous == false %}
+            <span>Prev</span>
+            {% else %}
+            <a href="{{ baseUrl() }}/admin/page/{{ pages.previous }}">Prev</a>
+        </li>
+        {% endif %}
         {% for page in pages.pagesInRange %}
         <li{% if page == pages.current %} class="active"{% endif %}><a href="{{ baseUrl() }}/admin/page/{{ page }}">{{ page }}</a></li>
         {% endfor %}
-        <li{% if pages.next == false %} class="disabled"{% endif %}><a href="{{ baseUrl() }}/admin/page/{{ pages.next }}">Next</a></li>
+        <li{% if pages.next == false %} class="disabled"{% endif %}>
+            {% if pages.next == false %}
+            <span>Next</span>
+            {% else %}
+            <a href="{{ baseUrl() }}/admin/page/{{ pages.next }}">Next</a>
+            {% endif %}
+        </li>
     </ul>
 </div>
 {% endif %}
