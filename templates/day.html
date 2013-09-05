@@ -1,8 +1,9 @@
 {% extends 'layout.html' %}
 
 {% block meta %}
-{% if fbTags|length > 0 %}
-    {% include("includes/fb-open-graph-tags.html") %}
+
+{% if tags|length > 0 %}
+{% include "includes/meta-tags.html" %}
 {% endif %}
 
 {% endblock %}

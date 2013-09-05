@@ -56,4 +56,21 @@ class MetaTags
 
         return $tags;
     }
+
+    public function getTwitterPhotoCard()
+    {
+        $image = array_pop($this->image['sizes']['size']);
+        $day = $this->image['day'];
+
+        $tags = array(
+            'twitter:card' => 'photo',
+            'twitter:title' => sprintf('%s | Day %s', $this->profile['site_name'], $day),
+            'twitter:image' => $image['source'],
+            'twitter:image:width' => $image['width'],
+            'twitter:image:height' => $image['height'],
+            'twitter:creator' => $this->profile['twitter_username'],
+        );
+
+        return $tags;
+    }
 }

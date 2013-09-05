@@ -88,9 +88,12 @@ $app->get('/day/:day', function($day) use ($app, $container) {
     $container['request'] = $app->request;
     $container['image'] = $image;
 
+    $fbTags = $container['metaTags']->getOpenGraphTags();
+    $twitterCard = $container['metaTags']->getTwitterPhotoCard();
+
     $app->render('day.html', array(
         'image' => $image,
-        'fbTags' => $container['metaTags']->getOpenGraphTags(), 
+        'tags' => array_merge($fbTags, $twitterCard),
     ));
 })->conditions(array('day' => '([1-9]\d?|[12]\d\d|3[0-5]\d|36[0-6])'));
 
