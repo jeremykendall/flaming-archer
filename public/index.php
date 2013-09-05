@@ -85,7 +85,13 @@ $app->get('/day/:day', function($day) use ($app, $container) {
         $app->notFound();
     }
 
-    $app->render('day.html', $image);
+    $container['request'] = $app->request;
+    $container['image'] = $image;
+
+    $app->render('day.html', array(
+        'image' => $image,
+        'fbTags' => $container['metaTags']->getOpenGraphTags(), 
+    ));
 })->conditions(array('day' => '([1-9]\d?|[12]\d\d|3[0-5]\d|36[0-6])'));
 
 $app->post('/admin/clear-cache', function() use ($app, $container) {

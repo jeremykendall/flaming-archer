@@ -14,6 +14,7 @@ use FA\Service\FlickrService;
 use FA\Service\FlickrServiceCache;
 use FA\Service\ImageService;
 use FA\Service\UserService;
+use FA\Social\MetaTags;
 use Pimple;
 use Slim\Log;
 use Slim\Middleware\SessionCookie;
@@ -128,6 +129,14 @@ class Container extends Pimple
 
         $this['pagination'] = function () {
             return new Pagination();
+        };
+
+        $this['metaTags'] = function () use ($c) {
+            return new MetaTags(
+                $c['request'], 
+                $c['image'], 
+                $c['config']['profile']
+            );
         };
     }
 }

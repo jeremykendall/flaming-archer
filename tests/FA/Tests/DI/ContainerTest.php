@@ -41,4 +41,14 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         
         $this->assertInstanceOf('FA\Middleware\GoogleAnalytics', $container['googleAnalyticsMiddleware']);
     }
+
+    public function testMetaTagsCreation()
+    {
+        $this->container['request'] = $this->getMockBuilder('Slim\Http\Request')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->container['image'] = array();
+
+        $this->assertInstanceOf('FA\Social\MetaTags', $this->container['metaTags']);
+    }
 }

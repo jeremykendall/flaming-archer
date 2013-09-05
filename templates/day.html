@@ -1,12 +1,19 @@
 {% extends 'layout.html' %}
 
+{% block meta %}
+{% if fbTags|length > 0 %}
+    {% include("includes/fb-open-graph-tags.html") %}
+{% endif %}
+
+{% endblock %}
+
 {% block page_title %}{{ parent() }} | Day {{ day }}{% endblock %}
 
 {% block content %}
 <div class="day-photo text-center">
-    <p class="lead"><em>{{ posted|date("d F Y") }}, Day {{ day }}</em></p>
-    <a href="http://flickr.com/photos/{{ profile.flickr_username }}/{{ photo_id }}/lightbox" target="_blank" title="View on Flickr">
-        <img class="img-responsive img-thumbnail" src="{{ sizes.size.7.source }}" />
+    <p class="lead"><em>{{ image.posted|date("d F Y") }}, Day {{ image.day }}</em></p>
+    <a href="http://flickr.com/photos/{{ profile.flickr_username }}/{{ image.photo_id }}/lightbox" target="_blank" title="View on Flickr">
+        <img class="img-responsive img-thumbnail" src="{{ image.sizes.size.7.source }}" />
     </a>
 </div>
 {% endblock %}
