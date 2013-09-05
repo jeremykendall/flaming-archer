@@ -26,7 +26,10 @@ class SlimContainer extends Container
         $app->add($c['navigationMiddleware']);
         $app->add($c['authenticationMiddleware']);
         $app->add($c['sessionCookieMiddleware']);
-        $app->add($c['googleAnalyticsMiddleware']);
+
+        if ($c['googleAnalyticsMiddleware']) {
+            $app->add($c['googleAnalyticsMiddleware']);
+        }
 
         // Prepare view
         $app->view($c['twig']);
