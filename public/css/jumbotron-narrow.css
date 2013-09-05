@@ -96,3 +96,10 @@ table.admin thead tr th {
 input#day.form-control {
     width: 40%;
 }
+
+.addthis_counter
+{
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+}
