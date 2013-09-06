@@ -171,7 +171,6 @@ $app->post('/admin/add-photo', function() use ($app, $container) {
     $data = $app->request()->post();
     try {
         $container['imageService']->save($data);
-        $container['cache']->flush();
     } catch (\PDOException $p) {
         $data = json_encode($data);
         if ($p->getCode() == 23000) {
