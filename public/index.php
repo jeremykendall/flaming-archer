@@ -189,9 +189,9 @@ $app->post('/admin/add-photo', function() use ($app, $container) {
 });
 
 $app->post('/admin/delete-photo', function() use ($app, $container) {
-    $day = $app->request()->post('day');
-    $container['imageService']->delete($day);
-    $container['cache']->flush();
+    $params = $app->request()->post();
+    $container['imageService']->delete($params['day']);
+    $container['cache']->removeItem($params['photo_id']);
     $app->redirect('/admin');
 });
 
