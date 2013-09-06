@@ -135,13 +135,13 @@ $app->get('/admin(/page/:page)', function ($page = 1) use ($app, $container) {
     $app->render('admin/index.html', $viewData);
 });
 
-$app->get('/admin/settings', function () use ($app) {
-    $user = json_decode($app->getCookie('identity'), true);
+$app->get('/admin/settings', function () use ($app, $container) {
+    $user = $container['userService']->getLoggedInUser();
     $app->render('admin/settings.html', array('user' => $user));
 });
 
 $app->post('/admin/user', function () use ($app, $container) {
-    $user = json_decode($app->getCookie('identity'), true);
+    $user = $container['userService']->getLoggedInUser();
     $params = $app->request()->post();
 
     $email = filter_var($params['email'], FILTER_SANITIZE_EMAIL);
