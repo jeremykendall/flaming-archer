@@ -23,13 +23,12 @@ class SlimContainer extends Container
 
         // Add Middleware
         $app->add($c['profileMiddleware']);
-        $app->add($c['navigationMiddleware']);
-        $app->add($c['authenticationMiddleware']);
-        $app->add($c['sessionCookieMiddleware']);
-
         if ($c['googleAnalyticsMiddleware']) {
             $app->add($c['googleAnalyticsMiddleware']);
         }
+        $app->add($c['navigationMiddleware']);
+        $app->add($c['authenticationMiddleware']);
+        $app->add($c['sessionCookieMiddleware']);
 
         // Prepare view
         $app->view($c['twig']);
