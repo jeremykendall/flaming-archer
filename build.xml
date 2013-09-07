@@ -35,6 +35,14 @@
                 --coverage-html=${project.basedir}/build/coverage" />
     </target>
 
+    <target name="phpunit-gen-report">
+        <phpunitreport 
+            infile="${project.basedir}/build/logs/junit.xml"
+            format="frames"
+            todir="${project.basedir}/build/logs"
+            />
+    </target>
+
     <target name="phpdoc" description="Generate API documentation">
         <exec
             passthru="${passthru}"
@@ -110,6 +118,7 @@
         <phingCall target="phpdoc" />
         <phingCall target="phpcs" />
         <phingCall target="phpunit" />
+        <phingCall target="phpunit-gen-report" />
         <phingCall target="phpcpd" />
         <phingCall target="phpmd" />
         <phingCall target="pdepend" />
