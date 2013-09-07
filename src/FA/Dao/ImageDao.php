@@ -48,6 +48,13 @@ class ImageDao
         return $stmt->fetch();
     }
 
+    /**
+     * Finds a page of images
+     *
+     * @param  int   $pageNumber Current page number
+     * @param  int   $perPage    Images per page
+     * @return array Images are in the 'image' key, image count in the 'total' key
+     */
     public function findPage($pageNumber, $perPage)
     {
         $lastSeen = ($pageNumber - 1) * $perPage;

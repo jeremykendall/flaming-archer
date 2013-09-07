@@ -68,14 +68,47 @@ class ImageServiceTest extends \PHPUnit_Framework_TestCase
 
     public function testFindPage()
     {
-        $this->markTestIncomplete();
+        $imageData = array(
+            array('day' => '3', 'photo_id' => '33'),
+            array('day' => '2', 'photo_id' => '22'),
+            array('day' => '1', 'photo_id' => '11'),
+        );
+
+        $imageSizes = array(
+            array('sizes' => array(33)),
+            array('sizes' => array(22)),
+            array('sizes' => array(11)),
+        );
+
         $pageNumber = 1;
         $perPage = 3;
+        $total = 10;
+
+        $page = array(
+            'images' => $imageData,
+            'total' => $total,
+        );
 
         $this->dao->expects($this->once())
-                ->method('find')
-                ->with($imageData['day'])
-                ->will($this->returnValue($imageData));
+            ->method('findPage')
+            ->with($pageNumber, $perPage)
+            ->will($this->returnValue($page));
+
+        // The Flickr service should be called as many times as there are
+        // data elements returned from the dao
+        foreach ($imageData as $index => $image) {
+
+            $expected[] = array_merge($image, $imageSizes[$index]);
+
+            $this->flickr->expects($this->at($index))
+                ->method('getSizes')
+                ->with($image['photo_id'])
+                ->will($this->returnValue($imageSizes[$index]));
+        }
+
+        $result = $this->service->findPage($pageNumber, $perPage);
+
+        $this->assertEquals($expected, $result);
     }
 
     public function testFindImageDoesNotExist()

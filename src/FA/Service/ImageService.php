@@ -64,6 +64,25 @@ class ImageService
     }
 
     /**
+     * Finds a page of images
+     *
+     * @param  int   $pageNumber Current page number
+     * @param  int   $perPage    Images per page
+     * @return array Images are in the 'image' key, image count in the 'total' key
+     */
+    public function findPage($pageNumber, $perPage)
+    {
+        $page = $this->dao->findPage($pageNumber, $perPage);
+        $result = array();
+
+        foreach ($page['images'] as $image) {
+            $result[] = array_merge($image, $this->flickr->getSizes($image['photo_id']));
+        }
+
+        return $result;
+    }
+
+    /**
      * Find all images
      *
      * @return array All images
