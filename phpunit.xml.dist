@@ -5,11 +5,6 @@
         <directory>tests/FA</directory>
     </testsuite>
 
-    <testsuite name="travis-ci">
-        <directory>tests/FA</directory>
-        <exclude>tests/FA/Tests/Service/FlickrServiceTest.php</exclude>
-    </testsuite>
-
     <filter>
         <whitelist>
             <directory suffix=".php">./src</directory>
