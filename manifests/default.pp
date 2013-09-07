@@ -43,7 +43,7 @@ apache::vhost { 'flaming-archer.dev':
   docroot       => '/var/www/public/',
   port          => '80',
   env_variables => [
-    'APP_ENV develop'
+    'SLIM_MODE development'
   ],
   priority      => '1',
 }
