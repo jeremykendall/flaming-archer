@@ -4,6 +4,10 @@ require '../vendor/autoload.php';
 
 $config = require_once __DIR__ . '/../config.php';
 
+if (getenv('SLIM_MODE')) {
+    $config['slim']['mode'] = getenv('SLIM_MODE');
+}
+
 use FA\DI\SlimContainer;
 use Slim\Slim;
 
