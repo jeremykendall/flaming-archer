@@ -25,6 +25,7 @@ class MetaTagsTest extends \PHPUnit_Framework_TestCase
         $this->profile = array(
             'site_name' => '365 Days of Photography',
             'tagline' => "I've combined my love of photography and open source software to create this photo-a-day tool for hackers.  Here are my 365.",
+            'twitter_username' => '@JeremyKendall',
         );
 
         $this->metaTags = new MetaTags(
@@ -52,6 +53,20 @@ class MetaTagsTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals($expected, $this->metaTags->getOpenGraphTags());
+    }
+
+    public function testGetTwiterPhotoCard()
+    {
+        $expected = array(
+            'twitter:card' => 'photo',
+            'twitter:title' => '365 Days of Photography | Day 10',
+            'twitter:image' => 'http://farm8.staticflickr.com/7115/7623533156_a557f0ecc6_b.jpg',
+            'twitter:image:width' => 665,
+            'twitter:image:height' => 1000,
+            'twitter:creator' => '@JeremyKendall',
+        );
+
+        $this->assertEquals($expected, $this->metaTags->getTwitterPhotoCard());
     }
 
     protected function getImage()
