@@ -48,6 +48,21 @@ class ImageDao
         return $stmt->fetch();
     }
 
+    public function findPage($pageNumber, $perPage)
+    {
+        $lastSeen = ($pageNumber - 1) * $perPage;
+        $sql = 'SELECT * FROM images WHERE day > :lastSeen ORDER BY day DESC LIMIT :perPage';
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindValue(':lastSeen', $lastSeen);
+        $stmt->bindValue(':perPage', $perPage);
+        $stmt->execute();
+
+        return array(
+            'images' => $stmt->fetchAll(),
+            'total' => $this->countImages(),
+        );
+    }
+
     /**
      * Find all images
      *

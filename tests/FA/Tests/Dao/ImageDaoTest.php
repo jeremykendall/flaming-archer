@@ -49,6 +49,20 @@ class ImageDaoTest extends CommonDbTestCase
         $this->assertEquals(10, count($result));
     }
 
+    public function testFindPage()
+    {
+        $page = 1;
+        $perPage = 3;
+
+        $result = $this->dao->findPage($page, $perPage);
+        $this->assertInternalType('array', $result);
+        $this->assertArrayHasKey('images', $result);
+        $this->assertArrayHasKey('total', $result);
+        $this->assertInternalType('array', $result['images']);
+        $this->assertEquals(3, count($result['images']), "Count of \$result['images'] is wrong.");
+        $this->assertEquals(10, $result['total']);
+    }
+
     /**
      * @covers FA\Dao\ImageDao::save
      */

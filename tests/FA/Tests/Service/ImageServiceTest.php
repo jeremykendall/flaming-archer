@@ -66,6 +66,18 @@ class ImageServiceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array_merge($imageData, $imageSizes), $result);
     }
 
+    public function testFindPage()
+    {
+        $this->markTestIncomplete();
+        $pageNumber = 1;
+        $perPage = 3;
+
+        $this->dao->expects($this->once())
+                ->method('find')
+                ->with($imageData['day'])
+                ->will($this->returnValue($imageData));
+    }
+
     public function testFindImageDoesNotExist()
     {
         $this->dao->expects($this->once())
