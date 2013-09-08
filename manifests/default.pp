@@ -23,7 +23,9 @@ package { [
     'build-essential',
     'vim',
     'curl',
-    'git-core'
+    'git-core',
+    'python',
+    'graphviz'
   ]:
   ensure  => 'installed',
 }
@@ -59,6 +61,7 @@ php::module { 'php5-curl': }
 php::module { 'php5-intl': }
 php::module { 'php5-mcrypt': }
 php::module { 'php5-sqlite': }
+php::module { 'php-apc': }
 
 class { 'php::devel':
   require => Class['php'],
@@ -135,7 +138,10 @@ puphpet::ini { 'xdebug':
     'xdebug.remote_connect_back = 1',
     'xdebug.remote_enable = 1',
     'xdebug.remote_handler = "dbgp"',
-    'xdebug.remote_port = 9000'
+    'xdebug.remote_port = 9000',
+    'xdebug.profiler_enable = 0',
+    'xdebug.profiler_enable_trigger = 1',
+    'xdebug.profiler_output_name = cachegrind.out.%H_%R.%r'
   ],
   ini     => '/etc/php5/conf.d/zzz_xdebug.ini',
   notify  => Service['apache'],
@@ -144,7 +150,7 @@ puphpet::ini { 'xdebug':
 
 puphpet::ini { 'php':
   value   => [
-    'date.timezone = "America/Chicago"'
+    'date.timezone = "UTC"'
   ],
   ini     => '/etc/php5/conf.d/zzz_php.ini',
   notify  => Service['apache'],
@@ -160,4 +166,26 @@ puphpet::ini { 'custom':
   ini     => '/etc/php5/conf.d/zzz_custom.ini',
   notify  => Service['apache'],
   require => Class['php'],
+}
+
+apache::vhost { 'webgrind':
+  server_name   => 'webgrind',
+  serveraliases => [
+],
+  docroot       => '/var/www/webgrind',
+  port          => '80',
+  env_variables => [
+  ],
+  priority      => '1',
+}
+
+apache::vhost { 'apc':
+  server_name   => 'apc',
+  serveraliases => [
+],
+  docroot       => '/var/www/apc',
+  port          => '80',
+  env_variables => [
+  ],
+  priority      => '1',
 }
