@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Flaming Archer
  *
@@ -10,7 +9,7 @@
 
 namespace FA\Service;
 
-use \Zend\Cache\Storage\Adapter\AbstractAdapter;
+use Zend\Cache\Storage\StorageInterface as CacheStorage;
 
 /**
  * Flickr service cache
@@ -19,49 +18,47 @@ use \Zend\Cache\Storage\Adapter\AbstractAdapter;
  */
 class FlickrServiceCache implements FlickrInterface
 {
-
     /**
-     * Instance of object honoring the \FA\Service\FlickrInterface
+     * Instance of object honoring the FA\Service\FlickrInterface
      *
-     * @var \FA\Service\FlickrInterface
+     * @var FlickrInterface
      */
     private $flickr;
 
     /**
-     * Abstract caching adapter
+     * ZF CacheStorage
      *
-     * @var \Zend\Cache\Storage\Adapter\AbstractAdapter
+     * @var CacheStorage
      */
-    private $adapter;
+    protected $cache;
 
     /**
      * Public constructor
      *
-     * @param \FA\Service\FlickrInterface                 $flickr
-     * @param \Zend\Cache\Storage\Adapter\AbstractAdapter $adapter
+     * @param FlickrInterface $flickr
+     * @param CacheStorage    $cache
      */
-    public function __construct(FlickrInterface $flickr, AbstractAdapter $adapter)
+    public function __construct(FlickrInterface $flickr, CacheStorage $cache)
     {
         $this->flickr = $flickr;
-        $this->adapter = $adapter;
+        $this->cache = $cache;
     }
 
     /**
-     * Returns sizes array for photo identified by Flickr photo id
+     * Finds photo on Flickr
      *
-     * @param  int   $photoId
-     * @return array Array of photo size information
+     * @param  int   $photoId Flickr photo id
+     * @return array Photo data from Flickr
      */
-    public function getSizes($photoId)
+    public function find($photoId)
     {
-        $sizes = $this->adapter->getItem($photoId);
+        $photo = $this->cache->getItem($photoId);
 
-        if (is_null($sizes)) {
-            $sizes = $this->flickr->getSizes($photoId);
-            $this->adapter->addItem($photoId, $sizes);
+        if (is_null($photo)) {
+            $photo = $this->flickr->find($photoId);
+            $this->cache->addItem($photoId, $photo);
         }
 
-        return $sizes;
+        return $photo;
     }
-
 }

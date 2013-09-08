@@ -27,8 +27,8 @@ class SlimContainer extends Container
                 'log.level' => Log::DEBUG,
             ));
 
-            $config['twig']['auto_reload'] = true;
-            $config['twig']['debug'] = true;
+            $config['twig']['environment']['auto_reload'] = true;
+            $config['twig']['environment']['debug'] = true;
         });
 
         // Add Middleware
