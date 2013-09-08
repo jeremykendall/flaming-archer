@@ -67,15 +67,17 @@ $app->post('/setup', function () use ($app, $container) {
 
 // Define routes
 $app->get('/', function ($page = 1) use ($app, $container) {
-    $images = $container['imageService']->findAll();
-    $paginator = $container['pagination']->newPaginator($images, $page, 10);
+    $paginator = $container['zendPaginator'];
+    $paginator->setItemCountPerPage(5);
+    $paginator->setCurrentPageNumber($page);
 
     $app->render('index.html', array('paginator' => $paginator, 'pages' => $paginator->getPages(), 'home' => true));
 });
 
 $app->get('/page/:page', function ($page = 1) use ($app, $container) {
-    $images = $container['imageService']->findAll();
-    $paginator = $container['pagination']->newPaginator($images, $page, 10);
+    $paginator = $container['zendPaginator'];
+    $paginator->setItemCountPerPage(5);
+    $paginator->setCurrentPageNumber($page);
 
     $home = ($page == 1) ? true : false;
 
@@ -119,15 +121,16 @@ $app->post('/admin/clear-cache', function() use ($app, $container) {
 });
 
 $app->get('/admin(/page/:page)', function ($page = 1) use ($app, $container) {
-    $images = $container['imageService']->findAll();
-    $paginator = $container['pagination']->newPaginator($images, $page, 25);
+    $paginator = $container['zendPaginator'];
+    $paginator->setItemCountPerPage(25);
+    $paginator->setCurrentPageNumber($page);
+
     $projectDay = $container['imageService']->getProjectDay();
     $daysLeft = 365 - $projectDay;
     $photoCount = $container['imageService']->countImages();
     $percentage = ($photoCount / $projectDay) * 100;
 
     $viewData = array(
-        'images' => $images,
         'paginator' => $paginator,
         'pages' => $paginator->getPages(),
         'projectDay' => $projectDay,

@@ -9,7 +9,7 @@
 
 namespace FA;
 
-use Zend\Paginator\Adapter\ArrayAdapter;
+use FA\Paginator\Adapter\DbAdapter;
 use Zend\Paginator\Paginator;
 
 /**
@@ -18,13 +18,28 @@ use Zend\Paginator\Paginator;
 class Pagination
 {
     /**
+     * @var DbAdapter
+     */
+    private $dbAdapter;
+
+    /**
+     * Public constructor
+     *
+     * @param DbAdapter $dbAdapter DbAdapter
+     */
+    public function __construct(DbAdapter $dbAdapter)
+    {
+        $this->dbAdapter = $dbAdapter;
+    }
+
+    /**
      * Creates a paginator
      *
      * @return Paginator Zend Paginator
      */
-    public function newPaginator(array $images = array(), $currentPage = 1, $perPage = 25)
+    public function newPaginator($currentPage = 1, $perPage = 25)
     {
-        $paginator = new Paginator(new ArrayAdapter($images));
+        $paginator = new Paginator($this->dbAdapter);
         $paginator->setItemCountPerPage($perPage);
         $paginator->setCurrentPageNumber($currentPage);
 

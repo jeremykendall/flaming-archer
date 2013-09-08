@@ -68,7 +68,7 @@ class ImageService
      *
      * @param  int   $pageNumber Current page number
      * @param  int   $perPage    Images per page
-     * @return array Images are in the 'image' key, image count in the 'total' key
+     * @return array Array of images
      */
     public function findPage($pageNumber, $perPage)
     {

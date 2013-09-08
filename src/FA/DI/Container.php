@@ -10,6 +10,7 @@ use FA\Middleware\GoogleAnalytics;
 use FA\Middleware\Navigation;
 use FA\Middleware\Profile;
 use FA\Pagination;
+use FA\Paginator\Adapter\DbAdapter as PaginatorAdapter;
 use FA\Service\FlickrService;
 use FA\Service\FlickrServiceCache;
 use FA\Service\ImageService;
@@ -23,6 +24,7 @@ use Slim\Views\Twig;
 use Slim\Views\TwigExtension;
 use Zend\Authentication\AuthenticationService;
 use Zend\Cache\StorageFactory;
+use Zend\Paginator\Paginator;
 
 class Container extends Pimple
 {
@@ -78,6 +80,17 @@ class Container extends Pimple
             return new ImageService(new ImageDao($c['db']), $c['flickrServiceCache']);
         };
 
+        $this['paginatorAdapter'] = function () use ($c) {
+            $adapter = new PaginatorAdapter($c['imageService']);
+            $adapter->setCache($c['cache']);
+
+            return $adapter;
+        };
+
+        $this['zendPaginator'] = function () use ($c) {
+            return new Paginator($c['paginatorAdapter']);
+        };
+
         $this['auth'] = function () use ($c) {
             $auth = new AuthenticationService();
             $auth->setAdapter($c['authAdapter']);
@@ -127,14 +140,14 @@ class Container extends Pimple
             return new TwigExtension();
         };
 
-        $this['pagination'] = function () {
-            return new Pagination();
+        $this['pagination'] = function () use ($c) {
+            return new Pagination($c['paginatorAdapter']);
         };
 
         $this['metaTags'] = function () use ($c) {
             return new MetaTags(
-                $c['request'], 
-                $c['image'], 
+                $c['request'],
+                $c['image'],
                 $c['config']['profile']
             );
         };
