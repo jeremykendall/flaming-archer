@@ -57,7 +57,7 @@ class ImageServiceTest extends \PHPUnit_Framework_TestCase
                 ->will($this->returnValue($imageData));
 
         $this->flickr->expects($this->once())
-                ->method('getSizes')
+                ->method('find')
                 ->with($imageData['photo_id'])
                 ->will($this->returnValue($imageSizes));
 
@@ -97,7 +97,7 @@ class ImageServiceTest extends \PHPUnit_Framework_TestCase
             $expected[] = array_merge($image, $imageSizes[$index]);
 
             $this->flickr->expects($this->at($index))
-                ->method('getSizes')
+                ->method('find')
                 ->with($image['photo_id'])
                 ->will($this->returnValue($imageSizes[$index]));
         }
@@ -114,7 +114,7 @@ class ImageServiceTest extends \PHPUnit_Framework_TestCase
                 ->with('222')
                 ->will($this->returnValue(false));
 
-        $this->flickr->expects($this->never())->method('getSizes');
+        $this->flickr->expects($this->never())->method('find');
 
         $this->assertNull($this->service->find('222'));
     }
@@ -149,7 +149,7 @@ class ImageServiceTest extends \PHPUnit_Framework_TestCase
             $expected[] = array_merge($image, $imageSizes[$index]);
 
             $this->flickr->expects($this->at($index))
-                    ->method('getSizes')
+                    ->method('find')
                     ->with($image['photo_id'])
                     ->will($this->returnValue($imageSizes[$index]));
         }

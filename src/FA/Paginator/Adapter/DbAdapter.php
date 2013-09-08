@@ -19,7 +19,7 @@ class DbAdapter implements AdapterInterface
     protected $count;
 
     /**
-     * @var Zend\Cache\Storage\StorageInterface
+     * @var CacheStorage
      */
     protected $cache;
 

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Flaming Archer
  *
@@ -17,7 +16,6 @@ namespace FA\Service;
  */
 class FlickrService implements FlickrInterface
 {
-
     /**
      * Flickr API key
      *
@@ -36,6 +34,20 @@ class FlickrService implements FlickrInterface
     }
 
     /**
+     * Finds photo on Flickr
+     *
+     * @param  int   $photoId Flickr photo id
+     * @return array Photo data from Flickr
+     */
+    public function find($photoId)
+    {
+        $sizes = $this->getSizes($photoId);
+        $info = $this->getInfo($photoId);
+
+        return array_merge($sizes, $info);
+    }
+
+    /**
      * Returns sizes array for photo identified by Flickr photo id
      *
      * @param  int   $photoId
@@ -51,6 +63,36 @@ class FlickrService implements FlickrInterface
             'nojsoncallback' => 1
         );
 
+        return $this->makeRequest($options);
+    }
+
+    /**
+     * Returns info array for photo identified by Flickr photo id
+     *
+     * @param  int   $photoId
+     * @return array Array of photo information
+     */
+    public function getInfo($photoId)
+    {
+        $options = array(
+            'method' => 'flickr.photos.getInfo',
+            'api_key' => $this->key,
+            'photo_id' => $photoId,
+            'format' => 'json',
+            'nojsoncallback' => 1
+        );
+
+        return $this->makeRequest($options);
+    }
+
+    /**
+     * Makes request to flickr API
+     *
+     * @param  array $options Query options
+     * @return array Query result
+     */
+    protected function makeRequest(array $options)
+    {
         $url = 'http://api.flickr.com/services/rest/?' . http_build_query($options);
 
         $ch = curl_init($url);
@@ -60,5 +102,4 @@ class FlickrService implements FlickrInterface
 
         return json_decode($result, true);
     }
-
 }

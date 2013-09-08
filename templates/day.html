@@ -12,11 +12,15 @@
 
 {% block content %}
 <div class="row">
-    <div class="day-photo text-center">
+    <div class="day-photo text-center col-md-12">
         <p class="lead"><em>{{ image.posted|date("d F Y") }}, Day {{ image.day }}</em></p>
         <a href="http://flickr.com/photos/{{ profile.flickr_username }}/{{ image.photo_id }}/lightbox" target="_blank" title="View on Flickr">
             <img class="img-responsive img-thumbnail" src="{{ image.sizes.size.7.source }}" />
         </a>
+    </div>
+    <div class="photo-meta col-md-12">
+        <h3>{{ image.photo.title._content }}</h3>
+        <p>{{ image.photo.description._content }}</p>
     </div>
 </div>
 <div class="row">
