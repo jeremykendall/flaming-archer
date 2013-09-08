@@ -58,7 +58,7 @@ class ImageService
             return null;
         }
 
-        $sizes = $this->flickr->getSizes($image['photo_id']);
+        $sizes = $this->flickr->find($image['photo_id']);
 
         return array_merge($image, $sizes);
     }
@@ -76,7 +76,7 @@ class ImageService
         $result = array();
 
         foreach ($page as $image) {
-            $result[] = array_merge($image, $this->flickr->getSizes($image['photo_id']));
+            $result[] = array_merge($image, $this->flickr->find($image['photo_id']));
         }
 
         return $result;
@@ -93,7 +93,7 @@ class ImageService
         $result = array();
 
         foreach ($images as $image) {
-            $result[] = array_merge($image, $this->flickr->getSizes($image['photo_id']));
+            $result[] = array_merge($image, $this->flickr->find($image['photo_id']));
         }
 
         return $result;
