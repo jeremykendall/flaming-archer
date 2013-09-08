@@ -49,24 +49,21 @@ class ImageDao
     }
 
     /**
-     * Finds a page of images
+     * Returns an collection of items for a page.
      *
-     * @param  int   $pageNumber Current page number
-     * @param  int   $perPage    Images per page
-     * @return array Images are in the 'image' key, image count in the 'total' key
+     * @param  int   $offset           Page offset
+     * @param  int   $itemCountPerPage Number of items per page
+     * @return array Page items
      */
-    public function findPage($pageNumber, $perPage)
+    public function findPage($offset, $itemCountPerPage)
     {
-        $sql = 'SELECT * FROM images ORDER BY day DESC LIMIT :perPage OFFSET :pageNumber';
+        $sql = 'SELECT * FROM images ORDER BY day DESC LIMIT :itemCountPerPage OFFSET :offset';
         $stmt = $this->db->prepare($sql);
-        $stmt->bindValue(':pageNumber', $pageNumber);
-        $stmt->bindValue(':perPage', $perPage);
+        $stmt->bindValue(':itemCountPerPage', $itemCountPerPage);
+        $stmt->bindValue(':offset', $offset);
         $stmt->execute();
 
-        return array(
-            'images' => $stmt->fetchAll(),
-            'total' => $this->countImages(),
-        );
+        return $stmt->fetchAll();
     }
 
     /**

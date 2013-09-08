@@ -64,18 +64,18 @@ class ImageService
     }
 
     /**
-     * Finds a page of images
+     * Returns an collection of items for a page.
      *
-     * @param  int   $pageNumber Current page number
-     * @param  int   $perPage    Images per page
-     * @return array Array of images
+     * @param  int   $offset           Page offset
+     * @param  int   $itemCountPerPage Number of items per page
+     * @return array Page items
      */
-    public function findPage($pageNumber, $perPage)
+    public function findPage($offset, $itemCountPerPage)
     {
-        $page = $this->dao->findPage($pageNumber, $perPage);
+        $page = $this->dao->findPage($offset, $itemCountPerPage);
         $result = array();
 
-        foreach ($page['images'] as $image) {
+        foreach ($page as $image) {
             $result[] = array_merge($image, $this->flickr->getSizes($image['photo_id']));
         }
 

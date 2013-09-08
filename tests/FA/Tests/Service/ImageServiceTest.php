@@ -80,18 +80,14 @@ class ImageServiceTest extends \PHPUnit_Framework_TestCase
             array('sizes' => array(11)),
         );
 
-        $pageNumber = 1;
-        $perPage = 3;
-        $total = 10;
+        $offset = 0;
+        $itemCountPerPage = 3;
 
-        $page = array(
-            'images' => $imageData,
-            'total' => $total,
-        );
+        $page = $imageData;
 
         $this->dao->expects($this->once())
             ->method('findPage')
-            ->with($pageNumber, $perPage)
+            ->with($offset, $itemCountPerPage)
             ->will($this->returnValue($page));
 
         // The Flickr service should be called as many times as there are
@@ -106,7 +102,7 @@ class ImageServiceTest extends \PHPUnit_Framework_TestCase
                 ->will($this->returnValue($imageSizes[$index]));
         }
 
-        $result = $this->service->findPage($pageNumber, $perPage);
+        $result = $this->service->findPage($offset, $itemCountPerPage);
 
         $this->assertEquals($expected, $result);
     }
