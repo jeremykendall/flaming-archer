@@ -20,6 +20,16 @@ class SlimContainer extends Container
     {
         $app = $this['slim'];
         $c = $this;
+        $config = $this['config'];
+
+        $app->configureMode('development', function() use ($app, $config) {
+            $app->config(array(
+                'log.level' => Log::DEBUG,
+            ));
+
+            $config['twig']['auto_reload'] = true;
+            $config['twig']['debug'] = true;
+        });
 
         // Add Middleware
         $app->add($c['profileMiddleware']);
@@ -34,17 +44,5 @@ class SlimContainer extends Container
         $app->view($c['twig']);
         $app->view->parserOptions = $this['config']['twig'];
         $app->view->parserExtensions = array($c['slimTwigExtension'], $c['twigExtensionDebug']);
-
-        $config = $this['config'];
-
-        // Dev mode settings
-        $app->configureMode('development', function() use ($app, $config) {
-            $app->config(array(
-                'log.enabled' => true,
-                'log.level' => Log::DEBUG,
-            ));
-
-            $config['twig']['debug'] = true;
-        });
     }
 }

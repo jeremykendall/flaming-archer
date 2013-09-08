@@ -58,9 +58,10 @@ $config = array(
         'environment' => array(
             'charset' => 'utf-8',
             'cache' => realpath(__DIR__ . '/templates/cache'),
-            'auto_reload' => true,
+            'auto_reload' => false,
             'strict_variables' => true,
             'autoescape' => true,
+            'debug' => false,
         ),
     ),
     'session_cookies' => array(
