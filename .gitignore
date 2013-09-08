@@ -6,7 +6,6 @@ config.php
 docs
 build
 tags
-composer.lock
 xhprof
 !Icons
 index.html
