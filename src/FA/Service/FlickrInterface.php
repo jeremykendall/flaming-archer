@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Flaming Archer
  *
@@ -18,10 +17,10 @@ namespace FA\Service;
 interface FlickrInterface
 {
     /**
-     * Returns sizes array for photo identified by Flickr photo id
+     * Finds photo information on Flickr
      *
      * @param  int   $photoId Flickr photo id
-     * @return array Photo size information
+     * @return array Photo information
      */
-    public function getSizes($photoId);
+    public function find($photoId);
 }
