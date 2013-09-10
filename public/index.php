@@ -178,6 +178,7 @@ $app->post('/admin/add-photo', function() use ($app, $container) {
     $data = $app->request()->post();
     try {
         $container['imageService']->save($data);
+        $container['cache']->clearByPrefix($container['paginatorAdapter']::CACHE_KEY_PREFIX);
     } catch (\PDOException $p) {
         $data = json_encode($data);
         if ($p->getCode() == 23000) {
@@ -198,6 +199,7 @@ $app->post('/admin/delete-photo', function() use ($app, $container) {
     $params = $app->request()->post();
     $container['imageService']->delete($params['day']);
     $container['cache']->removeItem($params['photo_id']);
+    $container['cache']->clearByPrefix($container['paginatorAdapter']::CACHE_KEY_PREFIX);
     $app->redirect('/admin');
 });
 

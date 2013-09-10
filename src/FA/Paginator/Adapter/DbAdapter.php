@@ -9,6 +9,11 @@ use Zend\Cache\Storage\StorageInterface as CacheStorage;
 class DbAdapter implements AdapterInterface
 {
     /**
+     * The cache key prefix used to namespace Paginator results in the cache
+     */
+    const CACHE_KEY_PREFIX = 'FA_PAGE_';
+
+    /**
      * @var FA\Service\ImageService
      */
     protected $service;
@@ -45,7 +50,7 @@ class DbAdapter implements AdapterInterface
     public function getItems($offset, $itemCountPerPage)
     {
         if ($this->cacheEnabled()) {
-            $page = $this->cache->getItem('FA_PAGE_' . md5($offset.$itemCountPerPage));
+            $page = $this->cache->getItem($this->getCacheId($offset, $itemCountPerPage));
             if ($page) {
                 return $page;
             }
@@ -54,7 +59,7 @@ class DbAdapter implements AdapterInterface
         $page = $this->service->findPage($offset, $itemCountPerPage);
 
         if ($this->cacheEnabled()) {
-            $this->cache->addItem('FA_PAGE_' . md5($offset.$itemCountPerPage), $page);
+            $this->cache->setItem($this->getCacheId($offset, $itemCountPerPage), $page);
         }
 
         return $page;
@@ -67,10 +72,6 @@ class DbAdapter implements AdapterInterface
      */
     public function count()
     {
-        if ($this->count !== null) {
-            return $this->count;
-        }
-
         return $this->service->countImages();
     }
 
@@ -84,14 +85,31 @@ class DbAdapter implements AdapterInterface
         $this->cache = $cache;
     }
 
+    public function getCacheId($offset, $itemCountPerPage)
+    {
+        return self::CACHE_KEY_PREFIX . md5($offset . $itemCountPerPage);
+    }
+
     /**
      * Tells if there is an active cache object
      * and if the cache has not been disabled
      *
      * @return bool
      */
-    protected function cacheEnabled()
+    public function cacheEnabled()
     {
         return (($this->cache !== null) && $this->cacheEnabled);
+    }
+    
+    /**
+     * Enables/Disables the cache
+     *
+     * @param bool $enable
+     * @return DbAdapter
+     */
+    public function setCacheEnabled($enable)
+    {
+        $this->cacheEnabled = (bool) $enable;
+        return $this;
     }
 }
