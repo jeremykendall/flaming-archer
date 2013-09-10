@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Flaming Archer
  *
@@ -15,7 +14,6 @@ namespace FA\Dao;
  */
 class ImageDao
 {
-
     /**
      * Database connection
      *
@@ -64,6 +62,38 @@ class ImageDao
         $stmt->execute();
 
         return $stmt->fetchAll();
+    }
+
+    /**
+     * Finds next day's image
+     *
+     * @param int $currentDay Current day
+     * @return int Day after current day
+     */
+    public function findNextImage($currentDay)
+    {
+        $sql = "SELECT day FROM images WHERE day > :currentDay ORDER BY day LIMIT 1";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindValue(':currentDay', $currentDay);
+        $stmt->execute();
+
+        return (int) $stmt->fetchColumn();
+    }
+
+    /**
+     * Finds previous day's image
+     *
+     * @param int $currentDay Current day
+     * @return int Day before current day
+     */
+    public function findPreviousImage($currentDay)
+    {
+        $sql = "SELECT day FROM images WHERE day < :currentDay ORDER BY day DESC LIMIT 1";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindValue(':currentDay', $currentDay);
+        $stmt->execute();
+
+        return (int) $stmt->fetchColumn();
     }
 
     /**

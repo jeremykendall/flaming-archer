@@ -49,6 +49,9 @@ class ImageDaoTest extends CommonDbTestCase
         $this->assertEquals(10, count($result));
     }
 
+    /**
+     * @covers FA\Dao\ImageDao::findPage
+     */
     public function testFindPage()
     {
         $page = 1;
@@ -57,6 +60,44 @@ class ImageDaoTest extends CommonDbTestCase
         $result = $this->dao->findPage($page, $perPage);
         $this->assertInternalType('array', $result);
         $this->assertEquals(3, count($result));
+    }
+
+    /**
+     * @covers FA\Dao\ImageDao::findNextImage
+     * @dataProvider nextDayDataProvider
+     */
+    public function testFindNextImage($currentDay, $expected)
+    {
+        $actual = $this->dao->findNextImage($currentDay);
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function nextDayDataProvider()
+    {
+        return array(
+            array(1, 2),
+            array(7, 10),
+            array(15, null),
+        );
+    }
+
+    /**
+     * @covers FA\Dao\ImageDao::findPreviousImage
+     * @dataProvider previousDayDataProvider
+     */
+    public function testFindPreviousImage($currentDay, $expected)
+    {
+        $actual = $this->dao->findPreviousImage($currentDay);
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function previousDayDataProvider()
+    {
+        return array(
+            array(1, null),
+            array(7, 6),
+            array(15, 11),
+        );
     }
 
     /**

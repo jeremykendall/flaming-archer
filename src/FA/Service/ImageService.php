@@ -83,6 +83,28 @@ class ImageService
     }
 
     /**
+     * Finds next day's image
+     *
+     * @param int $currentDay Current day
+     * @return int Day after current day
+     */
+    public function findNextImage($currentDay)
+    {
+        return $this->dao->findNextImage($currentDay);
+    }
+
+    /**
+     * Finds previous day's image
+     *
+     * @param int $currentDay Current day
+     * @return int Day before current day
+     */
+    public function findPreviousImage($currentDay)
+    {
+        return $this->dao->findPreviousImage($currentDay);
+    }
+
+    /**
      * Find all images
      *
      * @return array All images

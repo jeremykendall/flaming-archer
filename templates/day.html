@@ -36,9 +36,43 @@
         <!-- AddThis Button END -->
     </div>
 </div>
+<div class="row">
+    <div class="col-md-12">
+        <ul class="pager">
+            <li class="previous">
+                {% if previous != 0 %}
+                <a id="previous-day" href="{{ baseUrl() }}/day/{{ previous }}">&larr; Older</a>
+                {% endif %}
+            </li>
+            <li class="next">
+                {% if next != 0 %}
+                <a id="next-day" href="{{ baseUrl() }}/day/{{ next }}">Newer &rarr;</a>
+                {% endif %}
+            </li>
+        </ul>
+    </div>
+</div>
 {% endblock %}
 
 {% block javascript %}
+<script type="text/javascript" src="/js/jquery.hotkeys.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $(document).bind('keydown', 'left', function() {
+            var prev = $("#previous-day");
+            if (prev.length) {
+                location.href = prev.attr('href');
+            }
+        });
+
+        $(document).bind('keydown', 'right', function() {
+            var next = $("#next-day");
+            if (next.length) {
+                location.href = next.attr('href');
+            }
+        });
+    });
+</script>
 <!-- AddThis Button BEGIN -->
 <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-522116d11ed7bf53"></script>
 <!-- AddThis Button END -->

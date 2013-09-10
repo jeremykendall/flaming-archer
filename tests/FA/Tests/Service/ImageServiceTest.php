@@ -107,6 +107,26 @@ class ImageServiceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $result);
     }
 
+    public function testFindNextImage()
+    {
+        $this->dao->expects($this->once())
+            ->method('findNextImage')
+            ->with(7)
+            ->will($this->returnValue(10));
+
+        $this->service->findNextImage(7);
+    }
+
+    public function testFindPreviousImage()
+    {
+        $this->dao->expects($this->once())
+            ->method('findPreviousImage')
+            ->with(10)
+            ->will($this->returnValue(7));
+
+        $this->service->findPreviousImage(10);
+    }
+
     public function testFindImageDoesNotExist()
     {
         $this->dao->expects($this->once())
