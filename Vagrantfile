@@ -17,7 +17,7 @@ Vagrant.configure("2") do |config|
   config.vm.synced_folder "./", "/var/www", id: "vagrant-root",
     :owner => "vagrant",
     :group => "www-data",
-    :extra => "dmode=775,fmode=664"
+    :mount_options => ["dmode=775,fmode=664"]
 
   config.vm.provision :shell, :inline =>
     "if [[ ! -f /apt-get-run ]]; then sudo apt-get update && sudo touch /apt-get-run; fi"
