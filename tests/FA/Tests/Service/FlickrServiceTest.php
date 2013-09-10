@@ -56,8 +56,12 @@ class FlickrServiceTest extends \PHPUnit_Framework_TestCase
     {
         $photoId = 5977249629;
         $image = $this->service->find($photoId);
-        $expected = array_merge($this->getSizesResult(), $this->getInfoResult());
-        $this->assertEquals($expected, $image);
+        $expected = array_merge(
+            $this->getSizesResult(), 
+            $this->normalizeResult($this->getInfoResult())
+        );
+
+        $this->assertEquals($expected, $this->normalizeResult($image));
     }
 
     /**
@@ -79,7 +83,20 @@ class FlickrServiceTest extends \PHPUnit_Framework_TestCase
     {
         $photoId = 5977249629;
         $image = $this->service->getInfo($photoId);
-        $this->assertEquals($this->getInfoResult(), $image);
+        
+        $this->assertEquals(
+            $this->normalizeResult($this->getInfoResult()), 
+            $this->normalizeResult($image)
+        );
+    }
+
+    protected function normalizeResult(array $result)
+    {
+        unset($result['photo']['license']);
+        unset($result['photo']['safety_level']);
+        unset($result['photo']['views']);
+
+        return $result;
     }
 
     protected function getSizesResult()
@@ -97,7 +114,7 @@ class FlickrServiceTest extends \PHPUnit_Framework_TestCase
       { "label": "Large", "width": "1024", "height": "681", "source": "http:\/\/farm7.staticflickr.com\/6132\/5977249629_c204d31e3d_b.jpg", "url": "http:\/\/www.flickr.com\/photos\/jeremykendall\/5977249629\/sizes\/l\/", "media": "photo" }
     ] }, "stat": "ok" }
 JSON;
-
+    
         return json_decode($result, true);
     }
 
