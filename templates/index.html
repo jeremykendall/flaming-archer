@@ -24,7 +24,7 @@
             {% if pages.previous == false %}
             <span>Prev</span>
             {% else %}
-            <a href="{{ baseUrl() }}/page/{{ pages.previous }}">Prev</a>
+            <a id="previous-day" href="{{ baseUrl() }}/page/{{ pages.previous }}">Prev</a>
             {% endif %}
         </li>
 
@@ -36,7 +36,7 @@
             {% if pages.next == false %}
             <span>Next</span>
             {% else %}
-            <a href="{{ baseUrl() }}/page/{{ pages.next }}">Next</a>
+            <a id="next-day" href="{{ baseUrl() }}/page/{{ pages.next }}">Next</a>
         </li>
         {% endif %}
     </ul>
@@ -45,6 +45,8 @@
 {% endblock %}
 
 {% block javascript %}
+<script type="text/javascript" src="/js/jquery.scrollTo.min.js"></script>
+<script type="text/javascript" src="/js/keyboard-navigation.js"></script>
 <!-- AddThis Smart Layers BEGIN -->
 <!-- Go to http://www.addthis.com/get/smart-layers to customize -->
 <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-522116d11ed7bf53"></script>
