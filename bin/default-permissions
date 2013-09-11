@@ -1,0 +1,23 @@
+#!/bin/sh
+echo "This command uses chown and chmod. You may need to use sudo"
+
+echo "Your username: "
+read USERNAME
+
+echo "Apache username: "
+read GROUPNAME
+
+chown $USERNAME:$GROUPNAME db
+chown $USERNAME:$GROUPNAME logs
+chown $USERNAME:$GROUPNAME public
+chown $USERNAME:$GROUPNAME tmp
+
+chmod -R 775 db
+chmod -R 775 logs
+chmod -R 775 tmp
+
+chmod 775 public
+find public -type d -exec chmod 775 {} \;
+find public -type f -exec chmod 664 {} \;
+
+echo "Finished!"
