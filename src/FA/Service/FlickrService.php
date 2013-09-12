@@ -9,6 +9,10 @@
 
 namespace FA\Service;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use FA\Model\Photo\Photo;
+use FA\Model\Photo\Size;
+
 /**
  * Flickr service
  *
@@ -39,21 +43,41 @@ class FlickrService implements FlickrInterface
      * @param  int   $photoId Flickr photo id
      * @return array Photo data from Flickr
      */
-    public function find($photoId)
+    public function find(Photo $photo)
     {
-        $sizes = $this->getSizes($photoId);
-        $info = $this->getInfo($photoId);
+        $info = $this->getInfo($photo->getPhotoId());
 
-        return array_merge($sizes, $info);
+        $photo->setPhotoId($info['photo']['id']);
+        $photo->setTitle($info['photo']['title']['_content']);
+        $photo->setDescription($info['photo']['description']['_content']);
+        $photo->setTags($info['photo']['tags']['tag']);
+
+        $sizeData = $this->getSizes($photo->getPhotoId());
+
+        $sizes = new ArrayCollection();
+
+        foreach ($sizeData['sizes']['size'] as $data) {
+            $size = new Size();
+            $size->setLabel($data['label']);
+            $size->setWidth($data['width']);
+            $size->setHeight($data['height']);
+            $size->setSource($data['source']);
+            $size->setUrl($data['url']);
+            $sizes->set($size->getLabel(), $size);
+        }
+
+        $photo->setSizes($sizes);
+
+        return $photo;
     }
 
     /**
      * Returns sizes array for photo identified by Flickr photo id
      *
-     * @param  int   $photoId
-     * @return array Array of photo size information
+     * @param  int   $photoId Flickr photoId
+     * @return array Size data
      */
-    public function getSizes($photoId)
+    protected function getSizes($photoId)
     {
         $options = array(
             'method' => 'flickr.photos.getSizes',
@@ -69,10 +93,10 @@ class FlickrService implements FlickrInterface
     /**
      * Returns info array for photo identified by Flickr photo id
      *
-     * @param  int   $photoId
+     * @param  int   $photoId Flickr photo id
      * @return array Array of photo information
      */
-    public function getInfo($photoId)
+    protected function getInfo($photoId)
     {
         $options = array(
             'method' => 'flickr.photos.getInfo',
