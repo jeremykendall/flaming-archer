@@ -64,11 +64,12 @@ class MetaTags
 
         $tags = array(
             'twitter:card' => 'photo',
+            'twitter:site' => $this->profile['twitter_username'],
+            'twitter:creator' => $this->profile['twitter_username'],
             'twitter:title' => sprintf('%s | Day %s', $this->profile['site_name'], $day),
-            'twitter:image' => $image['source'],
+            'twitter:image:src' => $image['source'],
             'twitter:image:width' => $image['width'],
             'twitter:image:height' => $image['height'],
-            'twitter:creator' => $this->profile['twitter_username'],
         );
 
         return $tags;
