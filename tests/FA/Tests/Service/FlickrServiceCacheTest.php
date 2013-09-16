@@ -2,6 +2,7 @@
 
 namespace FA\Tests\Service;
 
+use FA\Model\Photo\Photo;
 use FA\Service\FlickrServiceCache;
 
 class FlickrServiceCacheTest extends \PHPUnit_Framework_TestCase
@@ -21,8 +22,16 @@ class FlickrServiceCacheTest extends \PHPUnit_Framework_TestCase
      */
     protected $cache;
 
+    /**
+     * @var Photo
+     */
+    protected $photo;
+
     protected function setUp()
     {
+        $this->photo = new Photo();
+        $this->photo->setId(1234);
+
         $this->service = $this->getMockBuilder('FA\Service\FlickrService')
             ->disableOriginalConstructor()
             ->getMock();
@@ -47,20 +56,20 @@ class FlickrServiceCacheTest extends \PHPUnit_Framework_TestCase
     {
         $this->cache->expects($this->once())
             ->method('getItem')
-            ->with(1234)
+            ->with($this->photo)
             ->will($this->returnValue(null));
 
         $this->service->expects($this->once())
             ->method('find')
-            ->with(1234)
+            ->with($this->photo)
             ->will($this->returnValue(array('Image information')));
 
         $this->cache->expects($this->once())
             ->method('addItem')
-            ->with(1234, array('Image information'))
+            ->with($this->photo, array('Image information'))
             ->will($this->returnValue(true));
 
-        $result = $this->serviceCache->find(1234);
+        $result = $this->serviceCache->find($this->photo);
 
         $this->assertEquals(array('Image information'), $result);
     }
@@ -69,12 +78,12 @@ class FlickrServiceCacheTest extends \PHPUnit_Framework_TestCase
     {
         $this->cache->expects($this->once())
             ->method('getItem')
-            ->with(1234)
+            ->with($this->photo)
             ->will($this->returnValue(array('Image information')));
 
         $this->service->expects($this->never())->method('find');
 
-        $result = $this->serviceCache->find(1234);
+        $result = $this->serviceCache->find($this->photo);
 
         $this->assertEquals(array('Image information'), $result);
     }
