@@ -3,6 +3,8 @@
 namespace FA\Tests\Service;
 
 use DateTime;
+use FA\Model\Photo\Photo;
+use FA\Model\Photo\Size;
 use FA\Service\ImageService;
 
 class ImageServiceTest extends \PHPUnit_Framework_TestCase
@@ -48,58 +50,51 @@ class ImageServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testFind()
     {
-        $imageData = array('day' => '1', 'photo_id' => '7606616668');
-        $imageSizes = array('sizes' => array('size' => array()));
+        $data = array('day' => '1', 'photo_id' => '7606616668');
+        $photo = new Photo($data);
 
         $this->dao->expects($this->once())
-                ->method('find')
-                ->with($imageData['day'])
-                ->will($this->returnValue($imageData));
+            ->method('find')
+            ->with($data['day'])
+            ->will($this->returnValue($photo));
 
         $this->flickr->expects($this->once())
-                ->method('find')
-                ->with($imageData['photo_id'])
-                ->will($this->returnValue($imageSizes));
+            ->method('find')
+            ->with($photo)
+            ->will($this->returnValue($photo));
 
-        $result = $this->service->find($imageData['day']);
-
-        $this->assertEquals(array_merge($imageData, $imageSizes), $result);
+        $this->service->find($data['day']);
     }
 
     public function testFindPage()
     {
-        $imageData = array(
-            array('day' => '3', 'photo_id' => '33'),
-            array('day' => '2', 'photo_id' => '22'),
-            array('day' => '1', 'photo_id' => '11'),
-        );
-
-        $imageSizes = array(
-            array('sizes' => array(33)),
-            array('sizes' => array(22)),
-            array('sizes' => array(11)),
+        $photos = array(
+            new Photo(array('day' => '3', 'photo_id' => '33')),
+            new Photo(array('day' => '2', 'photo_id' => '22')),
+            new Photo(array('day' => '1', 'photo_id' => '11')),
         );
 
         $offset = 0;
         $itemCountPerPage = 3;
 
-        $page = $imageData;
+        $page = $photos;
 
         $this->dao->expects($this->once())
             ->method('findPage')
             ->with($offset, $itemCountPerPage)
-            ->will($this->returnValue($page));
+            ->will($this->returnValue($photos));
 
         // The Flickr service should be called as many times as there are
-        // data elements returned from the dao
-        foreach ($imageData as $index => $image) {
+        // photos returned from the dao
+        foreach ($photos as $index => $photo) {
 
-            $expected[] = array_merge($image, $imageSizes[$index]);
+            $photo->setSize('large', new Size());
+            $expected[] = $photo;
 
             $this->flickr->expects($this->at($index))
                 ->method('find')
-                ->with($image['photo_id'])
-                ->will($this->returnValue($imageSizes[$index]));
+                ->with($photo)
+                ->will($this->returnValue($photo));
         }
 
         $result = $this->service->findPage($offset, $itemCountPerPage);
@@ -130,9 +125,9 @@ class ImageServiceTest extends \PHPUnit_Framework_TestCase
     public function testFindImageDoesNotExist()
     {
         $this->dao->expects($this->once())
-                ->method('find')
-                ->with('222')
-                ->will($this->returnValue(false));
+            ->method('find')
+            ->with('222')
+            ->will($this->returnValue(false));
 
         $this->flickr->expects($this->never())->method('find');
 
@@ -144,34 +139,32 @@ class ImageServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testFindAll()
     {
-        $imageData = array(
-            array('day' => '1', 'photo_id' => '11'),
-            array('day' => '2', 'photo_id' => '22'),
-            array('day' => '3', 'photo_id' => '33')
+        $photos = array(
+            new Photo(array('day' => '3', 'photo_id' => '33')),
+            new Photo(array('day' => '2', 'photo_id' => '22')),
+            new Photo(array('day' => '1', 'photo_id' => '11')),
         );
 
-        $imageSizes = array(
-            array('sizes' => array(11)),
-            array('sizes' => array(22)),
-            array('sizes' => array(33))
-        );
+        $offset = 0;
+        $itemCountPerPage = 3;
+
+        $page = $photos;
 
         $this->dao->expects($this->once())
-                ->method('findAll')
-                ->will($this->returnValue($imageData));
-
-        $expected = array();
+            ->method('findAll')
+            ->will($this->returnValue($photos));
 
         // The Flickr service should be called as many times as there are
-        // data elements returned from the dao
-        foreach ($imageData as $index => $image) {
+        // photos returned from the dao
+        foreach ($photos as $index => $photo) {
 
-            $expected[] = array_merge($image, $imageSizes[$index]);
+            $photo->setSize('large', new Size());
+            $expected[] = $photo;
 
             $this->flickr->expects($this->at($index))
-                    ->method('find')
-                    ->with($image['photo_id'])
-                    ->will($this->returnValue($imageSizes[$index]));
+                ->method('find')
+                ->with($photo)
+                ->will($this->returnValue($photo));
         }
 
         $result = $this->service->findAll();
@@ -184,12 +177,13 @@ class ImageServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testSave()
     {
+        $photo = new Photo(array('day' => 200, 'photo_id' => 999999));
         $this->dao->expects($this->once())
-                ->method('save')
-                ->with(array('day' => 200, 'photo_id' => 999999))
-                ->will($this->returnValue(1));
+            ->method('save')
+            ->with($photo)
+            ->will($this->returnValue(true));
 
-        $this->assertEquals(1, $this->service->save(array('day' => 200, 'photo_id' => 999999)));
+        $this->assertTrue($this->service->save($photo));
     }
 
     /**
@@ -197,12 +191,13 @@ class ImageServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testDelete()
     {
+        $photo = new Photo(array('day' => 200));
         $this->dao->expects($this->once())
-                ->method('delete')
-                ->with(200)
-                ->will($this->returnValue(1));
+            ->method('delete')
+            ->with($photo)
+            ->will($this->returnValue(true));
 
-        $this->assertEquals(1, $this->service->delete(200));
+        $this->assertTrue($this->service->delete($photo));
     }
 
     /**
@@ -221,8 +216,8 @@ class ImageServiceTest extends \PHPUnit_Framework_TestCase
         $date = new DateTime($testDate);
 
         $this->dao->expects($this->once())
-                ->method('findFirstImage')
-                ->will($this->returnValue($firstImage));
+            ->method('findFirstImage')
+            ->will($this->returnValue($firstImage));
 
         $this->assertEquals($projectDay, $this->service->getProjectDay($date));
     }
@@ -234,8 +229,8 @@ class ImageServiceTest extends \PHPUnit_Framework_TestCase
     public function testGetProjectDayWhenNoImagesExist()
     {
         $this->dao->expects($this->once())
-                ->method('findFirstImage')
-                ->will($this->returnValue(false));
+            ->method('findFirstImage')
+            ->will($this->returnValue(false));
 
         $this->assertEquals(1, $this->service->getProjectDay());
     }

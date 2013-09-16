@@ -9,8 +9,8 @@
 
 namespace FA\Service;
 
-use DateTime;
 use FA\Dao\ImageDao;
+use FA\Model\Photo\Photo;
 use FA\Service\FlickrInterface;
 
 /**
@@ -48,19 +48,19 @@ class ImageService
      * Find image by day
      *
      * @param  int   $day Project day (1-366)
-     * @return array Image data
+     * @return Photo Photo identified by day
      */
     public function find($day)
     {
-        $image = $this->dao->find($day);
+        $photo = $this->dao->find($day);
 
-        if (!$image) {
+        if (!$photo) {
             return null;
         }
 
-        $sizes = $this->flickr->find($image['photo_id']);
+        $photo = $this->flickr->find($photo);
 
-        return array_merge($image, $sizes);
+        return $photo;
     }
 
     /**
@@ -68,15 +68,15 @@ class ImageService
      *
      * @param  int   $offset           Page offset
      * @param  int   $itemCountPerPage Number of items per page
-     * @return array Page items
+     * @return Photo[] Page items
      */
     public function findPage($offset, $itemCountPerPage)
     {
-        $page = $this->dao->findPage($offset, $itemCountPerPage);
+        $photos = $this->dao->findPage($offset, $itemCountPerPage);
         $result = array();
 
-        foreach ($page as $image) {
-            $result[] = array_merge($image, $this->flickr->find($image['photo_id']));
+        foreach ($photos as $photo) {
+            $result[] = $this->flickr->find($photo);
         }
 
         return $result;
@@ -85,7 +85,7 @@ class ImageService
     /**
      * Finds next day's image
      *
-     * @param int $currentDay Current day
+     * @param  int $currentDay Current day
      * @return int Day after current day
      */
     public function findNextImage($currentDay)
@@ -96,7 +96,7 @@ class ImageService
     /**
      * Finds previous day's image
      *
-     * @param int $currentDay Current day
+     * @param  int $currentDay Current day
      * @return int Day before current day
      */
     public function findPreviousImage($currentDay)
@@ -107,15 +107,15 @@ class ImageService
     /**
      * Find all images
      *
-     * @return array All images
+     * @return Photo[] All images
      */
     public function findAll()
     {
-        $images = $this->dao->findAll();
+        $photos = $this->dao->findAll();
         $result = array();
 
-        foreach ($images as $image) {
-            $result[] = array_merge($image, $this->flickr->find($image['photo_id']));
+        foreach ($photos as $photo) {
+            $result[] = $this->flickr->find($photo);
         }
 
         return $result;
@@ -124,34 +124,35 @@ class ImageService
     /**
      * Save new image
      *
-     * @param  array $data Array containing 'day' and 'photo_id' keys
+     * @param  Photo $photo Photo to save
      * @return bool  True on success, false on failure
      */
-    public function save(array $data)
+    public function save(Photo $photo)
     {
-        return $this->dao->save($data);
+        return $this->dao->save($photo);
     }
 
     /**
      * Delete image
      *
-     * @param  int  $day Project day (1-366)
-     * @return bool True on success, false on failure
+     * @param  Photo $photo Photo to delete
+     * @return bool  True on success, false on failure
      */
-    public function delete($day)
+    public function delete(Photo $photo)
     {
-        return $this->dao->delete($day);
+        return $this->dao->delete($photo);
     }
 
     /**
      * Determines what project day it is by diffing project start and current date
      *
+     * @param DateTime $today Today's date OPTIONAL
      * @return int Project day (n of 365)
      */
-    public function getProjectDay(DateTime $today = null)
+    public function getProjectDay(\DateTime $today = null)
     {
         if ($today === null) {
-            $today = new DateTime();
+            $today = new \DateTime();
         }
 
         $today->setTime(0, 0, 0);
@@ -162,7 +163,7 @@ class ImageService
             return 1;
         }
 
-        $firstPostedDate = DateTime::createFromFormat('Y-m-d H:i:s', $firstImage['posted']);
+        $firstPostedDate = \DateTime::createFromFormat('Y-m-d H:i:s', $firstImage['posted']);
         $firstPostedDate->setTime(0, 0, 0);
 
         $interval = $today->diff($firstPostedDate, true);
