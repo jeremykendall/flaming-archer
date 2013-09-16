@@ -15,7 +15,7 @@ class Photo
     /**
      * @var int Flickr photo id
      */
-    private $photoId;
+    private $photo_id;
 
     /**
      * @var int Project day
@@ -50,10 +50,14 @@ class Photo
     /**
      * Public constructor
      */
-    public function __construct()
+    public function __construct(array $data = array())
     {
         $this->tags = array();
         $this->sizes = new ArrayCollection();
+
+        if (!empty($data)) {
+            $this->fromArray($data);
+        }
     }
 
     /**
@@ -77,23 +81,23 @@ class Photo
     }
 
     /**
-     * Get photoId
+     * Get photo_id
      *
-     * @return photoId
+     * @return photo_id
      */
     public function getPhotoId()
     {
-        return $this->photoId;
+        return $this->photo_id;
     }
 
     /**
-     * Set photoId
+     * Set photo_id
      *
      * @param $photoId the value to set
      */
     public function setPhotoId($photoId)
     {
-        $this->photoId = $photoId;
+        $this->photo_id = $photoId;
     }
 
     /**
@@ -236,5 +240,19 @@ class Photo
     public function setSize($label, Size $size)
     {
         $this->sizes->set($label, $size);
+    }
+
+    /**
+     * Sets properties from array
+     *
+     * @param array $data Photo data
+     */
+    public function fromArray(array $data)
+    {
+        foreach($data as $property => $value) {
+            if (property_exists($this, $property)) {
+                $this->$property = $value;
+            }
+        }
     }
 }
