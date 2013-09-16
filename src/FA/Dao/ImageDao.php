@@ -9,6 +9,8 @@
 
 namespace FA\Dao;
 
+use FA\Model\Photo\Photo;
+
 /**
  * Image Dao
  */
@@ -35,12 +37,13 @@ class ImageDao
      * Find image by day
      *
      * @param  int   $day Project day (1-366)
-     * @return array Image data
+     * @return Photo Photo identified by day
      */
     public function find($day)
     {
         $stmt = $this->db->prepare("SELECT * FROM images WHERE day = :day");
         $stmt->bindValue(':day', $day);
+        $stmt->setFetchMode(\PDO::FETCH_CLASS, 'FA\Model\Photo\Photo');
         $stmt->execute();
 
         return $stmt->fetch();
@@ -49,9 +52,9 @@ class ImageDao
     /**
      * Returns an collection of items for a page.
      *
-     * @param  int   $offset           Page offset
-     * @param  int   $itemCountPerPage Number of items per page
-     * @return array Page items
+     * @param  int     $offset           Page offset
+     * @param  int     $itemCountPerPage Number of items per page
+     * @return Photo[] Page items
      */
     public function findPage($offset, $itemCountPerPage)
     {
@@ -61,13 +64,13 @@ class ImageDao
         $stmt->bindValue(':offset', $offset);
         $stmt->execute();
 
-        return $stmt->fetchAll();
+        return $stmt->fetchAll(\PDO::FETCH_CLASS, 'FA\Model\Photo\Photo');
     }
 
     /**
      * Finds next day's image
      *
-     * @param int $currentDay Current day
+     * @param  int $currentDay Current day
      * @return int Day after current day
      */
     public function findNextImage($currentDay)
@@ -83,7 +86,7 @@ class ImageDao
     /**
      * Finds previous day's image
      *
-     * @param int $currentDay Current day
+     * @param  int $currentDay Current day
      * @return int Day before current day
      */
     public function findPreviousImage($currentDay)
@@ -99,25 +102,27 @@ class ImageDao
     /**
      * Find all images
      *
-     * @return array All images
+     * @return Photo[] All images
      */
     public function findAll()
     {
-        return $this->db->query("SELECT * FROM images ORDER BY day DESC")->fetchAll();
+        return $this->db
+            ->query("SELECT * FROM images ORDER BY day DESC")
+            ->fetchAll(\PDO::FETCH_CLASS, 'FA\Model\Photo\Photo');
     }
 
     /**
      * Save new image
      *
-     * @param  array $data Array containing 'day' and 'photo_id' keys
+     * @param  Photo $photo Photo to save
      * @return bool  True on success, false on failure
      */
-    public function save(array $data)
+    public function save(Photo $photo)
     {
         $sql = 'INSERT INTO images (day, photo_id) VALUES (:day, :photo_id)';
         $stmt = $this->db->prepare($sql);
-        $stmt->bindValue(':day', $data['day']);
-        $stmt->bindValue(':photo_id', $data['photo_id']);
+        $stmt->bindValue(':day', $photo->getDay());
+        $stmt->bindValue(':photo_id', $photo->getPhotoId());
 
         return $stmt->execute();
     }
@@ -125,14 +130,14 @@ class ImageDao
     /**
      * Delete image
      *
-     * @param  int  $day Project day (1-366)
-     * @return bool True on success, false on failure
+     * @param  Photo $photo Photo to delete
+     * @return bool  True on success, false on failure
      */
-    public function delete($day)
+    public function delete(Photo $photo)
     {
         $sql = 'DELETE FROM images WHERE day = :day';
         $stmt = $this->db->prepare($sql);
-        $stmt->bindValue(':day', $day);
+        $stmt->bindValue(':day', $photo->getDay());
 
         return $stmt->execute();
     }
@@ -154,12 +159,13 @@ class ImageDao
     /**
      * Finds the first image (oldest date) added to the project
      *
-     * @return array First image added to the project
+     * @return Photo First photo added to project
      */
     public function findFirstImage()
     {
         $sql = 'SELECT * FROM images ORDER BY posted ASC LIMIT 1';
         $stmt = $this->db->prepare($sql);
+        $stmt->setFetchMode(\PDO::FETCH_CLASS, 'FA\Model\Photo\Photo');
         $stmt->execute();
 
         return $stmt->fetch();
