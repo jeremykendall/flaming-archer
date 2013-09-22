@@ -3,6 +3,7 @@
 namespace FA\Tests\Authentication\Adapter;
 
 use FA\Authentication\Adapter\DbAdapter;
+use FA\Model\User;
 use Zend\Authentication\Result;
 
 class DbAdapterTest extends \PHPUnit_Framework_TestCase
@@ -34,12 +35,14 @@ class DbAdapterTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->adapter = new DbAdapter($this->dao);
 
-        $this->user = array(
+        $data = array(
             'id' => '1',
             'email' => 'user@example.com',
             'password_hash' => '$2y$12$pZg9j8DBSIP2R/vfDzTQOeIt5n57r5VigCUl/HH.FrBOadi3YhdPS',
             'last_login' => null,
         );
+
+        $this->user = new User($data);
     }
 
     /**
@@ -64,13 +67,11 @@ class DbAdapterTest extends \PHPUnit_Framework_TestCase
     {
         $this->dao->expects($this->once())
             ->method('findByEmail')
-            ->with($this->user['email'])
+            ->with($this->user->getEmail())
             ->will($this->returnValue($this->user));
 
         $this->adapter->setCredentials('user@example.com', 'password');
         $result = $this->adapter->authenticate();
-
-        unset($this->user['password_hash']);
 
         $this->assertInstanceOf('\Zend\Authentication\Result', $result);
         $this->assertEquals($this->user, $result->getIdentity());
@@ -85,7 +86,7 @@ class DbAdapterTest extends \PHPUnit_Framework_TestCase
     {
         $this->dao->expects($this->once())
             ->method('findByEmail')
-            ->with($this->user['email'])
+            ->with($this->user->getEmail())
             ->will($this->returnValue($this->user));
 
         $this->adapter->setCredentials('user@example.com', 'badpassword');
