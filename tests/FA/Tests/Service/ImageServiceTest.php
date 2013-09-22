@@ -213,11 +213,13 @@ class ImageServiceTest extends \PHPUnit_Framework_TestCase
             'posted' => '2012-07-29 15:31:56',
         );
 
+        $photo = new Photo($firstImage);
+
         $date = new DateTime($testDate);
 
         $this->dao->expects($this->once())
             ->method('findFirstImage')
-            ->will($this->returnValue($firstImage));
+            ->will($this->returnValue($photo));
 
         $this->assertEquals($projectDay, $this->service->getProjectDay($date));
     }

@@ -49,6 +49,8 @@ class Photo
 
     /**
      * Public constructor
+     *
+     * @param array $data OPTIONAL photo data
      */
     public function __construct(array $data = array())
     {
@@ -77,13 +79,13 @@ class Photo
      */
     public function setId($id)
     {
-        $this->id = $id;
+        $this->id = (int) $id;
     }
 
     /**
      * Get photo_id
      *
-     * @return photo_id
+     * @return int Photo id
      */
     public function getPhotoId()
     {
@@ -97,7 +99,7 @@ class Photo
      */
     public function setPhotoId($photoId)
     {
-        $this->photo_id = $photoId;
+        $this->photo_id = (int) $photoId;
     }
 
     /**
@@ -123,19 +125,23 @@ class Photo
     /**
      * Get posted
      *
-     * @return posted
+     * @return \DateTime Photo posted date
      */
     public function getPosted()
     {
+        if (false === $this->posted instanceof \DateTime && $this->posted !== null) {
+            $this->posted = \DateTime::createFromFormat('Y-m-d H:i:s', $this->posted);
+        }
+
         return $this->posted;
     }
 
     /**
      * Set posted
      *
-     * @param $posted the value to set
+     * @param \DateTime $posted the value to set
      */
-    public function setPosted($posted)
+    public function setPosted(\DateTime $posted)
     {
         $this->posted = $posted;
     }

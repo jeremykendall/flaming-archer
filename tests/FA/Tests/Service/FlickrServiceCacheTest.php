@@ -56,35 +56,35 @@ class FlickrServiceCacheTest extends \PHPUnit_Framework_TestCase
     {
         $this->cache->expects($this->once())
             ->method('getItem')
-            ->with($this->photo)
+            ->with($this->photo->getId())
             ->will($this->returnValue(null));
 
         $this->service->expects($this->once())
             ->method('find')
             ->with($this->photo)
-            ->will($this->returnValue(array('Image information')));
+            ->will($this->returnValue($this->photo));
 
         $this->cache->expects($this->once())
             ->method('addItem')
-            ->with($this->photo, array('Image information'))
+            ->with($this->photo->getId(), $this->photo)
             ->will($this->returnValue(true));
 
         $result = $this->serviceCache->find($this->photo);
 
-        $this->assertEquals(array('Image information'), $result);
+        $this->assertEquals($this->photo, $result);
     }
 
     public function testFindCacheHit()
     {
         $this->cache->expects($this->once())
             ->method('getItem')
-            ->with($this->photo)
-            ->will($this->returnValue(array('Image information')));
+            ->with($this->photo->getId())
+            ->will($this->returnValue($this->photo));
 
         $this->service->expects($this->never())->method('find');
 
         $result = $this->serviceCache->find($this->photo);
 
-        $this->assertEquals(array('Image information'), $result);
+        $this->assertEquals($this->photo, $result);
     }
 }

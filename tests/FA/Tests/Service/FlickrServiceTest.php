@@ -78,6 +78,9 @@ class FlickrServiceTest extends \PHPUnit_Framework_TestCase
         $this->service = null;
     }
 
+    /**
+     * @covers FA\Service\FlickrService::__construct
+     */
     public function testCreation()
     {
         $this->assertInstanceOf('FA\Service\FlickrService', $this->service);
@@ -86,6 +89,15 @@ class FlickrServiceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers FA\Service\FlickrService::find
+     * @covers FA\Service\FlickrService::getSizes
+     * @covers FA\Service\FlickrService::getInfo
+     * @covers FA\Service\FlickrService::makeRequest
+     * @covers FA\Model\Photo\Size::getLabel
+     * @covers FA\Model\Photo\Size::setLabel
+     * @covers FA\Model\Photo\Size::setWidth
+     * @covers FA\Model\Photo\Size::setHeight
+     * @covers FA\Model\Photo\Size::setSource
+     * @covers FA\Model\Photo\Size::setUrl
      */
     public function testFind()
     {

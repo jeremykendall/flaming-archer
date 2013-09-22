@@ -31,6 +31,7 @@ class ImageDaoTest extends CommonDbTestCase
 
     /**
      * @covers FA\Dao\ImageDao::find
+     * @covers FA\Model\Photo\Photo::getPosted
      */
     public function testFind()
     {
@@ -38,6 +39,10 @@ class ImageDaoTest extends CommonDbTestCase
         $this->assertInstanceOf('FA\Model\Photo\Photo', $result);
         $this->assertEquals(1, $result->getDay());
         $this->assertEquals(7606616668, $result->getPhotoId());
+
+        // PDO::FETCH_CLASS sets Photo::$posted to a string. This ensures the
+        // getter is returning a DateTime instance
+        $this->assertInstanceOf('DateTime', $result->getPosted());
     }
 
     /**
@@ -179,16 +184,22 @@ class ImageDaoTest extends CommonDbTestCase
      */
     public function testFindFirstImage()
     {
+        $posted = \DateTime::createFromFormat('Y-m-d H:i:s', '2013-04-29 15:31:56');
         $expected = new Photo();
         $expected->setId(1);
         $expected->setDay(1);
         $expected->setPhotoId(7606616668);
-        $expected->setPosted('2013-04-29 15:31:56');
+        $expected->setPosted($posted);
 
         $actual = $this->dao->findFirstImage();
 
-        $this->assertEquals($actual, $expected);
+        $this->assertEquals($actual->getId(), $expected->getId());
+        $this->assertEquals($actual->getDay(), $expected->getDay());
+        $this->assertEquals($actual->getPhotoId(), $expected->getPhotoId());
+        $this->assertEquals($actual->getPosted(), $expected->getPosted());
     }
+
+
 
     /**
      * @covers FA\Dao\ImageDao::findFirstImage

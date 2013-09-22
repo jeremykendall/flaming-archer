@@ -163,7 +163,7 @@ class ImageService
             return 1;
         }
 
-        $firstPostedDate = \DateTime::createFromFormat('Y-m-d H:i:s', $firstImage['posted']);
+        $firstPostedDate = $firstImage->getPosted();
         $firstPostedDate->setTime(0, 0, 0);
 
         $interval = $today->diff($firstPostedDate, true);

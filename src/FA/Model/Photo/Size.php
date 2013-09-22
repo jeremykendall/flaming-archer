@@ -30,6 +30,18 @@ class Size
     private $url;
 
     /**
+     * Public constructor
+     *
+     * @param array $data OPTIONAL Size data
+     */
+    public function __construct(array $data = array())
+    {
+        if (!empty($data)) {
+            $this->fromArray($data);
+        }
+    }
+
+    /**
      * Get label
      *
      * @return label
@@ -127,5 +139,19 @@ class Size
     public function setUrl($url)
     {
         $this->url = $url;
+    }
+
+    /**
+     * Sets properties from array
+     *
+     * @param array $data Size data
+     */
+    public function fromArray(array $data)
+    {
+        foreach($data as $property => $value) {
+            if (property_exists($this, $property)) {
+                $this->$property = $value;
+            }
+        }
     }
 }
