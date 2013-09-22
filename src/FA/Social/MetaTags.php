@@ -2,6 +2,7 @@
 
 namespace FA\Social;
 
+use FA\Model\Photo\Photo;
 use Slim\Http\Request;
 
 class MetaTags
@@ -25,10 +26,10 @@ class MetaTags
      * Public constructor
      *
      * @param Request $request Slim Request
-     * @param array $image Image data
-     * @param array $profile Profile data
+     * @param Photo   $image   Photo
+     * @param array   $profile Profile data
      */
-    public function __construct(Request $request, array $image, array $profile)
+    public function __construct(Request $request, Photo $image, array $profile)
     {
         $this->request = $request;
         $this->image = $image;
@@ -44,14 +45,15 @@ class MetaTags
     {
         $url = $this->request->getUrl();
         $path = $this->request->getPath();
-        $day = $this->image['day'];
-        $image = array_pop($this->image['sizes']['size']);
+        $day = $this->image->getDay();
+        $sizes = $this->image->getSizes()->toArray();
+        $size = array_pop($sizes);
 
         $tags = array(
             'og:url' => $url . $path,
             'og:title' => sprintf('%s | Day %s', $this->profile['site_name'], $day),
             'og:description' => $this->profile['tagline'],
-            'og:image' => $image['source'],
+            'og:image' => $size->getSource(),
         );
 
         return $tags;
@@ -59,15 +61,17 @@ class MetaTags
 
     public function getTwitterPhotoCard()
     {
-        $image = array_pop($this->image['sizes']['size']);
-        $day = $this->image['day'];
+        $sizes = $this->image->getSizes()->toArray();
+        $size = array_pop($sizes);
+
+        $day = $this->image->getDay();
 
         $tags = array(
             'twitter:card' => 'photo',
             'twitter:title' => sprintf('%s | Day %s', $this->profile['site_name'], $day),
-            'twitter:image' => $image['source'],
-            'twitter:image:width' => $image['width'],
-            'twitter:image:height' => $image['height'],
+            'twitter:image' => $size->getSource(),
+            'twitter:image:width' => $size->getWidth(),
+            'twitter:image:height' => $size->getHeight(),
             'twitter:creator' => $this->profile['twitter_username'],
         );
 
