@@ -3,6 +3,7 @@
 namespace FA\Tests\DI;
 
 use FA\DI\Container;
+use FA\Model\Photo\Photo;
 
 class ContainerTest extends \PHPUnit_Framework_TestCase
 {
@@ -47,7 +48,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $this->container['request'] = $this->getMockBuilder('Slim\Http\Request')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->container['image'] = array();
+        $this->container['image'] = new Photo();
 
         $this->assertInstanceOf('FA\Social\MetaTags', $this->container['metaTags']);
     }
