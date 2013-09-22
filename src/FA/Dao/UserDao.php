@@ -9,6 +9,8 @@
 
 namespace FA\Dao;
 
+use FA\Model\User;
+
 /**
  * User Dao
  */
@@ -44,7 +46,7 @@ class UserDao
         $stmt->bindValue(':id', $id);
         $stmt->execute();
 
-        return $stmt->fetch();
+        return new User($stmt->fetch());
     }
 
     /**
@@ -60,23 +62,28 @@ class UserDao
         $stmt->bindValue(':email', $email, \PDO::PARAM_STR);
         $stmt->execute();
 
-        return $stmt->fetch();
+        $data = $stmt->fetch();
+
+        if (!$data) {
+            return $data;
+        }
+
+        return new User($data);
     }
 
     /**
      * Updates user email address
      *
-     * @param  int    $id    User id
-     * @param  string $email New email address
-     * @return array  Updated user
+     * @param  User $user User to update
+     * @return User Updated user
      */
-    public function updateEmail($id, $email)
+    public function updateEmail(User $user)
     {
         $sql = 'UPDATE users SET email = :email WHERE id = :id';
         $stmt = $this->db->prepare($sql);
-        $stmt->execute(array('email' => $email, 'id' => $id));
+        $stmt->execute(array('email' => $user->getEmail(), 'id' => $user->getId()));
 
-        return $this->find($id);
+        return $this->find($user->getId());
     }
 
     /**
@@ -102,21 +109,29 @@ class UserDao
      */
     public function findAll()
     {
-        return $this->db->query('SELECT * FROM users')->fetchAll();
+        $result = $this->db->query('SELECT * FROM users')->fetchAll();
+
+        $users = array();
+
+        foreach ($result as $row) {
+            $users[] = new User($row);
+        }
+
+        return $users;
     }
 
     /**
      * Updates login timestamp
      *
-     * @param  string $email User's email address
-     * @return bool   True on success, false on failure
+     * @param  User $user User
+     * @return bool True on success, false on failure
      */
-    public function recordLogin($email)
+    public function recordLogin(User $user)
     {
         $sql = "UPDATE users SET last_login = datetime('now') WHERE email = :email";
         $stmt = $this->db->prepare($sql);
 
-        return $stmt->execute(array('email' => $email));
+        return $stmt->execute(array('email' => $user->getEmail()));
     }
 
     /**

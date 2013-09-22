@@ -10,6 +10,7 @@
 namespace FA\Service;
 
 use FA\Dao\UserDao;
+use FA\Model\User;
 use Zend\Authentication\AuthenticationService;
 
 /**
@@ -43,14 +44,12 @@ class UserService
      * Updates user's email address and updates auth storage with
      * updated user data
      *
-     * @param array  $user  User data
-     * @param string $email New email address
-     *
-     * @return array User data
+     * @param User  $user  User data
+     * @return User Updated user
      */
-    public function updateEmail(array $user, $email)
+    public function updateEmail(User $user)
     {
-        $user = $this->dao->updateEmail($user['id'], $email);
+        $user = $this->dao->updateEmail($user);
         $this->auth->clearIdentity();
         $this->auth->getStorage()->write($user);
 
@@ -80,7 +79,7 @@ class UserService
             throw new \InvalidArgumentException('Password must be at least 8 characters in length.');
         }
 
-        $authResult = $this->authenticate($email, $current);
+        $authResult = $this->checkPassword($email, $current);
 
         if (!$authResult->isValid()) {
             throw new \Exception('Your current password is incorrect.');
@@ -89,14 +88,12 @@ class UserService
         $newHash = password_hash($new, PASSWORD_DEFAULT);
 
         $user = $this->dao->findByEmail($email);
-        $user = $this->dao->changePassword($user['id'], $newHash);
+        $user = $this->dao->changePassword($user->getId(), $newHash);
         $this->authenticate($email, $new);
 
         if (!$authResult->isValid()) {
             throw new \Exception('Your password was changed but there was an issue reauthenticating. PLease log out and back in with your new password.');
         }
-
-        unset($user['password_hash']);
 
         return $user;
     }
@@ -126,7 +123,6 @@ class UserService
         $passwordHash = password_hash($password, PASSWORD_DEFAULT);
 
         $user = $this->dao->createUser($email, $passwordHash);
-        unset($user['password_hash']);
 
         return $user;
     }
@@ -141,6 +137,22 @@ class UserService
         if ($this->auth->hasIdentity()) {
             return $this->auth->getIdentity();
         }
+    }
+
+    /**
+     * Checks username and password for validity
+     *
+     * @param  string                                         $email    User email
+     * @param  string                                         $password User password
+     * @return Zend\Authentication\Result
+     * @throws Zend\Authentication\Exception\RuntimeException
+     */
+    public function checkPassword($email, $password)
+    {
+        $adapter = $this->auth->getAdapter();
+        $adapter->setCredentials($email, $password);
+
+        return $adapter->authenticate();
     }
 
     /**
