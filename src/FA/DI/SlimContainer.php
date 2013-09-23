@@ -22,11 +22,12 @@ class SlimContainer extends Container
         $c = $this;
         $config = $this['config'];
 
-        $app->configureMode('development', function() use ($app, $config) {
+        $app->configureMode('development', function() use ($app, &$config) {
             $app->config(array(
                 'log.level' => Log::DEBUG,
             ));
 
+            $config['twig']['environment']['strict_variables'] = false;
             $config['twig']['environment']['auto_reload'] = true;
             $config['twig']['environment']['debug'] = true;
         });
@@ -42,7 +43,7 @@ class SlimContainer extends Container
 
         // Prepare view
         $app->view($c['twig']);
-        $app->view->parserOptions = $this['config']['twig'];
+        $app->view->parserOptions = $config['twig']['environment'];
         $app->view->parserExtensions = array($c['slimTwigExtension'], $c['twigExtensionDebug']);
     }
 }

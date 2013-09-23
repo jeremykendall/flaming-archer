@@ -20,7 +20,7 @@
     </div>
     <div class="col-md-6">
         <h2>Add a photo</h2>
-        {% if flash.addPhotoError %}
+        {% if flash['addPhotoError'] is defined %}
         <div class="alert alert-danger alert-dismissable">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             {{ flash.addPhotoError }}
@@ -49,14 +49,14 @@
     <tbody>
         {% for image in paginator %}
         <tr>
-            <td class="text-center"><a href="/day/{{image.day}}"><img class="img-responsive img-thumbnail" src="{{image.sizes.size.0.source}}" width="{{image.sizes.size.0.width}}" height="{{image.sizes.size.0.height}}" /></a></td>
+            <td class="text-center"><a href="/day/{{ image.day }}"><img class="img-responsive img-thumbnail" src="{{ image.sizes['Square'].source }}" width="{{ image.sizes['Square'].width }}" height="{{ image.sizes['Square'].height }}" /></a></td>
             <td>{{image.day}}</td>
-            <td>{{image.photo_id}}</td>
+            <td>{{image.photoId}}</td>
             <td>{{image.posted|date("m/d/Y")}}</td>
             <td>
                 <form action="/admin/delete-photo" method="post">
                     <input type="hidden" name="delete" value="1" />
-                    <input type="hidden" name="photo_id" value="{{image.photo_id}}" />
+                    <input type="hidden" name="photo_id" value="{{image.photoId}}" />
                     <input type="hidden" name="day" value="{{image.day}}" />
                     <button class="btn btn-danger btn-xs" type="submit">
                         <span class="glyphicon glyphicon-trash"></span> Delete
@@ -71,23 +71,23 @@
 {% if pages.pageCount %}
 <div class="text-center">
     <ul class="pagination">
-        <li{% if pages.previous == false %} class="disabled"{% endif %}>
-            {% if pages.previous == false %}
+        <li{% if pages.previous is not defined %} class="disabled"{% endif %}>
+            {% if pages.previous is not defined %}
             <span>Prev</span>
             {% else %}
-            <a href="{{ baseUrl() }}/admin/page/{{ pages.previous }}">Prev</a>
+            <a id="previous-day" href="{{ baseUrl() }}/admin/page/{{ pages.previous }}">Prev</a>
+            {% endif %}
         </li>
-        {% endif %}
 
         {% for page in pages.pagesInRange %}
         <li{% if page == pages.current %} class="active"{% endif %}><a href="{{ baseUrl() }}/admin/page/{{ page }}">{{ page }}</a></li>
         {% endfor %}
 
-        <li{% if pages.next == false %} class="disabled"{% endif %}>
-            {% if pages.next == false %}
+        <li{% if pages.next is not defined %} class="disabled"{% endif %}>
+            {% if pages.next is not defined %}
             <span>Next</span>
             {% else %}
-            <a href="{{ baseUrl() }}/admin/page/{{ pages.next }}">Next</a>
+            <a id="next-day" href="{{ baseUrl() }}/admin/page/{{ pages.next }}">Next</a>
             {% endif %}
         </li>
     </ul>

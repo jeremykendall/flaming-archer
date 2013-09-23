@@ -9,6 +9,8 @@
 
 namespace FA\Service;
 
+use FA\Model\Photo\Photo;
+
 /**
  * Flickr service interface
  *
@@ -19,8 +21,8 @@ interface FlickrInterface
     /**
      * Finds photo information on Flickr
      *
-     * @param  int   $photoId Flickr photo id
-     * @return array Photo information
+     * @param  Photo Photo object without Flickr data
+     * @return Photo Photo object populated with Flickr data
      */
-    public function find($photoId);
+    public function find(Photo $photo);
 }

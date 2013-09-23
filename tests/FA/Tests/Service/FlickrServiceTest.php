@@ -2,6 +2,9 @@
 
 namespace FA\Tests\Service;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use FA\Model\Photo\Photo;
+use FA\Model\Photo\Size;
 use FA\Service\FlickrService;
 
 /**
@@ -19,6 +22,16 @@ class FlickrServiceTest extends \PHPUnit_Framework_TestCase
      */
     protected static $config;
 
+    /**
+     * @var ArrayCollection
+     */
+    protected $sizes;
+
+    /**
+     * @var Photo
+     */
+    protected $photo;
+
     public static function setUpBeforeClass()
     {
         parent::setUpBeforeClass();
@@ -32,6 +45,28 @@ class FlickrServiceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->service = new FlickrService(self::$config['flickr.api.key']);
+
+        $info = $this->getInfoResult();
+        $this->photo = new Photo();
+        $this->photo->setPhotoId($info['photo']['id']);
+        $this->photo->setTitle($info['photo']['title']['_content']);
+        $this->photo->setDescription($info['photo']['description']['_content']);
+        $this->photo->setTags($info['photo']['tags']['tag']);
+
+        $sizesResult = $this->getSizesResult();
+        $this->sizes = new ArrayCollection();
+
+        foreach ($sizesResult['sizes']['size'] as $result) {
+            $size = new Size();
+            $size->setLabel($result['label']);
+            $size->setWidth($result['width']);
+            $size->setHeight($result['height']);
+            $size->setSource($result['source']);
+            $size->setUrl($result['url']);
+            $this->sizes->set($size->getLabel(), $size);
+        }
+
+        $this->photo->setSizes($this->sizes);
     }
 
     /**
@@ -43,6 +78,9 @@ class FlickrServiceTest extends \PHPUnit_Framework_TestCase
         $this->service = null;
     }
 
+    /**
+     * @covers FA\Service\FlickrService::__construct
+     */
     public function testCreation()
     {
         $this->assertInstanceOf('FA\Service\FlickrService', $this->service);
@@ -51,52 +89,27 @@ class FlickrServiceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers FA\Service\FlickrService::find
+     * @covers FA\Service\FlickrService::getSizes
+     * @covers FA\Service\FlickrService::getInfo
+     * @covers FA\Service\FlickrService::makeRequest
+     * @covers FA\Model\Photo\Size::getLabel
+     * @covers FA\Model\Photo\Size::setLabel
+     * @covers FA\Model\Photo\Size::setWidth
+     * @covers FA\Model\Photo\Size::setHeight
+     * @covers FA\Model\Photo\Size::setSource
+     * @covers FA\Model\Photo\Size::setUrl
      */
     public function testFind()
     {
         $photoId = 5977249629;
-        $image = $this->service->find($photoId);
-        $expected = array_merge(
-            $this->getSizesResult(), 
-            $this->normalizeResult($this->getInfoResult())
-        );
 
-        $this->assertEquals($expected, $this->normalizeResult($image));
-    }
+        $photo = new Photo();
+        $photo->setPhotoId($photoId);
 
-    /**
-     * @covers FA\Service\FlickrService::getSizes
-     * @covers FA\Service\FlickrService::makeRequest
-     */
-    public function testGetSizes()
-    {
-        $photoId = 5977249629;
-        $image = $this->service->getSizes($photoId);
-        $this->assertEquals($this->getSizesResult(), $image);
-    }
+        $actual = $this->service->find($photo);
 
-    /**
-     * @covers FA\Service\FlickrService::getInfo
-     * @covers FA\Service\FlickrService::makeRequest
-     */
-    public function testGetInfo()
-    {
-        $photoId = 5977249629;
-        $image = $this->service->getInfo($photoId);
-        
-        $this->assertEquals(
-            $this->normalizeResult($this->getInfoResult()), 
-            $this->normalizeResult($image)
-        );
-    }
-
-    protected function normalizeResult(array $result)
-    {
-        unset($result['photo']['license']);
-        unset($result['photo']['safety_level']);
-        unset($result['photo']['views']);
-
-        return $result;
+        $this->assertEquals($this->photo, $actual);
+        $this->assertEquals('Jonathan at the Young Avenue Deli', $photo->getTitle());
     }
 
     protected function getSizesResult()

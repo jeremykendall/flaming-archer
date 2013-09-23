@@ -9,6 +9,8 @@
 
 namespace FA\Dao;
 
+use FA\Model\User;
+
 /**
  * User Dao
  */
@@ -42,6 +44,7 @@ class UserDao
         $sql = 'SELECT * FROM users WHERE id = :id';
         $stmt = $this->db->prepare($sql);
         $stmt->bindValue(':id', $id);
+        $stmt->setFetchMode(\PDO::FETCH_CLASS, 'FA\Model\User');
         $stmt->execute();
 
         return $stmt->fetch();
@@ -60,23 +63,32 @@ class UserDao
         $stmt->bindValue(':email', $email, \PDO::PARAM_STR);
         $stmt->execute();
 
-        return $stmt->fetch();
+        $data = $stmt->fetch();
+
+        if (!$data) {
+            return $data;
+        }
+
+        return new User($data);
     }
 
     /**
      * Updates user email address
      *
-     * @param  int    $id    User id
-     * @param  string $email New email address
-     * @return array  Updated user
+     * @param  User $user User to update
+     * @return User Updated user
      */
-    public function updateEmail($id, $email)
+    public function updateEmail(User $user)
     {
-        $sql = 'UPDATE users SET email = :email WHERE id = :id';
+        $sql = 'UPDATE users SET email = :email, emailCanonical = :emailCanonical WHERE id = :id';
         $stmt = $this->db->prepare($sql);
-        $stmt->execute(array('email' => $email, 'id' => $id));
+        $stmt->execute(array(
+            'email' => $user->getEmail(),
+            'emailCanonical' => $user->getEmailCanonical(),
+            'id' => $user->getId()
+        ));
 
-        return $this->find($id);
+        return $this->find($user->getId());
     }
 
     /**
@@ -88,9 +100,9 @@ class UserDao
      */
     public function changePassword($id, $newPasswordHash)
     {
-        $sql = 'UPDATE users SET password_hash = :password_hash WHERE id = :id';
+        $sql = 'UPDATE users SET passwordHash = :passwordHash WHERE id = :id';
         $stmt = $this->db->prepare($sql);
-        $stmt->execute(array('password_hash' => $newPasswordHash, 'id' => $id));
+        $stmt->execute(array('passwordHash' => $newPasswordHash, 'id' => $id));
 
         return $this->find($id);
     }
@@ -102,21 +114,29 @@ class UserDao
      */
     public function findAll()
     {
-        return $this->db->query('SELECT * FROM users')->fetchAll();
+        $result = $this->db->query('SELECT * FROM users')->fetchAll();
+
+        $users = array();
+
+        foreach ($result as $row) {
+            $users[] = new User($row);
+        }
+
+        return $users;
     }
 
     /**
      * Updates login timestamp
      *
-     * @param  string $email User's email address
-     * @return bool   True on success, false on failure
+     * @param  User $user User
+     * @return bool True on success, false on failure
      */
-    public function recordLogin($email)
+    public function recordLogin(User $user)
     {
-        $sql = "UPDATE users SET last_login = datetime('now') WHERE email = :email";
+        $sql = "UPDATE users SET lastLogin = datetime('now') WHERE email = :email";
         $stmt = $this->db->prepare($sql);
 
-        return $stmt->execute(array('email' => $email));
+        return $stmt->execute(array('email' => $user->getEmail()));
     }
 
     /**
@@ -132,9 +152,9 @@ class UserDao
             throw new \InvalidArgumentException('Password hash must not be null');
         }
 
-        $sql = 'INSERT INTO users (email, password_hash) VALUES (:email, :password_hash)';
+        $sql = 'INSERT INTO users (email, emailCanonical, passwordHash) VALUES (:email, :emailCanonical, :passwordHash)';
         $stmt = $this->db->prepare($sql);
-        $stmt->execute(array('email' => $email, 'password_hash' => $passwordHash));
+        $stmt->execute(array('email' => $email, 'emailCanonical' => strtolower($email), 'passwordHash' => $passwordHash));
 
         return $this->findByEmail($email);
     }

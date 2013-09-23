@@ -6,16 +6,16 @@
 <div class="row">
     <div class="col-md-4">
         <h2>Clear Cache</h2>
-        {% if flash.cacheSuccess %}
+        {% if flash['cacheSuccess'] is defined %}
         <div class="alert alert-success alert-dismissable">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            {{ flash.cacheSuccess }}
+            {{ flash['cacheSuccess'] }}
         </div>       
         {% endif %}
-        {% if flash.cacheFailure %}
+        {% if flash['cacheFailure'] is defined %}
         <div class="alert alert-danger alert-dismissable">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            {{ flash.cacheFailure }}
+            {{ flash['cacheFailure'] }}
         </div>
         {% endif %}
         <form name="clear-cache" id="clear-cache" action="/admin/clear-cache" method="post">
@@ -35,16 +35,16 @@
     <div class="col-md-6">
         <h2>Update Your Info</h2>
         <h4>Change Your Email Address</h4>
-        {% if flash.emailSuccess %}
+        {% if flash['emailSuccess'] is defined %}
         <div class="alert alert-success alert-dismissable">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            {{ flash.emailSuccess }}
+            {{ flash['emailSuccess'] }}
         </div>       
         {% endif %}
-        {% if flash.emailError %}
+        {% if flash['emailError'] is defined %}
         <div class="alert alert-danger alert-dismissable">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            {{ flash.emailError }}
+            {{ flash['emailError'] }}
         </div>
         {% endif %}
         <form role="form" method="post" action="/admin/user" name="change-email-form" id="change-email-form" class="well well-sm">
@@ -57,16 +57,16 @@
         </form>
 
         <h4>Change Your Password</h4>
-        {% if flash.passwordSuccess %}
+        {% if flash['passwordSuccess'] is defined %}
         <div class="alert alert-success alert-dismissable">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            {{ flash.passwordSuccess }}
+            {{ flash['passwordSuccess'] }}
         </div>       
         {% endif %}
-        {% if flash.passwordError %}
+        {% if flash['passwordError'] is defined %}
         <div class="alert alert-danger alert-dismissable">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            {{ flash.passwordError }}
+            {{ flash['passwordError'] }}
         </div>
         {% endif %}
         <form role="form" method="post" action="/admin/user" name="change-password-form" id="change-password-form" class="well well-sm">

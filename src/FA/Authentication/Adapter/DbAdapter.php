@@ -74,9 +74,8 @@ class DbAdapter implements AdapterInterface
             return new Result(Result::FAILURE_IDENTITY_NOT_FOUND, array(), array('Invalid username or password provided'));
         }
 
-        if (password_verify($this->password, $user['password_hash'])) {
-            unset($user['password_hash']);
-            $this->dao->recordLogin($user['email']);
+        if (password_verify($this->password, $user->getPasswordHash())) {
+            $this->dao->recordLogin($user);
 
             return new Result(Result::SUCCESS, $user, array());
         } else {

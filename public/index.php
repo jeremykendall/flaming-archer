@@ -9,6 +9,7 @@ if (getenv('SLIM_MODE')) {
 }
 
 use FA\DI\SlimContainer;
+use FA\Model\Photo\Photo;
 use Slim\Slim;
 
 // Prepare app
@@ -45,8 +46,8 @@ $app->post('/setup', function () use ($app, $container) {
     if ($email) {
         try {
             $user = $container['userService']->createUser($email, $params['password'], $params['confirm-password']);
-            $app->log->info(sprintf('New user %s has been created', $user['email']));
-            $app->flash('joinSuccess', sprintf('Congrats %s! Now log in and get started!', $user['email']));
+            $app->log->info(sprintf('New user %s has been created', $user->getEmail()));
+            $app->flash('joinSuccess', sprintf('Congrats %s! Now log in and get started!', $user->getEmail()));
             $redirectTo = '/login';
         } catch (\PDOException $p) {
             $app->log->error(sprintf('Database error creating account for %s: %s', $email, $p->getMessage()));
@@ -157,17 +158,18 @@ $app->post('/admin/user', function () use ($app, $container) {
 
     $email = filter_var($params['email'], FILTER_SANITIZE_EMAIL);
 
-    if (filter_var($email, FILTER_VALIDATE_EMAIL) && ($email != $user['email'])) {
-        $container['userService']->updateEmail($user, $email);
-        $app->log->info(sprintf('Email changed from %s to %s', $user['email'], $email));
+    if (filter_var($email, FILTER_VALIDATE_EMAIL) && ($email != $user->getEmail())) {
+        $user->setEmail($email);
+        $container['userService']->updateEmail($user);
+        $app->log->info(sprintf('Email changed from %s to %s', $user->getEmail(), $email));
         $app->flash('emailSuccess', 'Your email is now ' . $email);
     }
 
     if ($params['form-type'] == 'change-password' && $params['password']) {
-        $app->log->info(sprintf('About to change password for %s', $user['email']));
+        $app->log->info(sprintf('About to change password for %s', $user->getEmail()));
         try {
-            $result = $container['userService']->changePassword($user['email'], $params['password'], $params['new-password'], $params['confirm-password']);
-            $app->log->info(sprintf('Password changed for %s', $user['email']));
+            $result = $container['userService']->changePassword($user->getEmail(), $params['password'], $params['new-password'], $params['confirm-password']);
+            $app->log->info(sprintf('Password changed for %s', $user->getEmail()));
             $app->flash('passwordSuccess', 'Password changed!');
         } catch (\Exception $e) {
             $app->log->error(sprintf('Error changing password: %s', $e->getMessage()));
@@ -180,8 +182,9 @@ $app->post('/admin/user', function () use ($app, $container) {
 
 $app->post('/admin/add-photo', function() use ($app, $container) {
     $data = $app->request()->post();
+    $photo = new Photo($data);
     try {
-        $container['imageService']->save($data);
+        $container['imageService']->save($photo);
         $container['cache']->clearByPrefix($container['paginatorAdapter']::CACHE_KEY_PREFIX);
     } catch (\PDOException $p) {
         $data = json_encode($data);
@@ -201,7 +204,8 @@ $app->post('/admin/add-photo', function() use ($app, $container) {
 
 $app->post('/admin/delete-photo', function() use ($app, $container) {
     $params = $app->request()->post();
-    $container['imageService']->delete($params['day']);
+    $photo = new Photo($params);
+    $container['imageService']->delete($photo);
     $container['cache']->removeItem($params['photo_id']);
     $container['cache']->clearByPrefix($container['paginatorAdapter']::CACHE_KEY_PREFIX);
     $app->redirect('/admin');

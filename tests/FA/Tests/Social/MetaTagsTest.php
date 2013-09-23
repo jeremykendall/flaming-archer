@@ -2,6 +2,9 @@
 
 namespace FA\Tests\Social;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use FA\Model\Photo\Photo;
+use FA\Model\Photo\Size;
 use FA\Social\MetaTags;
 
 class MetaTagsTest extends \PHPUnit_Framework_TestCase
@@ -71,102 +74,98 @@ class MetaTagsTest extends \PHPUnit_Framework_TestCase
 
     protected function getImage()
     {
-        return array (
+
+        $photoData = array (
             'id' => '10',
             'day' => '10',
             'photo_id' => '7623533156',
             'posted' => '2013-08-10 12:19:54',
-            'sizes' =>
-            array (
-                'canblog' => 0,
-                'canprint' => 0,
-                'candownload' => 0,
-                'size' =>
-                array (
-                    0 =>
-                    array (
-                        'label' => 'Square',
-                        'width' => 75,
-                        'height' => 75,
-                        'source' => 'http://farm8.staticflickr.com/7115/7623533156_a557f0ecc6_s.jpg',
-                        'url' => 'http://www.flickr.com/photos/jeremykendall/7623533156/sizes/sq/',
-                        'media' => 'photo',
-                    ),
-                    1 =>
-                    array (
-                        'label' => 'Large Square',
-                        'width' => '150',
-                        'height' => '150',
-                        'source' => 'http://farm8.staticflickr.com/7115/7623533156_a557f0ecc6_q.jpg',
-                        'url' => 'http://www.flickr.com/photos/jeremykendall/7623533156/sizes/q/',
-                        'media' => 'photo',
-                    ),
-                    2 =>
-                    array (
-                        'label' => 'Thumbnail',
-                        'width' => '67',
-                        'height' => '100',
-                        'source' => 'http://farm8.staticflickr.com/7115/7623533156_a557f0ecc6_t.jpg',
-                        'url' => 'http://www.flickr.com/photos/jeremykendall/7623533156/sizes/t/',
-                        'media' => 'photo',
-                    ),
-                    3 =>
-                    array (
-                        'label' => 'Small',
-                        'width' => '160',
-                        'height' => '240',
-                        'source' => 'http://farm8.staticflickr.com/7115/7623533156_a557f0ecc6_m.jpg',
-                        'url' => 'http://www.flickr.com/photos/jeremykendall/7623533156/sizes/s/',
-                        'media' => 'photo',
-                    ),
-                    4 =>
-                    array (
-                        'label' => 'Small 320',
-                        'width' => 213,
-                        'height' => '320',
-                        'source' => 'http://farm8.staticflickr.com/7115/7623533156_a557f0ecc6_n.jpg',
-                        'url' => 'http://www.flickr.com/photos/jeremykendall/7623533156/sizes/n/',
-                        'media' => 'photo',
-                    ),
-                    5 =>
-                    array (
-                        'label' => 'Medium',
-                        'width' => '333',
-                        'height' => '500',
-                        'source' => 'http://farm8.staticflickr.com/7115/7623533156_a557f0ecc6.jpg',
-                        'url' => 'http://www.flickr.com/photos/jeremykendall/7623533156/sizes/m/',
-                        'media' => 'photo',
-                    ),
-                    6 =>
-                    array (
-                        'label' => 'Medium 640',
-                        'width' => '426',
-                        'height' => '640',
-                        'source' => 'http://farm8.staticflickr.com/7115/7623533156_a557f0ecc6_z.jpg',
-                        'url' => 'http://www.flickr.com/photos/jeremykendall/7623533156/sizes/z/',
-                        'media' => 'photo',
-                    ),
-                    7 =>
-                    array (
-                        'label' => 'Medium 800',
-                        'width' => 532,
-                        'height' => '800',
-                        'source' => 'http://farm8.staticflickr.com/7115/7623533156_a557f0ecc6_c.jpg',
-                        'url' => 'http://www.flickr.com/photos/jeremykendall/7623533156/sizes/c/',
-                        'media' => 'photo',
-                    ),
-                    8 =>
-                    array (
-                        'label' => 'Large',
-                        'width' => '665',
-                        'height' => '1000',
-                        'source' => 'http://farm8.staticflickr.com/7115/7623533156_a557f0ecc6_b.jpg',
-                        'url' => 'http://www.flickr.com/photos/jeremykendall/7623533156/sizes/l/',
-                        'media' => 'photo',
-                    ),
-                ),
-            ),
-            'stat' => 'ok',
         );
+
+        $sizeData = array (
+            'Square' => array (
+                'label' => 'Square',
+                'width' => 75,
+                'height' => 75,
+                'source' => 'http://farm8.staticflickr.com/7115/7623533156_a557f0ecc6_s.jpg',
+                'url' => 'http://www.flickr.com/photos/jeremykendall/7623533156/sizes/sq/',
+                'media' => 'photo',
+            ),
+            'Large Square' => array (
+                'label' => 'Large Square',
+                'width' => '150',
+                'height' => '150',
+                'source' => 'http://farm8.staticflickr.com/7115/7623533156_a557f0ecc6_q.jpg',
+                'url' => 'http://www.flickr.com/photos/jeremykendall/7623533156/sizes/q/',
+                'media' => 'photo',
+            ),
+            'Thumbnail' => array (
+                'label' => 'Thumbnail',
+                'width' => '67',
+                'height' => '100',
+                'source' => 'http://farm8.staticflickr.com/7115/7623533156_a557f0ecc6_t.jpg',
+                'url' => 'http://www.flickr.com/photos/jeremykendall/7623533156/sizes/t/',
+                'media' => 'photo',
+            ),
+            'Small' => array (
+                'label' => 'Small',
+                'width' => '160',
+                'height' => '240',
+                'source' => 'http://farm8.staticflickr.com/7115/7623533156_a557f0ecc6_m.jpg',
+                'url' => 'http://www.flickr.com/photos/jeremykendall/7623533156/sizes/s/',
+                'media' => 'photo',
+            ),
+            'Small 320' => array (
+                'label' => 'Small 320',
+                'width' => 213,
+                'height' => '320',
+                'source' => 'http://farm8.staticflickr.com/7115/7623533156_a557f0ecc6_n.jpg',
+                'url' => 'http://www.flickr.com/photos/jeremykendall/7623533156/sizes/n/',
+                'media' => 'photo',
+            ),
+            'Medium' => array (
+                'label' => 'Medium',
+                'width' => '333',
+                'height' => '500',
+                'source' => 'http://farm8.staticflickr.com/7115/7623533156_a557f0ecc6.jpg',
+                'url' => 'http://www.flickr.com/photos/jeremykendall/7623533156/sizes/m/',
+                'media' => 'photo',
+            ),
+            'Medium 640' => array (
+                'label' => 'Medium 640',
+                'width' => '426',
+                'height' => '640',
+                'source' => 'http://farm8.staticflickr.com/7115/7623533156_a557f0ecc6_z.jpg',
+                'url' => 'http://www.flickr.com/photos/jeremykendall/7623533156/sizes/z/',
+                'media' => 'photo',
+            ),
+            'Medium 800' => array (
+                'label' => 'Medium 800',
+                'width' => 532,
+                'height' => '800',
+                'source' => 'http://farm8.staticflickr.com/7115/7623533156_a557f0ecc6_c.jpg',
+                'url' => 'http://www.flickr.com/photos/jeremykendall/7623533156/sizes/c/',
+                'media' => 'photo',
+            ),
+            'Large' => array (
+                'label' => 'Large',
+                'width' => '665',
+                'height' => '1000',
+                'source' => 'http://farm8.staticflickr.com/7115/7623533156_a557f0ecc6_b.jpg',
+                'url' => 'http://www.flickr.com/photos/jeremykendall/7623533156/sizes/l/',
+                'media' => 'photo',
+            ),
+        );
+
+        $sizes = new ArrayCollection();
+
+        foreach ($sizeData as $size => $data) {
+            $sizes->set($size, new Size($data));
+        }
+
+        $photo = new Photo($photoData);
+        $photo->setSizes($sizes);
+
+        return $photo;
     }
 }

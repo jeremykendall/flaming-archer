@@ -3,7 +3,11 @@
 namespace FA\Tests\Dao;
 
 use FA\Dao\ImageDao;
+use FA\Model\Photo\Photo;
 
+/**
+ * @group database
+ */
 class ImageDaoTest extends CommonDbTestCase
 {
     /**
@@ -30,13 +34,18 @@ class ImageDaoTest extends CommonDbTestCase
 
     /**
      * @covers FA\Dao\ImageDao::find
+     * @covers FA\Model\Photo\Photo::getPosted
      */
     public function testFind()
     {
         $result = $this->dao->find(1);
-        $this->assertInternalType('array', $result);
-        $this->assertEquals(1, $result['day']);
-        $this->assertEquals(7606616668, $result['photo_id']);
+        $this->assertInstanceOf('FA\Model\Photo\Photo', $result);
+        $this->assertEquals(1, $result->getDay());
+        $this->assertEquals(7606616668, $result->getPhotoId());
+
+        // PDO::FETCH_CLASS sets Photo::$posted to a string. This ensures the
+        // getter is returning a DateTime instance
+        $this->assertInstanceOf('DateTime', $result->getPosted());
     }
 
     /**
@@ -47,6 +56,10 @@ class ImageDaoTest extends CommonDbTestCase
         $result = $this->dao->findAll();
         $this->assertInternalType('array', $result);
         $this->assertEquals(10, count($result));
+
+        foreach ($result as $photo) {
+            $this->assertInstanceOf('FA\Model\Photo\Photo', $photo);
+        }
     }
 
     /**
@@ -105,12 +118,15 @@ class ImageDaoTest extends CommonDbTestCase
      */
     public function testSave()
     {
-        $result = $this->dao->save(array('day' => 200, 'photo_id' => 7623527264));
+        $photo = new Photo();
+        $photo->setDay(200);
+        $photo->setPhotoId(7623527264);
+        $result = $this->dao->save($photo);
         $this->assertEquals(1, $result);
 
         $image = $this->dao->find(200);
-        $this->assertEquals(200, $image['day']);
-        $this->assertEquals(7623527264, $image['photo_id']);
+        $this->assertEquals(200, $image->getDay());
+        $this->assertEquals(7623527264, $image->getPhotoId());
     }
 
     /**
@@ -119,7 +135,10 @@ class ImageDaoTest extends CommonDbTestCase
     public function testSaveDuplicateDayThrowsException()
     {
         $this->setExpectedException('PDOException', 'SQLSTATE[23000]: Integrity constraint violation: 19 column day is not unique');
-        $this->dao->save(array('day' => 7, 'photo_id' => 9627527264));
+        $photo = new Photo();
+        $photo->setDay(7);
+        $photo->setPhotoId(9627527264);
+        $this->dao->save($photo);
     }
 
     /**
@@ -127,8 +146,11 @@ class ImageDaoTest extends CommonDbTestCase
      */
     public function testSaveDuplicatePhotoIdThrowsException()
     {
-        $this->setExpectedException('PDOException', 'SQLSTATE[23000]: Integrity constraint violation: 19 column photo_id is not unique');
-        $this->dao->save(array('day' => 11, 'photo_id' => 7512338326));
+        $this->setExpectedException('PDOException', 'SQLSTATE[23000]: Integrity constraint violation: 19 column photoId is not unique');
+        $photo = new Photo();
+        $photo->setDay(11);
+        $photo->setPhotoId(7512338326);
+        $this->dao->save($photo);
     }
 
     /**
@@ -136,9 +158,12 @@ class ImageDaoTest extends CommonDbTestCase
      */
     public function testDelete()
     {
+        $photo = new Photo();
+        $photo->setDay(1);
+
         $this->assertEquals(10, $this->dao->countImages());
-        $this->assertEquals(1, $this->dao->delete(1));
-        $this->assertFAlse($this->dao->find(1));
+        $this->assertEquals(1, $this->dao->delete($photo));
+        $this->assertFalse($this->dao->find($photo->getDay()));
         $this->assertEquals(9, $this->dao->countImages());
     }
 
@@ -147,14 +172,14 @@ class ImageDaoTest extends CommonDbTestCase
      */
     public function testCountImages()
     {
+        $photo = new Photo();
+        $photo->setDay(1);
+
         $count = $this->dao->countImages();
         $this->assertInternalType('int', $count);
         $this->assertEquals(10, $count);
-        $this->dao->delete(1);
-        $this->dao->delete(2);
-        $this->dao->delete(3);
-        $this->dao->delete(4);
-        $this->assertEquals(6, $this->dao->countImages());
+        $this->dao->delete($photo);
+        $this->assertEquals(9, $this->dao->countImages());
     }
 
     /**
@@ -162,17 +187,22 @@ class ImageDaoTest extends CommonDbTestCase
      */
     public function testFindFirstImage()
     {
-        $expected = array(
-            'id' => 1,
-            'day' => 1,
-            'photo_id' => 7606616668,
-            'posted' => '2013-04-29 15:31:56',
-        );
+        $posted = \DateTime::createFromFormat('Y-m-d H:i:s', '2013-04-29 15:31:56');
+        $expected = new Photo();
+        $expected->setId(1);
+        $expected->setDay(1);
+        $expected->setPhotoId(7606616668);
+        $expected->setPosted($posted);
 
         $actual = $this->dao->findFirstImage();
 
-       $this->assertEquals($actual, $expected);
+        $this->assertEquals($actual->getId(), $expected->getId());
+        $this->assertEquals($actual->getDay(), $expected->getDay());
+        $this->assertEquals($actual->getPhotoId(), $expected->getPhotoId());
+        $this->assertEquals($actual->getPosted(), $expected->getPosted());
     }
+
+
 
     /**
      * @covers FA\Dao\ImageDao::findFirstImage

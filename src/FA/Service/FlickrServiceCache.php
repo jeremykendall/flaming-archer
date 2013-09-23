@@ -9,6 +9,7 @@
 
 namespace FA\Service;
 
+use FA\Model\Photo\Photo;
 use Zend\Cache\Storage\StorageInterface as CacheStorage;
 
 /**
@@ -47,16 +48,18 @@ class FlickrServiceCache implements FlickrInterface
     /**
      * Finds photo on Flickr
      *
-     * @param  int   $photoId Flickr photo id
-     * @return array Photo data from Flickr
+     * @param  Photo $photo Photo without Flickr data
+     * @return Photo Photo with data from Flickr
      */
-    public function find($photoId)
+    public function find(Photo $photo)
     {
-        $photo = $this->cache->getItem($photoId);
+        $cachedPhoto = $this->cache->getItem($photo->getId());
 
-        if (is_null($photo)) {
-            $photo = $this->flickr->find($photoId);
-            $this->cache->addItem($photoId, $photo);
+        if (is_null($cachedPhoto)) {
+            $photo = $this->flickr->find($photo);
+            $this->cache->addItem($photo->getId(), $photo);
+        } else {
+            $photo = $cachedPhoto;
         }
 
         return $photo;
