@@ -63,10 +63,11 @@ class MetaTagsTest extends \PHPUnit_Framework_TestCase
         $expected = array(
             'twitter:card' => 'photo',
             'twitter:title' => '365 Days of Photography | Day 10',
-            'twitter:image' => 'http://farm8.staticflickr.com/7115/7623533156_a557f0ecc6_b.jpg',
+            'twitter:image:src' => 'http://farm8.staticflickr.com/7115/7623533156_a557f0ecc6_b.jpg',
             'twitter:image:width' => 665,
             'twitter:image:height' => 1000,
             'twitter:creator' => '@JeremyKendall',
+            'twitter:site' => '@JeremyKendall',
         );
 
         $this->assertEquals($expected, $this->metaTags->getTwitterPhotoCard());

@@ -71,9 +71,9 @@ class MetaTags
             'twitter:site' => $this->profile['twitter_username'],
             'twitter:creator' => $this->profile['twitter_username'],
             'twitter:title' => sprintf('%s | Day %s', $this->profile['site_name'], $day),
-            'twitter:image:src' => $image['source'],
-            'twitter:image:width' => $image['width'],
-            'twitter:image:height' => $image['height'],
+            'twitter:image:src' => $size->getSource(),
+            'twitter:image:width' => $size->getWidth(),
+            'twitter:image:height' => $size->getHeight(),
         );
 
         return $tags;
