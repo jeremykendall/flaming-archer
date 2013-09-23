@@ -44,9 +44,10 @@ class UserDao
         $sql = 'SELECT * FROM users WHERE id = :id';
         $stmt = $this->db->prepare($sql);
         $stmt->bindValue(':id', $id);
+        $stmt->setFetchMode(\PDO::FETCH_CLASS, 'FA\Model\User');
         $stmt->execute();
 
-        return new User($stmt->fetch());
+        return $stmt->fetch();
     }
 
     /**
@@ -79,9 +80,13 @@ class UserDao
      */
     public function updateEmail(User $user)
     {
-        $sql = 'UPDATE users SET email = :email WHERE id = :id';
+        $sql = 'UPDATE users SET email = :email, emailCanonical = :emailCanonical WHERE id = :id';
         $stmt = $this->db->prepare($sql);
-        $stmt->execute(array('email' => $user->getEmail(), 'id' => $user->getId()));
+        $stmt->execute(array(
+            'email' => $user->getEmail(),
+            'emailCanonical' => $user->getEmailCanonical(),
+            'id' => $user->getId()
+        ));
 
         return $this->find($user->getId());
     }
@@ -95,9 +100,9 @@ class UserDao
      */
     public function changePassword($id, $newPasswordHash)
     {
-        $sql = 'UPDATE users SET password_hash = :password_hash WHERE id = :id';
+        $sql = 'UPDATE users SET passwordHash = :passwordHash WHERE id = :id';
         $stmt = $this->db->prepare($sql);
-        $stmt->execute(array('password_hash' => $newPasswordHash, 'id' => $id));
+        $stmt->execute(array('passwordHash' => $newPasswordHash, 'id' => $id));
 
         return $this->find($id);
     }
@@ -128,7 +133,7 @@ class UserDao
      */
     public function recordLogin(User $user)
     {
-        $sql = "UPDATE users SET last_login = datetime('now') WHERE email = :email";
+        $sql = "UPDATE users SET lastLogin = datetime('now') WHERE email = :email";
         $stmt = $this->db->prepare($sql);
 
         return $stmt->execute(array('email' => $user->getEmail()));
@@ -147,9 +152,9 @@ class UserDao
             throw new \InvalidArgumentException('Password hash must not be null');
         }
 
-        $sql = 'INSERT INTO users (email, password_hash) VALUES (:email, :password_hash)';
+        $sql = 'INSERT INTO users (email, emailCanonical, passwordHash) VALUES (:email, :emailCanonical, :passwordHash)';
         $stmt = $this->db->prepare($sql);
-        $stmt->execute(array('email' => $email, 'password_hash' => $passwordHash));
+        $stmt->execute(array('email' => $email, 'emailCanonical' => strtolower($email), 'passwordHash' => $passwordHash));
 
         return $this->findByEmail($email);
     }

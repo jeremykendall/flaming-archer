@@ -2,7 +2,9 @@
 
 namespace FA\Model\Photo;
 
-class Size
+use FA\Model\BaseModel;
+
+class Size extends BaseModel
 {
     /**
      * @var string Label
@@ -28,18 +30,6 @@ class Size
      * @var string Url for the size's Flickr page
      */
     private $url;
-
-    /**
-     * Public constructor
-     *
-     * @param array $data OPTIONAL Size data
-     */
-    public function __construct(array $data = array())
-    {
-        if (!empty($data)) {
-            $this->fromArray($data);
-        }
-    }
 
     /**
      * Get label
@@ -141,17 +131,15 @@ class Size
         $this->url = $url;
     }
 
-    /**
-     * Sets properties from array
-     *
-     * @param array $data Size data
-     */
-    public function fromArray(array $data)
+    public function toArray()
     {
-        foreach($data as $property => $value) {
-            if (property_exists($this, $property)) {
-                $this->$property = $value;
-            }
-        }
+        return array(
+            'id' => $this->getId(),
+            'label' => $this->getLabel(),
+            'width' => $this->getWidth(),
+            'height' => $this->getHeight(),
+            'source' => $this->getSource(),
+            'url' => $this->getUrl(),
+        );
     }
 }

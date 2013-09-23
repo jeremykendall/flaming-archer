@@ -23,8 +23,8 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->data = array(
             'id' => '1',
             'email' => 'User@Example.COM',
-            'password_hash' => '$2y$12$pZg9j8DBSIP2R/vfDzTQOeIt5n57r5VigCUl/HH.FrBOadi3YhdPS',
-            'last_login' => $lastLogin,
+            'passwordHash' => '$2y$12$pZg9j8DBSIP2R/vfDzTQOeIt5n57r5VigCUl/HH.FrBOadi3YhdPS',
+            'lastLogin' => $lastLogin,
         );
 
         $this->user = new User($this->data);
@@ -65,8 +65,8 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->data['id'], $user->getId());
         $this->assertEquals($this->data['email'], $user->getEmail());
         $this->assertEquals(strtolower($this->data['email']), $user->getEmailCanonical());
-        $this->assertEquals($this->data['password_hash'], $user->getPasswordHash());
-        $this->assertEquals($this->data['last_login'], $user->getLastLogin());
+        $this->assertEquals($this->data['passwordHash'], $user->getPasswordHash());
+        $this->assertEquals($this->data['lastLogin'], $user->getLastLogin());
     }
 
     public function testConstructWithData()
@@ -74,8 +74,8 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->data['id'], $this->user->getId());
         $this->assertEquals($this->data['email'], $this->user->getEmail());
         $this->assertEquals(strtolower($this->data['email']), $this->user->getEmailCanonical());
-        $this->assertEquals($this->data['password_hash'], $this->user->getPasswordHash());
-        $this->assertEquals($this->data['last_login'], $this->user->getLastLogin());
+        $this->assertEquals($this->data['passwordHash'], $this->user->getPasswordHash());
+        $this->assertEquals($this->data['lastLogin'], $this->user->getLastLogin());
     }
 
     public function testToArray()

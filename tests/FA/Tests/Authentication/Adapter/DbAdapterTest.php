@@ -38,8 +38,8 @@ class DbAdapterTest extends \PHPUnit_Framework_TestCase
         $data = array(
             'id' => '1',
             'email' => 'user@example.com',
-            'password_hash' => '$2y$12$pZg9j8DBSIP2R/vfDzTQOeIt5n57r5VigCUl/HH.FrBOadi3YhdPS',
-            'last_login' => null,
+            'passwordHash' => '$2y$12$pZg9j8DBSIP2R/vfDzTQOeIt5n57r5VigCUl/HH.FrBOadi3YhdPS',
+            'lastLogin' => null,
         );
 
         $this->user = new User($data);

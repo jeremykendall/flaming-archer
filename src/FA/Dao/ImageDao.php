@@ -119,10 +119,10 @@ class ImageDao
      */
     public function save(Photo $photo)
     {
-        $sql = 'INSERT INTO images (day, photo_id) VALUES (:day, :photo_id)';
+        $sql = 'INSERT INTO images (day, photoId) VALUES (:day, :photoId)';
         $stmt = $this->db->prepare($sql);
         $stmt->bindValue(':day', $photo->getDay());
-        $stmt->bindValue(':photo_id', $photo->getPhotoId());
+        $stmt->bindValue(':photoId', $photo->getPhotoId());
 
         return $stmt->execute();
     }

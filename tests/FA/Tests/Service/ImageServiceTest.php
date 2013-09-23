@@ -202,6 +202,7 @@ class ImageServiceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers FA\Service\ImageService::getProjectDay
+     * @covers FA\Model\Photo\Photo::getPosted
      * @dataProvider getProjectDayDataProvider
      */
     public function testGetProjectDay($testDate, $projectDay)

@@ -2,13 +2,8 @@
 
 namespace FA\Model;
 
-class User implements \Serializable
+class User extends BaseModel
 {
-    /**
-     * @var int User id
-     */
-    protected $id;
-
     /**
      * @var string User email
      */
@@ -20,47 +15,14 @@ class User implements \Serializable
     protected $emailCanonical;
 
     /**
-     * @var string password
+     * @var string password hash
      */
-    protected $password_hash;
+    protected $passwordHash;
 
     /**
      * @var DateTime User's last login time
      */
-    protected $last_login;
-
-    /**
-     * Public constructor
-     *
-     * @param array $data OPTIONAL user data
-     */
-    public function __construct(array $data = array())
-    {
-        if (!empty($data)) {
-            $this->fromArray($data);
-        }
-    }
-
-
-    /**
-     * Get id
-     *
-     * @return int id
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set id
-     *
-     * @param int $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-    }
+    protected $lastLogin;
 
     /**
      * Get email
@@ -104,65 +66,43 @@ class User implements \Serializable
     }
 
     /**
-     * Get password_hash
+     * Get passwordHash
      *
-     * @return string password_hash
+     * @return string passwordHash
      */
     public function getPasswordHash()
     {
-        return $this->password_hash;
+        return $this->passwordHash;
     }
 
     /**
-     * Set password_hash
+     * Set passwordHash
      *
-     * @param string $password_hash
+     * @param string $passwordHash
      */
     public function setPasswordHash($passwordHash)
     {
-        $this->password_hash = $passwordHash;
+        $this->passwordHash = $passwordHash;
     }
 
     /**
-     * Get last_login
+     * Get lastLogin
      *
      * @return DateTime User's last login time
      */
     public function getLastLogin()
     {
-        return $this->last_login;
+        return $this->lastLogin;
     }
 
     /**
-     * Set last_login
+     * Set lastLogin
      *
-     * @param DateTime $last_login the value to set
+     * @param DateTime $lastLogin the value to set
      */
     public function setLastLogin(\DateTime $lastLogin = null)
     {
-        $this->last_login = $lastLogin;
-    }
-
-    /**
-     * Sets properties from array
-     *
-     * @param array $data User data
-     */
-    public function fromArray(array $data)
-    {
-        foreach ($data as $property => $value) {
-            if ($property == 'last_login' && $value != null) {
-                if (!$value instanceof \DateTime) {
-                    $value = \DateTime::createFromFormat('Y-m-d H:i:s', $value);
-                }
-            }
-
-            $setter = 'set' . str_replace(' ', '', ucwords(str_replace('_', ' ', $property)));
-
-            if (method_exists($this, $setter)) {
-                $this->$setter($value);
-            }
-        }
+        $this->lastLogin = $lastLogin;
     }
 
     /**
@@ -176,30 +116,10 @@ class User implements \Serializable
             'id' => $this->getId(),
             'email' => $this->getEmail(),
             'emailCanonical' => $this->getEmailCanonical(),
-            'password_hash' => $this->getPasswordHash(),
-            'last_login' => $this->getLastLogin(),
+            'passwordHash' => $this->getPasswordHash(),
+            'lastLogin' => $this->getLastLogin(),
         );
 
         return $data;
-    }
-
-    /**
-     * Serializes User
-     *
-     * @return string Serialized user
-     */
-    public function serialize()
-    {
-        return serialize($this->toArray());
-    }
-
-    /**
-     * Unserializes user
-     *
-     * @param string $data Serialized User data
-     */
-    public function unserialize($data)
-    {
-        $this->fromArray(unserialize($data));
     }
 }

@@ -5,6 +5,9 @@ namespace FA\Tests\Dao;
 use FA\Dao\UserDao;
 use FA\Model\User;
 
+/**
+ * @group database
+ */
 class UserDaoTest extends CommonDbTestCase
 {
     /**
@@ -28,8 +31,8 @@ class UserDaoTest extends CommonDbTestCase
         $data = array(
             'id' => '1',
             'email' => 'user@example.com',
-            'password_hash' => '$2y$12$pZg9j8DBSIP2R/vfDzTQOeIt5n57r5VigCUl/HH.FrBOadi3YhdPS',
-            'last_login' => null
+            'passwordHash' => '$2y$12$pZg9j8DBSIP2R/vfDzTQOeIt5n57r5VigCUl/HH.FrBOadi3YhdPS',
+            'lastLogin' => null
         );
 
         $this->user = new User($data);
@@ -88,7 +91,7 @@ class UserDaoTest extends CommonDbTestCase
         $user = $this->dao->findByEmail($this->user->getEmail());
         $this->assertNotNull($user->getLastLogin());
         $interval = $now->diff($user->getLastLogin());
-        $this->assertLessThanOrEqual(3, $interval->s, "last_login wasn't updated within the last 3 seconds.");
+        $this->assertLessThanOrEqual(3, $interval->s, "lastLogin wasn't updated within the last 3 seconds.");
     }
 
     public function testUpdateEmail()
@@ -129,7 +132,7 @@ class UserDaoTest extends CommonDbTestCase
     }
 
     /**
-     * This should cover the possibility of a malfunciton in password_hash
+     * This should cover the possibility of a malfunciton in passwordHash
      */
     public function testCreateUserFailsWithNullHash()
     {

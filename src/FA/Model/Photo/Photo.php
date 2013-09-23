@@ -3,19 +3,15 @@
 namespace FA\Model\Photo;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use FA\Model\BaseModel;
 use FA\Model\Photo\Size;
 
-class Photo
+class Photo extends BaseModel
 {
-    /**
-     * @var int Photo id
-     */
-    private $id;
-
     /**
      * @var int Flickr photo id
      */
-    private $photo_id;
+    private $photoId;
 
     /**
      * @var int Project day
@@ -57,49 +53,27 @@ class Photo
         $this->tags = array();
         $this->sizes = new ArrayCollection();
 
-        if (!empty($data)) {
-            $this->fromArray($data);
-        }
+        parent::__construct($data);
     }
 
     /**
-     * Get id
-     *
-     * @return id
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set id
-     *
-     * @param $id the value to set
-     */
-    public function setId($id)
-    {
-        $this->id = (int) $id;
-    }
-
-    /**
-     * Get photo_id
+     * Get photoId
      *
      * @return int Photo id
      */
     public function getPhotoId()
     {
-        return $this->photo_id;
+        return $this->photoId;
     }
 
     /**
-     * Set photo_id
+     * Set photoId
      *
      * @param $photoId the value to set
      */
     public function setPhotoId($photoId)
     {
-        $this->photo_id = (int) $photoId;
+        $this->photoId = (int) $photoId;
     }
 
     /**
@@ -248,17 +222,17 @@ class Photo
         $this->sizes->set($label, $size);
     }
 
-    /**
-     * Sets properties from array
-     *
-     * @param array $data Photo data
-     */
-    public function fromArray(array $data)
+    public function toArray()
     {
-        foreach($data as $property => $value) {
-            if (property_exists($this, $property)) {
-                $this->$property = $value;
-            }
-        }
+        return array(
+            'id' => $this->getId(),
+            'photoId' => $this->getPhotoId(),
+            'day' => $this->getDay(),
+            'posted' => $this->getPosted(),
+            'title' => $this->getTitle(),
+            'description' => $this->getDescription(),
+            'tags' => $this->getTags(),
+            'sizes' => $this->getSizes(),
+        );
     }
 }

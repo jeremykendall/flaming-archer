@@ -8,12 +8,23 @@ use FA\Model\Photo\Size;
 
 class PhotoTest extends \PHPUnit_Framework_TestCase
 {
+    protected $data;
     protected $photo;
 
     protected function setUp()
     {
         parent::setUp();
-        $this->photo = new Photo();
+
+        $posted = \DateTime::createFromFormat('Y-m-d H:i:s', '2013-09-22 15:31:56');
+
+        $this->data = array(
+            'id' => 1,
+            'photoId' => 9881096656,
+            'day' => 1,
+            'posted' => $posted,
+        );
+
+        $this->photo = new Photo($this->data);
     }
 
     protected function tearDown()
@@ -29,56 +40,55 @@ class PhotoTest extends \PHPUnit_Framework_TestCase
         $this->assertEmpty($photo->getTags());
     }
 
+    public function testSerializeUnserialize()
+    {
+        $serialized = serialize($this->photo);
+        $unserialized = unserialize($serialized);
+
+        $this->assertEquals($this->photo, $unserialized);
+        $this->assertNotSame($this->photo, $unserialized);
+    }
+
     public function testFromArray()
     {
-        $posted = \DateTime::createFromFormat('Y-m-d H:i:s', '2013-04-29 15:31:56');
-        $data = array(
-            'id' => 1,
-            'day' => 1,
-            'photo_id' => 7606616668,
-            'posted' => $posted,
-        );
-
         $photo = new Photo();
-        $photo->fromArray($data);
+        $photo->fromArray($this->data);
 
-        $this->assertEquals($data['id'], $photo->getId());
-        $this->assertEquals($data['day'], $photo->getDay());
-        $this->assertEquals($data['photo_id'], $photo->getPhotoId());
-        $this->assertEquals($data['posted'], $photo->getPosted());
+        $this->assertEquals($this->data['id'], $photo->getId());
+        $this->assertEquals($this->data['day'], $photo->getDay());
+        $this->assertEquals($this->data['photoId'], $photo->getPhotoId());
+        $this->assertEquals($this->data['posted'], $photo->getPosted());
+    }
+
+    public function testToArray()
+    {
+        $array = $this->photo->toArray();
+
+        $this->data['title'] = null;
+        $this->data['description'] = null;
+        $this->data['tags'] = array();
+        $this->data['sizes'] = new ArrayCollection();
+
+        $this->assertEquals($this->data, $array);
     }
 
     public function testConstructSetsPropertiesFromArray()
     {
-        $posted = \DateTime::createFromFormat('Y-m-d H:i:s', '2013-04-29 15:31:56');
-        $data = array(
-            'id' => 1,
-            'day' => 1,
-            'photo_id' => 7606616668,
-            'posted' => $posted,
-        );
+        $photo = new Photo($this->data);
 
-        $photo = new Photo($data);
-
-        $this->assertEquals($data['id'], $photo->getId());
-        $this->assertEquals($data['day'], $photo->getDay());
-        $this->assertEquals($data['photo_id'], $photo->getPhotoId());
-        $this->assertEquals($data['posted'], $photo->getPosted());
-    }
-
-    public function testGetSetDay()
-    {
-        $this->assertNull($this->photo->getDay());
-        $this->photo->setDay(22);
-        $this->assertEquals(22, $this->photo->getDay());
+        $this->assertEquals($this->data['id'], $photo->getId());
+        $this->assertEquals($this->data['day'], $photo->getDay());
+        $this->assertEquals($this->data['photoId'], $photo->getPhotoId());
+        $this->assertEquals($this->data['posted'], $photo->getPosted());
     }
 
     public function testGetSetPosted()
     {
-        $this->assertNull($this->photo->getPosted());
+        $photo = new Photo();
+        $this->assertNull($photo->getPosted());
         $date = new \DateTime();
-        $this->photo->setPosted($date);
-        $this->assertSame($date, $this->photo->getPosted());
+        $photo->setPosted($date);
+        $this->assertSame($date, $photo->getPosted());
     }
 
     public function testGetSetTitle()
@@ -97,18 +107,20 @@ class PhotoTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSetId()
     {
-        $this->assertNull($this->photo->getId());
-        $this->photo->setId(322);
-        $this->assertInternalType('int', $this->photo->getId());
-        $this->assertEquals(322, $this->photo->getId());
+        $photo = new Photo();
+        $this->assertNull($photo->getId());
+        $photo->setId(322);
+        $this->assertInternalType('int', $photo->getId());
+        $this->assertEquals(322, $photo->getId());
     }
 
     public function testGetSetPhotoId()
     {
-        $this->assertNull($this->photo->getPhotoId());
-        $this->photo->setPhotoId(322);
-        $this->assertInternalType('int', $this->photo->getPhotoId());
-        $this->assertEquals(322, $this->photo->getPhotoId());
+        $photo = new Photo();
+        $this->assertNull($photo->getPhotoId());
+        $photo->setPhotoId(322);
+        $this->assertInternalType('int', $photo->getPhotoId());
+        $this->assertEquals(322, $photo->getPhotoId());
     }
 
     public function testGetSetTags()
@@ -127,7 +139,7 @@ class PhotoTest extends \PHPUnit_Framework_TestCase
             $this->photo->getSizes()
         );
         $this->assertTrue($this->photo->getSizes()->isEmpty());
-        
+
         $size1 = new Size();
         $size2 = new Size();
         $sizes = new ArrayCollection();

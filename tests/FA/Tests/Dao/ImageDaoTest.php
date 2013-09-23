@@ -5,6 +5,9 @@ namespace FA\Tests\Dao;
 use FA\Dao\ImageDao;
 use FA\Model\Photo\Photo;
 
+/**
+ * @group database
+ */
 class ImageDaoTest extends CommonDbTestCase
 {
     /**
@@ -143,7 +146,7 @@ class ImageDaoTest extends CommonDbTestCase
      */
     public function testSaveDuplicatePhotoIdThrowsException()
     {
-        $this->setExpectedException('PDOException', 'SQLSTATE[23000]: Integrity constraint violation: 19 column photo_id is not unique');
+        $this->setExpectedException('PDOException', 'SQLSTATE[23000]: Integrity constraint violation: 19 column photoId is not unique');
         $photo = new Photo();
         $photo->setDay(11);
         $photo->setPhotoId(7512338326);
