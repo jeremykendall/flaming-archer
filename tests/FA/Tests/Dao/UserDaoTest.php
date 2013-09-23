@@ -3,7 +3,11 @@
 namespace FA\Tests\Dao;
 
 use FA\Dao\UserDao;
+use FA\Model\User;
 
+/**
+ * @group database
+ */
 class UserDaoTest extends CommonDbTestCase
 {
     /**
@@ -12,7 +16,7 @@ class UserDaoTest extends CommonDbTestCase
     protected $dao;
 
     /**
-     * @var array User
+     * @var User User
      */
     protected $user;
 
@@ -24,12 +28,14 @@ class UserDaoTest extends CommonDbTestCase
     {
         parent::setUp();
         $this->dao = new UserDao($this->db);
-        $this->user = array(
+        $data = array(
             'id' => '1',
             'email' => 'user@example.com',
-            'password_hash' => '$2y$12$pZg9j8DBSIP2R/vfDzTQOeIt5n57r5VigCUl/HH.FrBOadi3YhdPS',
-            'last_login' => null
+            'passwordHash' => '$2y$12$pZg9j8DBSIP2R/vfDzTQOeIt5n57r5VigCUl/HH.FrBOadi3YhdPS',
+            'lastLogin' => null
         );
+
+        $this->user = new User($data);
     }
 
     /**
@@ -47,7 +53,7 @@ class UserDaoTest extends CommonDbTestCase
      */
     public function testFind()
     {
-        $user = $this->dao->find($this->user['id']);
+        $user = $this->dao->find($this->user->getId());
 
         $this->assertNotNull($user);
         $this->assertEquals($this->user, $user);
@@ -58,7 +64,7 @@ class UserDaoTest extends CommonDbTestCase
      */
     public function testFindByEmail()
     {
-        $user = $this->dao->findByEmail($this->user['email']);
+        $user = $this->dao->findByEmail($this->user->getEmail());
 
         $this->assertNotNull($user);
         $this->assertEquals($this->user, $user);
@@ -67,7 +73,7 @@ class UserDaoTest extends CommonDbTestCase
     public function testFindByEmailUserNotExist()
     {
         $user = $this->dao->findByEmail('snoop@lion.com');
-        $this->assertFAlse($user);
+        $this->assertFalse($user);
     }
 
     public function testFindAll()
@@ -80,35 +86,35 @@ class UserDaoTest extends CommonDbTestCase
 
     public function testRecordLogin()
     {
-        $email = $this->user['email'];
         $now = new \DateTime('now');
-        $this->assertTrue($this->dao->recordLogin($email));
-        $user = $this->dao->findByEmail($email);
-        $this->assertNotNull($user['last_login']);
-        $last_login = new \DateTime($user['last_login']);
-        $interval = $now->diff($last_login);
-        $this->assertLessThanOrEqual(3, $interval->s, "last_login wasn't updated within the last 3 seconds.");
+        $this->assertTrue($this->dao->recordLogin($this->user));
+        $user = $this->dao->findByEmail($this->user->getEmail());
+        $this->assertNotNull($user->getLastLogin());
+        $interval = $now->diff($user->getLastLogin());
+        $this->assertLessThanOrEqual(3, $interval->s, "lastLogin wasn't updated within the last 3 seconds.");
     }
 
     public function testUpdateEmail()
     {
-        $newEmail = 'user@example.org';
+        $newEmail = 'User@Example.ORG';
 
-        $user = $this->dao->findByEmail($this->user['email']);
-        $updatedUser = $this->dao->updateEmail($user['id'], $newEmail);
+        $user = $this->dao->findByEmail($this->user->getEmail());
+        $this->user->setEmail($newEmail);
+        $updatedUser = $this->dao->updateEmail($this->user);
 
-        $this->assertEquals($user['id'], $updatedUser['id']);
-        $this->assertEquals($newEmail, $updatedUser['email']);
+        $this->assertEquals($this->user->getId(), $updatedUser->getId());
+        $this->assertEquals($newEmail, $updatedUser->getEmail());
+        $this->assertEquals(strtolower($newEmail), $updatedUser->getEmailCanonical());
     }
 
     public function testChangePassword()
     {
-        $user = $this->dao->findByEmail($this->user['email']);
-        $password = $user['password_hash'];
+        $user = $this->dao->findByEmail($this->user->getEmail());
+        $password = $user->getPasswordHash();
 
         $newPasswordHash = 'this_is_a_password_h@sh';
-        $updatedUser = $this->dao->changePassword($user['id'], $newPasswordHash);
-        $this->assertEquals($newPasswordHash, $updatedUser['password_hash']);
+        $updatedUser = $this->dao->changePassword($user->getId(), $newPasswordHash);
+        $this->assertEquals($newPasswordHash, $updatedUser->getPasswordHash());
     }
 
     public function testCreateUser()
@@ -120,13 +126,13 @@ class UserDaoTest extends CommonDbTestCase
         $user = $this->dao->createUser($email, $passwordHash);
 
         $this->assertEquals($users + 1, count($this->dao->findAll()));
-        $this->assertEquals(2, $user['id']);
-        $this->assertEquals($email, $user['email']);
-        $this->assertEquals($passwordHash, $user['password_hash']);
+        $this->assertEquals(2, $user->getId());
+        $this->assertEquals($email, $user->getEmail());
+        $this->assertEquals($passwordHash, $user->getPasswordHash());
     }
 
     /**
-     * This should cover the possibility of a malfunciton in password_hash
+     * This should cover the possibility of a malfunciton in passwordHash
      */
     public function testCreateUserFailsWithNullHash()
     {

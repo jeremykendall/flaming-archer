@@ -10,7 +10,7 @@
         </p>
     </div>
     <div class="col-md-9 col-sm-9 text-center">
-        <a href="/day/{{ image.day }}"><img src="{{ image.sizes.size.6.source }}" class="img-responsive img-thumbnail text-center" /></a>
+        <a href="/day/{{ image.day }}"><img src="{{ image.sizes['Medium 640'].source }}" class="img-responsive img-thumbnail text-center" /></a>
     </div>
 </div>
 {% else %}
@@ -20,8 +20,8 @@
 {% if pages.pageCount %}
 <div class="text-center">
     <ul class="pagination">
-        <li{% if pages.previous == false %} class="disabled"{% endif %}>
-            {% if pages.previous == false %}
+        <li{% if pages.previous is not defined %} class="disabled"{% endif %}>
+            {% if pages.previous is not defined %}
             <span>Prev</span>
             {% else %}
             <a id="previous-day" href="{{ baseUrl() }}/page/{{ pages.previous }}">Prev</a>
@@ -32,13 +32,13 @@
         <li{% if page == pages.current %} class="active"{% endif %}><a href="{{ baseUrl() }}/page/{{ page }}">{{ page }}</a></li>
         {% endfor %}
 
-        <li{% if pages.next == false %} class="disabled"{% endif %}>
-            {% if pages.next == false %}
+        <li{% if pages.next is not defined %} class="disabled"{% endif %}>
+            {% if pages.next is not defined %}
             <span>Next</span>
             {% else %}
             <a id="next-day" href="{{ baseUrl() }}/page/{{ pages.next }}">Next</a>
+            {% endif %}
         </li>
-        {% endif %}
     </ul>
 </div>
 {% endif %}
