@@ -2,6 +2,11 @@
 
 master: [![Build Status](https://secure.travis-ci.org/jeremykendall/flaming-archer.png?branch=master)](https://travis-ci.org/jeremykendall/flaming-archer) develop: [![Build Status](https://secure.travis-ci.org/jeremykendall/flaming-archer.png?branch=develop)](https://travis-ci.org/jeremykendall/flaming-archer)
 
+# DO NOT INSTALL THE LATEST DEVELOP VERSION
+
+There are a few kinks that need working out.  It'll probably work fine for you,
+but just in case, I recommend waiting a few days until I remove this notice.
+
 ## What is Flaming Archer?
 
 Flaming Archer is a "photo-a-day" application for hackers. It makes it simple to
