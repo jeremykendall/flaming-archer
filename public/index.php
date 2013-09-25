@@ -69,7 +69,7 @@ $app->post('/setup', function () use ($app, $container) {
 // Define routes
 $app->get('/', function ($page = 1) use ($app, $container) {
     $paginator = $container['zendPaginator'];
-    $paginator->setItemCountPerPage(5);
+    $paginator->setItemCountPerPage(10);
     $paginator->setCurrentPageNumber($page);
 
     $app->render('index.html', array('paginator' => $paginator, 'pages' => $paginator->getPages(), 'home' => true));
@@ -77,7 +77,7 @@ $app->get('/', function ($page = 1) use ($app, $container) {
 
 $app->get('/page/:page', function ($page = 1) use ($app, $container) {
     $paginator = $container['zendPaginator'];
-    $paginator->setItemCountPerPage(5);
+    $paginator->setItemCountPerPage(10);
     $paginator->setCurrentPageNumber($page);
 
     $home = ($page == 1) ? true : false;
