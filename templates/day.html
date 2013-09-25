@@ -8,14 +8,14 @@
 
 {% endblock %}
 
-{% block page_title %}{{ parent() }} | Day {{ image.day }}{% endblock %}
+{% block page_title %}{{ image.title }} | Day {{ image.day }}{% endblock %}
 
 {% block content %}
 <div class="row">
     <div class="day-photo text-center col-md-12">
         <p class="lead"><em>{{ image.posted|date("d F Y") }}, Day {{ image.day }}</em></p>
         <a href="http://flickr.com/photos/{{ profile.flickr_username }}/{{ image.photoId }}/lightbox" target="_blank" title="View on Flickr">
-            <img class="img-responsive img-thumbnail" src="{{ image.sizes['Medium 800'].source }}" />
+            <img class="img-responsive img-thumbnail" src="{{ image.featureSize.source }}" />
         </a>
     </div>
     <div class="photo-meta col-md-12">
