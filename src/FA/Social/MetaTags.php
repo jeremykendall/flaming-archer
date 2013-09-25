@@ -13,9 +13,9 @@ class MetaTags
     protected $request;
 
     /**
-     * @var array Image data
+     * @var Photo Photo data
      */
-    protected $image;
+    protected $photo;
 
     /**
      * @var array Profile data
@@ -23,37 +23,65 @@ class MetaTags
     protected $profile;
 
     /**
+     * @var Size Photo size
+     */
+    protected $size;
+
+    /**
+     * @var string Description
+     */
+    protected $description;
+
+    /**
      * Public constructor
      *
      * @param Request $request Slim Request
-     * @param Photo   $image   Photo
+     * @param Photo   $photo   Photo
      * @param array   $profile Profile data
      */
-    public function __construct(Request $request, Photo $image, array $profile)
+    public function __construct(Request $request, Photo $photo, array $profile)
     {
         $this->request = $request;
-        $this->image = $image;
+        $this->photo = $photo;
         $this->profile = $profile;
+        $sizes = $photo->getSizes()->toArray();
+        $this->size = array_pop($sizes);
+
+        if ($description = $photo->getDescription()) {
+            $this->description = $description;
+        } else {
+            $this->description = $this->profile['tagline'];
+        }
+    }
+
+    public function getTags()
+    {
+        return array_merge(
+            $this->getOpenGraphTags(),
+            $this->getTwitterPhotoCard()
+        );
     }
 
     /**
-     * Should return the largest image size available
+     * Should return the largest photo size available
      *
      * @return array Array of tag names and values
      */
     public function getOpenGraphTags()
     {
-        $url = $this->request->getUrl();
-        $path = $this->request->getPath();
-        $day = $this->image->getDay();
-        $sizes = $this->image->getSizes()->toArray();
-        $size = array_pop($sizes);
-
         $tags = array(
-            'og:url' => $url . $path,
-            'og:title' => sprintf('%s | Day %s', $this->profile['site_name'], $day),
-            'og:description' => $this->profile['tagline'],
-            'og:image' => $size->getSource(),
+            'og:url' => sprintf(
+                '%s%s', 
+                $this->request->getUrl(), 
+                $this->request->getPath()
+            ),
+            'og:title' => sprintf(
+                '%s | Day %s', 
+                $this->photo->getTitle(), 
+                $this->photo->getDay()
+            ),
+            'og:description' => $this->description,
+            'og:image' => $this->size->getSource(),
         );
 
         return $tags;
@@ -61,19 +89,20 @@ class MetaTags
 
     public function getTwitterPhotoCard()
     {
-        $sizes = $this->image->getSizes()->toArray();
-        $size = array_pop($sizes);
-
-        $day = $this->image->getDay();
+        $day = $this->photo->getDay();
 
         $tags = array(
             'twitter:card' => 'photo',
             'twitter:site' => $this->profile['twitter_username'],
             'twitter:creator' => $this->profile['twitter_username'],
-            'twitter:title' => sprintf('%s | Day %s', $this->profile['site_name'], $day),
-            'twitter:image:src' => $size->getSource(),
-            'twitter:image:width' => $size->getWidth(),
-            'twitter:image:height' => $size->getHeight(),
+            'twitter:title' => sprintf(
+                '%s | Day %s', 
+                $this->photo->getTitle(), 
+                $this->photo->getDay()
+            ),
+            'twitter:image:src' => $this->size->getSource(),
+            'twitter:image:width' => $this->size->getWidth(),
+            'twitter:image:height' => $this->size->getHeight(),
         );
 
         return $tags;

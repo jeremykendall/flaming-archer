@@ -97,12 +97,10 @@ $app->get('/day/:day', function($day) use ($app, $container) {
 
     $container['request'] = $app->request;
     $container['image'] = $image;
-    $fbTags = $container['metaTags']->getOpenGraphTags();
-    $twitterCard = $container['metaTags']->getTwitterPhotoCard();
 
     $app->render('day.html', array(
         'image' => $image,
-        'tags' => array_merge($fbTags, $twitterCard),
+        'tags' => $container['metaTags']->getTags(),
         'next' => $next,
         'previous' => $previous,
     ));

@@ -13,13 +13,17 @@ class MetaTagsTest extends \PHPUnit_Framework_TestCase
 
     protected $request;
 
-    protected $image;
+    protected $photo;
 
     protected $profile;
 
+    protected $openGraphTags;
+
+    protected $twitterCard;
+
     protected function setUp()
     {
-        $this->image = $this->getImage();
+        $this->photo = $this->getPhoto();
 
         $this->request = $this->getMockBuilder('Slim\Http\Request')
             ->disableOriginalConstructor()
@@ -33,8 +37,25 @@ class MetaTagsTest extends \PHPUnit_Framework_TestCase
 
         $this->metaTags = new MetaTags(
             $this->request, 
-            $this->image, 
+            $this->photo, 
             $this->profile
+        );
+
+        $this->openGraphTags = array(
+            'og:url' => 'http://flaming-archer.dev/day/10',
+            'og:title' => 'Untitled | Day 10',
+            'og:description' => "I've combined my love of photography and open source software to create this photo-a-day tool for hackers.  Here are my 365.",
+            'og:image' => 'http://farm8.staticflickr.com/7115/7623533156_a557f0ecc6_b.jpg',
+        );
+
+        $this->twitterCard = array(
+            'twitter:card' => 'photo',
+            'twitter:title' => 'Untitled | Day 10',
+            'twitter:image:src' => 'http://farm8.staticflickr.com/7115/7623533156_a557f0ecc6_b.jpg',
+            'twitter:image:width' => 665,
+            'twitter:image:height' => 1000,
+            'twitter:creator' => '@JeremyKendall',
+            'twitter:site' => '@JeremyKendall',
         );
     }
 
@@ -48,38 +69,57 @@ class MetaTagsTest extends \PHPUnit_Framework_TestCase
             ->method('getPath')
             ->will($this->returnValue('/day/10'));
 
-        $expected = array(
-            'og:url' => 'http://flaming-archer.dev/day/10',
-            'og:title' => '365 Days of Photography | Day 10',
-            'og:description' => "I've combined my love of photography and open source software to create this photo-a-day tool for hackers.  Here are my 365.",
-            'og:image' => 'http://farm8.staticflickr.com/7115/7623533156_a557f0ecc6_b.jpg',
-        );
+        $this->assertEquals($this->openGraphTags, $this->metaTags->getOpenGraphTags());
+    }
 
-        $this->assertEquals($expected, $this->metaTags->getOpenGraphTags());
+    public function testGetOpenGraphTagsWithPhotoDescription()
+    {
+        $this->photo->setDescription('Photo description');
+
+        $metaTags = new MetaTags($this->request, $this->photo, $this->profile);
+
+        $this->request->expects($this->once())
+            ->method('getUrl')
+            ->will($this->returnValue('http://flaming-archer.dev'));
+
+        $this->request->expects($this->once())
+            ->method('getPath')
+            ->will($this->returnValue('/day/10'));
+
+        $this->openGraphTags['og:description'] = 'Photo description';
+
+        $this->assertEquals($this->openGraphTags, $metaTags->getOpenGraphTags());
     }
 
     public function testGetTwiterPhotoCard()
     {
-        $expected = array(
-            'twitter:card' => 'photo',
-            'twitter:title' => '365 Days of Photography | Day 10',
-            'twitter:image:src' => 'http://farm8.staticflickr.com/7115/7623533156_a557f0ecc6_b.jpg',
-            'twitter:image:width' => 665,
-            'twitter:image:height' => 1000,
-            'twitter:creator' => '@JeremyKendall',
-            'twitter:site' => '@JeremyKendall',
-        );
-
-        $this->assertEquals($expected, $this->metaTags->getTwitterPhotoCard());
+        $this->assertEquals($this->twitterCard, $this->metaTags->getTwitterPhotoCard());
     }
 
-    protected function getImage()
+    public function testGetTags()
     {
+        $this->request->expects($this->once())
+            ->method('getUrl')
+            ->will($this->returnValue('http://flaming-archer.dev'));
 
+        $this->request->expects($this->once())
+            ->method('getPath')
+            ->will($this->returnValue('/day/10'));
+
+        $tags = array_merge(
+            $this->openGraphTags,
+            $this->twitterCard
+        );
+
+        $this->assertEquals($tags, $this->metaTags->getTags());
+    }
+
+    protected function getPhoto()
+    {
         $photoData = array (
             'id' => '10',
             'day' => '10',
-            'photo_id' => '7623533156',
+            'photoId' => '7623533156',
             'posted' => '2013-08-10 12:19:54',
         );
 
