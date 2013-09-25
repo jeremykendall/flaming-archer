@@ -40,7 +40,7 @@ class FlickrService implements FlickrInterface
     /**
      * Finds photo on Flickr
      *
-     * @param  int   $photoId Flickr photo id
+     * @param  Photo $photo Photo
      * @return array Photo data from Flickr
      */
     public function find(Photo $photo)
