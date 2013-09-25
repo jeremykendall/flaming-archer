@@ -27,7 +27,6 @@ class SlimContainer extends Container
                 'log.level' => Log::DEBUG,
             ));
 
-            $config['twig']['environment']['strict_variables'] = false;
             $config['twig']['environment']['auto_reload'] = true;
             $config['twig']['environment']['debug'] = true;
         });
