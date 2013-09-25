@@ -38,6 +38,7 @@ class PhotoTest extends \PHPUnit_Framework_TestCase
         $photo = new Photo();
         $this->assertInternalType('array', $photo->getTags());
         $this->assertEmpty($photo->getTags());
+        $this->assertEquals('Untitled', $photo->getTitle());
     }
 
     public function testSerializeUnserialize()
@@ -64,7 +65,7 @@ class PhotoTest extends \PHPUnit_Framework_TestCase
     {
         $array = $this->photo->toArray();
 
-        $this->data['title'] = null;
+        $this->data['title'] = 'Untitled';
         $this->data['description'] = null;
         $this->data['tags'] = array();
         $this->data['sizes'] = new ArrayCollection();
@@ -93,9 +94,13 @@ class PhotoTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSetTitle()
     {
-        $this->assertNull($this->photo->getTitle());
+        $this->assertEquals('Untitled', $this->photo->getTitle());
         $this->photo->setTitle('OUT');
         $this->assertEquals('OUT', $this->photo->getTitle());
+
+        // Setting title to empty string will then return 'Untitled'
+        $this->photo->setTitle('');
+        $this->assertEquals('Untitled', $this->photo->getTitle());
     }
 
     public function testGetSetDescription()
@@ -158,5 +163,19 @@ class PhotoTest extends \PHPUnit_Framework_TestCase
         $size3 = new Size();
         $this->photo->setSize('small', $size3);
         $this->assertSame($size3, $this->photo->getSize('small'));
+    }
+
+    public function testGetFeatureSize()
+    {
+        $med800 = new Size(array('label' => 'Medium 800'));
+        $large1024 = new Size(array('label' => 'Large'));
+
+        $this->photo->setSize('Medium 800', $med800);
+
+        $this->assertEquals($med800, $this->photo->getFeatureSize());
+
+        $this->photo->setSize('Large', $large1024);
+
+        $this->assertEquals($large1024, $this->photo->getFeatureSize());
     }
 }

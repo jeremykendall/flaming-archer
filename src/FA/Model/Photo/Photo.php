@@ -127,6 +127,10 @@ class Photo extends BaseModel
      */
     public function getTitle()
     {
+        if (!$this->title) {
+            $this->title = 'Untitled';
+        }
+
         return $this->title;
     }
 
@@ -220,6 +224,17 @@ class Photo extends BaseModel
     public function setSize($label, Size $size)
     {
         $this->sizes->set($label, $size);
+    }
+
+    public function getFeatureSize()
+    {
+        $featured = $this->getSize('Large');
+
+        if (!$featured) {
+            $featured = $this->getSize('Medium 800');
+        }
+
+        return $featured;
     }
 
     public function toArray()
