@@ -3,7 +3,11 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="{{ (image.description) ? image.description : profile.tagline }}">
+        {% if image is defined %}
+            <meta name="description" content="{{ (image.description) ? image.description : profile.tagline }}">
+        {% else %}
+            <meta name="description" content="{{ profile.tagline }}">
+        {% endif %}
         <meta name="author" content="Jeremy Kendall">
         {% block meta %}
         {% endblock %}
