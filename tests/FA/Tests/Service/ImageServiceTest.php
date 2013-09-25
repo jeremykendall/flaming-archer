@@ -50,7 +50,7 @@ class ImageServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testFind()
     {
-        $data = array('day' => '1', 'photo_id' => '7606616668');
+        $data = array('day' => '1', 'photoId' => '7606616668');
         $photo = new Photo($data);
 
         $this->dao->expects($this->once())
@@ -69,9 +69,9 @@ class ImageServiceTest extends \PHPUnit_Framework_TestCase
     public function testFindPage()
     {
         $photos = array(
-            new Photo(array('day' => '3', 'photo_id' => '33')),
-            new Photo(array('day' => '2', 'photo_id' => '22')),
-            new Photo(array('day' => '1', 'photo_id' => '11')),
+            new Photo(array('day' => '3', 'photoId' => '33')),
+            new Photo(array('day' => '2', 'photoId' => '22')),
+            new Photo(array('day' => '1', 'photoId' => '11')),
         );
 
         $offset = 0;
@@ -140,9 +140,9 @@ class ImageServiceTest extends \PHPUnit_Framework_TestCase
     public function testFindAll()
     {
         $photos = array(
-            new Photo(array('day' => '3', 'photo_id' => '33')),
-            new Photo(array('day' => '2', 'photo_id' => '22')),
-            new Photo(array('day' => '1', 'photo_id' => '11')),
+            new Photo(array('day' => '3', 'photoId' => '33')),
+            new Photo(array('day' => '2', 'photoId' => '22')),
+            new Photo(array('day' => '1', 'photoId' => '11')),
         );
 
         $offset = 0;
@@ -177,7 +177,7 @@ class ImageServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testSave()
     {
-        $photo = new Photo(array('day' => 200, 'photo_id' => 999999));
+        $photo = new Photo(array('day' => 200, 'photoId' => 999999));
         $this->dao->expects($this->once())
             ->method('save')
             ->with($photo)
@@ -210,7 +210,7 @@ class ImageServiceTest extends \PHPUnit_Framework_TestCase
         $firstImage = array(
             'id' => 1,
             'day' => 1,
-            'photo_id' => 7606616668,
+            'photoId' => 7606616668,
             'posted' => '2012-07-29 15:31:56',
         );
 
