@@ -3,9 +3,10 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="{{ profile.tagline }}">
+        <meta name="description" content="{{ (image.description) ? image.description : profile.tagline }}">
         <meta name="author" content="Jeremy Kendall">
-        {% block meta %}{% endblock %}
+        {% block meta %}
+        {% endblock %}
 
         <link rel="shortcut icon" href="/img/icons/favicon.ico" type="image/x-icon">
 
