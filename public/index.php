@@ -229,6 +229,10 @@ $app->map('/login', function() use ($app, $container) {
     $app->render('login.html', array('email' => $email));
 })->via('GET', 'POST');
 
+$app->post('/csp-report', function() use ($app) {
+    $app->getLog()->info(trim($app->request()->getBody()));
+});
+
 $app->get('/logout', function() use ($app, $container) {
     $container['userService']->clearIdentity();
     $app->redirect('/');
