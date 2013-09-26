@@ -230,7 +230,8 @@ $app->map('/login', function() use ($app, $container) {
 })->via('GET', 'POST');
 
 $app->post('/csp-report', function() use ($app) {
-    $app->getLog()->info(trim($app->request()->getBody()));
+    $app->log->error(trim($app->request()->getBody()));
+    $app->halt(200);
 });
 
 $app->get('/logout', function() use ($app, $container) {
