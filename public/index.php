@@ -234,6 +234,15 @@ $app->post('/csp-report', function() use ($app) {
     $app->halt(200);
 });
 
+$app->get('/feed(/:format)', function($format = 'rss') use ($app, $container) {
+    $container['baseUrl'] = sprintf('%s%s', $app->request->getUrl(), $app->request->getRootUri());
+    $app->response->headers->set('Content-Type', 'application/atom+xml; charset=utf-8');
+    $feedWriter = $container['feedWriter'];
+    $feedWriter->setView($app->view);
+
+    echo $feedWriter->get($format);
+});
+
 $app->get('/logout', function() use ($app, $container) {
     $container['userService']->clearIdentity();
     $app->redirect('/');

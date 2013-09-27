@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "adea38c99e011caeaab547fcc8a44d63",
+    "hash": "597ecd8409a2015afe47b2cbecc99f65",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -833,6 +833,49 @@
             "time": "2013-07-17 10:00:05"
         },
         {
+            "name": "zendframework/zend-escaper",
+            "version": "2.2.4",
+            "target-dir": "Zend/Escaper",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zendframework/Component_ZendEscaper.git",
+                "reference": "5db67b32359d86326077209f1fefbbf1183911e8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://packages.zendframework.com/composer/zendframework-zend-escaper-5db67b32359d86326077209f1fefbbf1183911e8-zip-2c10f9.zip",
+                "reference": "2.2.4",
+                "shasum": "84dc4cd44c6329f2ad5ad6edd7ebc80a81818de6"
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.2-dev",
+                    "dev-develop": "2.3-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Zend\\Escaper\\": ""
+                }
+            },
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": " ",
+            "keywords": [
+                "escaper",
+                "zf2"
+            ],
+            "support": {
+                "source": "https://github.com/zendframework/Component_ZendEscaper/tree/release-2.2.0rc1"
+            },
+            "time": "2013-05-01 21:53:03"
+        },
+        {
             "name": "zendframework/zend-eventmanager",
             "version": "2.2.4",
             "target-dir": "Zend/EventManager",
@@ -875,6 +918,56 @@
                 "source": "https://github.com/zendframework/Component_ZendEventManager/tree/release-2.2.1"
             },
             "time": "2013-06-12 19:45:10"
+        },
+        {
+            "name": "zendframework/zend-feed",
+            "version": "2.2.4",
+            "target-dir": "Zend/Feed",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zendframework/Component_ZendFeed.git",
+                "reference": "8fd74c4c166fb46246abc2b70d65c024439a9798"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://packages.zendframework.com/composer/zendframework-zend-feed-8fd74c4c166fb46246abc2b70d65c024439a9798-zip-3672fb.zip",
+                "reference": "2.2.4",
+                "shasum": "194236bb8dd46fe324404db331d76fa135834a0b"
+            },
+            "require": {
+                "php": ">=5.3.3",
+                "zendframework/zend-escaper": "self.version",
+                "zendframework/zend-stdlib": "self.version"
+            },
+            "suggest": {
+                "zendframework/zend-http": "Zend\\Http for PubSubHubbub, and optionally for use with Zend\\Feed\\Reader",
+                "zendframework/zend-servicemanager": "Zend\\ServiceManager component, for default/recommended ExtensionManager implementations",
+                "zendframework/zend-validator": "Zend\\Validator component"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.2-dev",
+                    "dev-develop": "2.3-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Zend\\Feed\\": ""
+                }
+            },
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "provides functionality for consuming RSS and Atom feeds",
+            "keywords": [
+                "feed",
+                "zf2"
+            ],
+            "support": {
+                "source": "https://github.com/zendframework/Component_ZendFeed/tree/release-2.2.2"
+            },
+            "time": "2013-06-28 17:00:15"
         },
         {
             "name": "zendframework/zend-filter",
@@ -1373,12 +1466,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/composer.git",
-                "reference": "b0a7c7574aa9aeb6ac31efdf77dbaf13fc971452"
+                "reference": "05ffc605f1f68cc6a7f11429052816ed64f908ba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/composer/zipball/b0a7c7574aa9aeb6ac31efdf77dbaf13fc971452",
-                "reference": "b0a7c7574aa9aeb6ac31efdf77dbaf13fc971452",
+                "url": "https://api.github.com/repos/composer/composer/zipball/05ffc605f1f68cc6a7f11429052816ed64f908ba",
+                "reference": "05ffc605f1f68cc6a7f11429052816ed64f908ba",
                 "shasum": ""
             },
             "require": {
@@ -1434,7 +1527,7 @@
                 "dependency",
                 "package"
             ],
-            "time": "2013-09-21 09:34:15"
+            "time": "2013-09-26 10:49:50"
         },
         {
             "name": "jeremykendall/phpctagger",
