@@ -14,6 +14,11 @@ class Photo extends BaseModel
     private $photoId;
 
     /**
+     * @var array Photo owner data
+     */
+    private $owner;
+
+    /**
      * @var int Project day
      */
     private $day;
@@ -74,6 +79,26 @@ class Photo extends BaseModel
     public function setPhotoId($photoId)
     {
         $this->photoId = (int) $photoId;
+    }
+
+    /**
+     * Get owner data
+     *
+     * @return array owner
+     */
+    public function getOwner()
+    {
+        return $this->owner;
+    }
+    
+    /**
+     * Set owner
+     *
+     * @param array $owner Owner data
+     */
+    public function setOwner(array $owner = null)
+    {
+        $this->owner = $owner;
     }
 
     /**
@@ -240,13 +265,14 @@ class Photo extends BaseModel
     public function toArray()
     {
         return array(
-            'id' => $this->getId(),
-            'photoId' => $this->getPhotoId(),
-            'day' => $this->getDay(),
-            'posted' => $this->getPosted(),
-            'title' => $this->getTitle(),
+            'id'          => $this->getId(),
+            'photoId'     => $this->getPhotoId(),
+            'owner'       => $this->getOwner(),
+            'day'         => $this->getDay(),
+            'posted'      => $this->getPosted(),
+            'title'       => $this->getTitle(),
             'description' => $this->getDescription(),
-            'tags' => $this->getTags(),
+            'tags'        => $this->getTags(),
             'sizes' => $this->getSizes(),
         );
     }
