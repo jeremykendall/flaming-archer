@@ -67,6 +67,7 @@ class PhotoTest extends \PHPUnit_Framework_TestCase
 
         $this->data['title'] = 'Untitled';
         $this->data['description'] = null;
+        $this->data['owner'] = null;
         $this->data['tags'] = array();
         $this->data['sizes'] = new ArrayCollection();
 

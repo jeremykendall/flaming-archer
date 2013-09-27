@@ -5,6 +5,7 @@ namespace FA\DI;
 use FA\Authentication\Adapter\DbAdapter;
 use FA\Dao\ImageDao;
 use FA\Dao\UserDao;
+use FA\Feed\Feed;
 use FA\Middleware\Authentication;
 use FA\Middleware\GoogleAnalytics;
 use FA\Middleware\Navigation;
@@ -78,6 +79,10 @@ class Container extends Pimple
 
         $this['imageService'] = function () use ($c) {
             return new ImageService(new ImageDao($c['db']), $c['flickrServiceCache']);
+        };
+
+        $this['feedWriter'] = function () use ($c) {
+            return new Feed($c['imageService'], $c['twig'], $c['config']['profile'], $c['baseUrl']);
         };
 
         $this['paginatorAdapter'] = function () use ($c) {

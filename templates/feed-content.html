@@ -1,0 +1,16 @@
+<h2>
+    <em>
+        <a href="{{ baseUrl() }}/day/{{ photo.day }}">
+            {{ photo.posted|date("d F Y") }}, Day {{ photo.day }}
+        </a>
+    </em>
+</h2>
+<p>
+    <a href="http://flickr.com/photos/{{ profile.flickr_username }}/{{ photo.photoId }}/lightbox" target="_blank" title="View on Flickr">
+        <img class="img-responsive img-thumbnail" src="{{ photo.featureSize.source }}" />
+    </a>
+</p>
+<p>
+    <h3>{{ photo.title }}</h3>
+    <p>{{ photo.description|raw }}</p>
+</p>
