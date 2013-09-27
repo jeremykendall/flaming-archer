@@ -13,6 +13,7 @@
         {% endblock %}
 
         <link rel="shortcut icon" href="/img/icons/favicon.ico" type="image/x-icon">
+        <link rel="alternate" type="application/rss+xml" title="{{ profile.site_name }}" href="{{ baseUrl() }}/feed">
 
         <title>{% block page_title %}{{ profile.site_name }}{% endblock %}</title>
 
