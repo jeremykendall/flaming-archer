@@ -38,6 +38,12 @@ apache::dotconf { 'custom':
 
 apache::module { 'rewrite': }
 
+exec { "sed -i 's/www-data/vagrant/g' /etc/apache2/envvars":
+    onlyif => "/bin/grep -c 'www-data' /etc/apache2/envvars",
+    notify => Service['apache2'],
+    require => Package['apache2'],
+}
+
 apache::vhost { 'flaming-archer.dev':
   server_name   => 'flaming-archer.dev',
   serveraliases => [
