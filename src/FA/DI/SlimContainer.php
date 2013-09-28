@@ -22,26 +22,8 @@ class SlimContainer extends Container
         $c = $this;
         $config = $this['config'];
 
-        $directives = array(
-            'default-src' => "'none' https://localhost chrome-extension:// chromeinvoke:// chromenull:// chromeinvokeimmediate://",
-            'font-src' => "'self' netdna.bootstrapcdn.com",
-            'img-src' => "'self' *.staticflickr.com www.google-analytics.com data:",
-            'object-src' => "'self'",
-            'script-src' => "'self' 'unsafe-inline' cdnjs.cloudflare.com netdna.bootstrapcdn.com www.google-analytics.com",
-            'style-src' => "'self' netdna.bootstrapcdn.com",
-            'report-uri' => '/csp-report',
-        );
-
-        $policy = null;
-
-        foreach ($directives as $name => $value) {
-            $policy .= sprintf('%s %s;', $name, $value);
-        }
-
         // Set default headers
         $app->response->headers->set('Content-Type', 'text/html; charset=utf-8');
-        $app->response->headers->set('Content-Security-Policy', $policy);
-        $app->response->headers->set('X-Webkit-CSP', $policy);
 
         $app->configureMode('development', function() use ($app, &$config) {
             $app->config(array(

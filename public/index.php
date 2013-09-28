@@ -229,13 +229,6 @@ $app->map('/login', function() use ($app, $container) {
     $app->render('login.html', array('email' => $email));
 })->via('GET', 'POST');
 
-$app->post('/csp-report', function() use ($app) {
-    $app->log->error(sprintf('Referrer: %s', $app->request->getReferrer()));
-    $app->log->error(sprintf('User Agent: %s', $app->request->getUserAgent()));
-    $app->log->error(trim($app->request()->getBody()));
-    $app->halt(200);
-});
-
 $app->get('/feed(/:format)', function($format = 'rss') use ($app, $container) {
     $container['baseUrl'] = sprintf('%s%s', $app->request->getUrl(), $app->request->getRootUri());
     $app->response->headers->set('Content-Type', 'application/atom+xml; charset=utf-8');
