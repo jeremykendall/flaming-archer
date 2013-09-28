@@ -23,9 +23,10 @@ class SlimContainer extends Container
         $config = $this['config'];
 
         $directives = array(
-            'default-src' => "'none'",
+            'default-src' => "'none' https://localhost chrome-extension:// chromeinvoke:// chromenull:// chromeinvokeimmediate://",
             'font-src' => "'self' netdna.bootstrapcdn.com",
             'img-src' => "'self' *.staticflickr.com www.google-analytics.com data:",
+            'object-src' => "'self'",
             'script-src' => "'self' 'unsafe-inline' cdnjs.cloudflare.com netdna.bootstrapcdn.com www.google-analytics.com",
             'style-src' => "'self' netdna.bootstrapcdn.com",
             'report-uri' => '/csp-report',

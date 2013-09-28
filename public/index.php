@@ -230,6 +230,8 @@ $app->map('/login', function() use ($app, $container) {
 })->via('GET', 'POST');
 
 $app->post('/csp-report', function() use ($app) {
+    $app->log->error(sprintf('Referrer: %s', $app->request->getReferrer()));
+    $app->log->error(sprintf('User Agent: %s', $app->request->getUserAgent()));
     $app->log->error(trim($app->request()->getBody()));
     $app->halt(200);
 });
