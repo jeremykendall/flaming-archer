@@ -68,7 +68,7 @@ class ImageServiceTest extends \PHPUnit_Framework_TestCase
 
     public function testFindPage()
     {
-        $photos = array(
+        $photosDb = array(
             new Photo(array('day' => '3', 'photoId' => '33')),
             new Photo(array('day' => '2', 'photoId' => '22')),
             new Photo(array('day' => '1', 'photoId' => '11')),
@@ -77,29 +77,25 @@ class ImageServiceTest extends \PHPUnit_Framework_TestCase
         $offset = 0;
         $itemCountPerPage = 3;
 
-        $page = $photos;
-
         $this->dao->expects($this->once())
             ->method('findPage')
             ->with($offset, $itemCountPerPage)
-            ->will($this->returnValue($photos));
+            ->will($this->returnValue($photosDb));
 
-        // The Flickr service should be called as many times as there are
-        // photos returned from the dao
-        foreach ($photos as $index => $photo) {
+        $photosFlickr = array();
 
-            $photo->setSize('large', new Size());
-            $expected[] = $photo;
-
-            $this->flickr->expects($this->at($index))
-                ->method('find')
-                ->with($photo)
-                ->will($this->returnValue($photo));
+        foreach ($photosDb as $photo) {
+            $photosFlickr[] = $photo->setSize('large', new Size());
         }
+
+        $this->flickr->expects($this->once())
+            ->method('findPhotos')
+            ->with($photosDb)
+            ->will($this->returnValue($photosFlickr));
 
         $result = $this->service->findPage($offset, $itemCountPerPage);
 
-        $this->assertEquals($expected, $result);
+        $this->assertEquals($photosFlickr, $result);
     }
 
     public function testFindNextImage()
@@ -139,37 +135,30 @@ class ImageServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testFindAll()
     {
-        $photos = array(
+        $photosDb = array(
             new Photo(array('day' => '3', 'photoId' => '33')),
             new Photo(array('day' => '2', 'photoId' => '22')),
             new Photo(array('day' => '1', 'photoId' => '11')),
         );
 
-        $offset = 0;
-        $itemCountPerPage = 3;
-
-        $page = $photos;
-
         $this->dao->expects($this->once())
             ->method('findAll')
-            ->will($this->returnValue($photos));
+            ->will($this->returnValue($photosDb));
 
-        // The Flickr service should be called as many times as there are
-        // photos returned from the dao
-        foreach ($photos as $index => $photo) {
+        $photosFlickr = array();
 
-            $photo->setSize('large', new Size());
-            $expected[] = $photo;
-
-            $this->flickr->expects($this->at($index))
-                ->method('find')
-                ->with($photo)
-                ->will($this->returnValue($photo));
+        foreach ($photosDb as $photo) {
+            $photosFlickr[] = $photo->setSize('large', new Size());
         }
+
+        $this->flickr->expects($this->once())
+            ->method('findPhotos')
+            ->with($photosDb)
+            ->will($this->returnValue($photosFlickr));
 
         $result = $this->service->findAll();
 
-        $this->assertEquals($expected, $result);
+        $this->assertEquals($photosFlickr, $result);
     }
 
     /**

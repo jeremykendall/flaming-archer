@@ -73,13 +73,7 @@ class ImageService
     public function findPage($offset, $itemCountPerPage)
     {
         $photos = $this->dao->findPage($offset, $itemCountPerPage);
-        $result = array();
-
-        foreach ($photos as $photo) {
-            $result[] = $this->flickr->find($photo);
-        }
-
-        return $result;
+        return $this->flickr->findPhotos($photos);
     }
 
     /**
@@ -112,13 +106,7 @@ class ImageService
     public function findAll()
     {
         $photos = $this->dao->findAll();
-        $result = array();
-
-        foreach ($photos as $photo) {
-            $result[] = $this->flickr->find($photo);
-        }
-
-        return $result;
+        return $this->flickr->findPhotos($photos);
     }
 
     /**
