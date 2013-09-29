@@ -25,4 +25,12 @@ interface FlickrInterface
      * @return Photo Photo object populated with Flickr data
      */
     public function find(Photo $photo);
+
+    /**
+     * Finds photo information on Flickr
+     *
+     * @param  Photo[] Array of Photo objects without Flickr data
+     * @return Photo[] Array of Photo objects with Flickr data
+     */
+    public function findPhotos(array $photos);
 }
