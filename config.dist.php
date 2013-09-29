@@ -34,15 +34,6 @@ $userConfig = array(
 // Slim configuration
 $slim = array(
     'templates.path' => __DIR__ . '/templates',
-    'log.level' => Slim\Log::ERROR,
-    'log.enabled' => true,
-    'log.writer' => new Slim\Extras\Log\DateTimeFileWriter(
-        array(
-            'path' => __DIR__ . '/logs',
-            'name_format' => 'Y-m-d'
-        )
-    ),
-    // Global, not SessionCookie, cookie settings
     'cookies.secret_key' => $userConfig['cookies.secret_key'],
     'cookies.encrypt' => false, // must be false until https://github.com/codeguy/Slim/pull/606 is merged
     'cookies.cipher' => MCRYPT_RIJNDAEL_256,
@@ -53,6 +44,9 @@ $slim = array(
 $sqlite = __DIR__ . '/db/flaming-archer.db';
 
 $config = array(
+    'flickr.api.endpoint' => 'http://api.flickr.com/services/rest',
+    'log.file' => __DIR__ . '/logs/app.log',
+    'log.level' => \Psr\Log\LogLevel::ERROR,
     'slim' => $slim,
     'twig' => array(
         'environment' => array(
