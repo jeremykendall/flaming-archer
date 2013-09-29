@@ -2,6 +2,11 @@
 
 namespace FA\DI;
 
+use Guzzle\Log\MessageFormatter;
+use Guzzle\Log\MonologLogAdapter;
+use Guzzle\Plugin\Log\LogPlugin;
+use Monolog\Handler\ChromePHPHandler;
+use Psr\Log\LogLevel;
 use Slim\Log;
 use Slim\Slim;
 use Slim\Views\Twig;
@@ -25,10 +30,12 @@ class SlimContainer extends Container
         // Set default headers
         $app->response->headers->set('Content-Type', 'text/html; charset=utf-8');
 
-        $app->configureMode('development', function() use ($app, &$config) {
-            $app->config(array(
-                'log.level' => Log::DEBUG,
-            ));
+        $app->configureMode('development', function() use ($app, $c, &$config) {
+            $c['logger']->pushHandler(new ChromePHPHandler(LogLevel::DEBUG));
+
+            $adapter = new MonologLogAdapter($c['logger']);
+            $logPlugin = new LogPlugin($adapter, MessageFormatter::DEFAULT_FORMAT);
+            $c['guzzleFlickrClient']->addSubscriber($logPlugin);
 
             $config['twig']['environment']['auto_reload'] = true;
             $config['twig']['environment']['debug'] = true;
