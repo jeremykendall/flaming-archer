@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use FA\Model\Photo\Photo;
 use FA\Model\Photo\Size;
 use FA\Service\FlickrService;
+use Guzzle\Http\Client;
 
 /**
  * @group internet
@@ -32,6 +33,16 @@ class FlickrServiceTest extends \PHPUnit_Framework_TestCase
      */
     protected $photo;
 
+    /**
+     * @var Client Guzzle client
+     */
+    protected $client;
+
+    /**
+     * @var Log
+     */
+    protected $log;
+
     public static function setUpBeforeClass()
     {
         parent::setUpBeforeClass();
@@ -44,7 +55,18 @@ class FlickrServiceTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->service = new FlickrService(self::$config['flickr.api.key']);
+        $this->client = new Client(self::$config['flickr.api.endpoint']);
+        $this->client->setDefaultOption('query', array(
+            'api_key' => self::$config['flickr.api.key'],
+            'format' => 'json',
+            'nojsoncallback' => 1,
+        ));
+
+        $this->log = $this->getMockBuilder('Psr\Log\LoggerInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->service = new FlickrService($this->client, $this->log);
 
         $info = $this->getInfoResult();
         $this->photo = new Photo();
@@ -84,21 +106,9 @@ class FlickrServiceTest extends \PHPUnit_Framework_TestCase
     public function testCreation()
     {
         $this->assertInstanceOf('FA\Service\FlickrService', $this->service);
-        $this->assertInstanceOf('FA\Service\FlickrInterface', $this->service);
+        $this->assertEquals($this->client, $this->service->getClient());
     }
 
-    /**
-     * @covers FA\Service\FlickrService::find
-     * @covers FA\Service\FlickrService::getSizes
-     * @covers FA\Service\FlickrService::getInfo
-     * @covers FA\Service\FlickrService::makeRequest
-     * @covers FA\Model\Photo\Size::getLabel
-     * @covers FA\Model\Photo\Size::setLabel
-     * @covers FA\Model\Photo\Size::setWidth
-     * @covers FA\Model\Photo\Size::setHeight
-     * @covers FA\Model\Photo\Size::setSource
-     * @covers FA\Model\Photo\Size::setUrl
-     */
     public function testFind()
     {
         $photoId = 5977249629;
@@ -110,6 +120,26 @@ class FlickrServiceTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->photo, $actual);
         $this->assertEquals('Jonathan at the Young Avenue Deli', $photo->getTitle());
+    }
+
+    public function testFindPhotos()
+    {
+        $photos = array();
+        $photos[] = new Photo(array('photoId' => 9967407956));
+        $photos[] = new Photo(array('photoId' => 9954737636));
+        $photos[] = new Photo(array('photoId' => 9944577415));
+
+        $result = $this->service->findPhotos($photos);
+
+        $this->assertInternalType('array', $result); 
+        $this->assertCount(3, $result);
+        $this->assertContainsOnlyInstancesOf('FA\Model\Photo\Photo', $result);
+
+        foreach ($result as $photo) {
+            $this->assertContainsOnlyInstancesOf('FA\Model\Photo\Size', $photo->getSizes());
+            // Each photo has 11 associated sizes
+            $this->assertEquals(11, count($photo->getSizes()));
+        }
     }
 
     protected function getSizesResult()

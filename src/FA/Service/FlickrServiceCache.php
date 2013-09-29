@@ -64,4 +64,12 @@ class FlickrServiceCache implements FlickrInterface
 
         return $photo;
     }
+
+    /**
+     * PLACEHOLDER
+     */
+    public function findPhotos(array $photos)
+    {
+        return $this->flickr->findPhotos($photos);
+    }
 }
