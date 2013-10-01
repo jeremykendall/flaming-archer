@@ -33,13 +33,14 @@ class SlimContainer extends Container
         $app->configureMode('development', function() use ($app, $c, &$config) {
             $c['logger']->pushHandler(new ChromePHPHandler(LogLevel::DEBUG));
 
-            $adapter = new MonologLogAdapter($c['logger']);
-            $logPlugin = new LogPlugin($adapter, MessageFormatter::DEBUG_FORMAT);
-            $c['guzzleFlickrClient']->addSubscriber($logPlugin);
-
+            $config['slim']['debug'] = true;
             $config['twig']['environment']['auto_reload'] = true;
             $config['twig']['environment']['debug'] = true;
         });
+
+        $adapter = new MonologLogAdapter($c['logger']);
+        $logPlugin = new LogPlugin($adapter, MessageFormatter::DEBUG_FORMAT);
+        $c['guzzleFlickrClient']->addSubscriber($logPlugin);
 
         // Add Middleware
         $app->add($c['profileMiddleware']);
