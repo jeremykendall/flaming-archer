@@ -33,6 +33,7 @@ $userConfig = array(
 
 // Slim configuration
 $slim = array(
+    'debug' => false,
     'templates.path' => __DIR__ . '/templates',
     'cookies.secret_key' => $userConfig['cookies.secret_key'],
     'cookies.encrypt' => false, // must be false until https://github.com/codeguy/Slim/pull/606 is merged
