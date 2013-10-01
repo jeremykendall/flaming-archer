@@ -26,6 +26,7 @@ $userConfig = array(
         'tagline' => "@@@ Some clever tagline @@@",
         'external_url' => '@@@ Website, Flickr profile, blog, etc. @@@',
         'twitter_username' => '@YOUR_TWITTER_USERNAME',
+        'timezone' => 'America/Chicago',
     ),
     // Change this to a random-ish string. It's used for encrypting cookies.
     'cookies.secret_key' => 'CHANGE_ME',

@@ -55,5 +55,6 @@ class SlimContainer extends Container
         $app->view($c['twig']);
         $app->view->parserOptions = $config['twig']['environment'];
         $app->view->parserExtensions = array($c['slimTwigExtension'], $c['twigExtensionDebug']);
+        $app->view->getInstance()->getExtension('core')->setTimezone($c['config']['profile']['timezone']);
     }
 }
