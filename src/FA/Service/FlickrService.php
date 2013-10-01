@@ -12,6 +12,9 @@ namespace FA\Service;
 use Doctrine\Common\Collections\ArrayCollection;
 use FA\Model\Photo\Photo;
 use FA\Model\Photo\Size;
+use Guzzle\Common\Exception\MultiTransferException;
+use Guzzle\Http\Client;
+use Psr\Log\LoggerInterface;
 
 /**
  * Flickr service
@@ -21,32 +24,40 @@ use FA\Model\Photo\Size;
 class FlickrService implements FlickrInterface
 {
     /**
-     * Flickr API key
-     *
-     * @var string
+     * Guzzle Client
+     * 
+     * @var Client
      */
-    private $key;
+    private $client;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $log;
 
     /**
      * Public constructor
      *
-     * @param string $key Flickr API key
+     * @param Client $client Guzzle client
+     * @param LoggerInterface $log Logger
      */
-    public function __construct($key)
+    public function __construct(Client $client, LoggerInterface $log)
     {
-        $this->key = $key;
+        $this->client = $client;
+        $this->log = $log;
     }
 
     /**
      * Finds photo on Flickr
      *
      * @param  Photo $photo Photo
-     * @return array Photo data from Flickr
+     * @return Photo Photo data from Flickr
      */
     public function find(Photo $photo)
     {
         $info = $this->getInfo($photo->getPhotoId());
 
+        // TODO: Why am I resetting photoId?  Could cause problems
         $photo->setPhotoId($info['photo']['id']);
         $photo->setTitle($info['photo']['title']['_content']);
         $photo->setDescription($info['photo']['description']['_content']);
@@ -72,6 +83,94 @@ class FlickrService implements FlickrInterface
     }
 
     /**
+     * Finds multiple photos
+     *
+     * @param Photo[] Array of photos to find
+     * @return array Array of photos with Flickr data
+     */
+    public function findPhotos(array $photos)
+    {
+        $requests = array();
+
+        foreach ($photos as $photo) {
+            $requests[] = $this->client->get(
+                sprintf('?%s', http_build_query(array(
+                    'method' => 'flickr.photos.getSizes',
+                    'photo_id' => $photo->getPhotoId(),
+                )))
+            );
+            $requests[] = $this->client->get(
+                sprintf('?%s', http_build_query(array(
+                    'method' => 'flickr.photos.getInfo',
+                    'photo_id' => $photo->getPhotoId(),
+                )))
+            );
+        }
+
+        // TODO: Handle exceptions gracefully. Add tests for exceptions
+        try {
+            $responses = $this->client->send($requests);
+
+            $photoData = array();
+            $sizeData = array();
+
+            foreach ($responses as $response) {
+                $body = $response->json();
+
+                if (array_key_exists('photo', $body)) {
+                    $photoData[$body['photo']['id']] = $body;
+                }
+
+                if (array_key_exists('sizes', $body)) {
+                    $sizeData[] = $body;
+                }
+            }
+
+            foreach ($photos as $photo) {
+                $info = $photoData[$photo->getPhotoId()];
+                $photo->setTitle($info['photo']['title']['_content']);
+                $photo->setDescription($info['photo']['description']['_content']);
+                $photo->setTags($info['photo']['tags']['tag']);
+
+                $sizes = array_filter($sizeData, function($size) use ($photo) {
+                    $url = $size['sizes']['size'][0]['url'];
+                    if (strpos($url, (string) $photo->getPhotoId()) !== false) {
+                        return $size;
+                    }
+                });
+
+                foreach ($sizes as $data) {
+                    foreach($data['sizes']['size'] as $size) {
+                        $photo->setSize($size['label'], new Size($size));
+                    }
+                }
+            }
+
+            return $photos;
+        } catch (MultiTransferException $e) {
+            foreach ($e as $exception) {
+                $this->log->error(
+                    sprintf('Guzzle exception: %s', $exception->getMessage())
+                );
+            }
+
+            foreach ($e->getFailedRequests() as $request) {
+                $this->log->error(
+                    sprintf('Guzzle failed request: %s', $request)
+                );
+            }
+
+            foreach ($e->getSuccessfulRequests() as $request) {
+                $this->log->error(
+                    sprintf('Guzzle successful request: %s', $request)
+                );
+            }
+        } catch (\Exception $e) {
+            $this->log->error(sprintf('Exception processing photos: %s', $e->getMessage()));
+        }
+    }
+
+    /**
      * Returns sizes array for photo identified by Flickr photo id
      *
      * @param  int   $photoId Flickr photoId
@@ -81,10 +180,7 @@ class FlickrService implements FlickrInterface
     {
         $options = array(
             'method' => 'flickr.photos.getSizes',
-            'api_key' => $this->key,
             'photo_id' => $photoId,
-            'format' => 'json',
-            'nojsoncallback' => 1
         );
 
         return $this->makeRequest($options);
@@ -100,10 +196,7 @@ class FlickrService implements FlickrInterface
     {
         $options = array(
             'method' => 'flickr.photos.getInfo',
-            'api_key' => $this->key,
             'photo_id' => $photoId,
-            'format' => 'json',
-            'nojsoncallback' => 1
         );
 
         return $this->makeRequest($options);
@@ -117,13 +210,29 @@ class FlickrService implements FlickrInterface
      */
     protected function makeRequest(array $options)
     {
-        $url = 'http://api.flickr.com/services/rest/?' . http_build_query($options);
+        $request = $this->client->get(sprintf('?%s', http_build_query($options)));
+        $response = $request->send();
 
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $result = curl_exec($ch);
-        curl_close($ch);
-
-        return json_decode($result, true);
+        return $response->json();
+    }
+    
+    /**
+     * Get client
+     *
+     * @return Client Guzzle client
+     */
+    public function getClient()
+    {
+        return $this->client;
+    }
+    
+    /**
+     * Set client
+     *
+     * @param Client $client Guzzle client
+     */
+    public function setClient(Client $client)
+    {
+        $this->client = $client;
     }
 }

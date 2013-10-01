@@ -13,12 +13,16 @@ use FA\Middleware\Profile;
 use FA\Pagination;
 use FA\Paginator\Adapter\DbAdapter as PaginatorAdapter;
 use FA\Service\FlickrService;
-use FA\Service\FlickrServiceCache;
 use FA\Service\ImageService;
 use FA\Service\UserService;
 use FA\Social\MetaTags;
+use Guzzle\Cache\Zf2CacheAdapter;
+use Guzzle\Http\Client;
+use Guzzle\Plugin\Cache\CachePlugin;
+use Guzzle\Plugin\Cache\DefaultCacheStorage;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 use Pimple;
-use Slim\Log;
 use Slim\Middleware\SessionCookie;
 use Slim\Slim;
 use Slim\Views\Twig;
@@ -57,6 +61,30 @@ class Container extends Pimple
             }
         });
 
+        $this['logger.app'] = $this->share(function () use ($c) {
+            $log = new Logger('app');
+            $log->pushHandler(
+                new StreamHandler(
+                    $c['config']['logger.app.logfile'], 
+                    $c['config']['logger.app.level']
+                )
+            );
+
+            return $log;
+        });
+
+        $this['logger.guzzle'] = $this->share(function () use ($c) {
+            $log = new Logger('guzzle');
+            $log->pushHandler(
+                new StreamHandler(
+                    $c['config']['logger.guzzle.logfile'], 
+                    $c['config']['logger.guzzle.level']
+                )
+            );
+
+            return $log;
+        });
+
         $this['userDao'] = $this->share(function () use ($c) {
             return new UserDao($c['db']);
         });
@@ -70,11 +98,11 @@ class Container extends Pimple
         });
 
         $this['flickrService'] = function () use ($c) {
-            return new FlickrService($c['config']['flickr.api.key']);
+            return new FlickrService($c['guzzleFlickrClient'], $c['logger.app']);
         };
 
         $this['flickrServiceCache'] = function () use ($c) {
-            return new FlickrServiceCache($c['flickrService'], $c['cache']);
+            return new FlickrService($c['guzzleFlickrCachingClient'], $c['logger.app']);
         };
 
         $this['imageService'] = function () use ($c) {
@@ -156,5 +184,24 @@ class Container extends Pimple
                 $c['config']['profile']
             );
         };
+
+        $this['guzzleFlickrClient'] = $this->share(function () use ($c) {
+            $client = new Client($c['config']['flickr.api.endpoint']);
+            $client->setDefaultOption('query', array(
+                'api_key' => $c['config']['flickr.api.key'],
+                'format' => 'json',
+                'nojsoncallback' => 1,
+            ));
+
+            return $client;
+        });
+
+        $this['guzzleFlickrCachingClient'] = $this->share(function () use ($c) {
+            $client = $c['guzzleFlickrClient'];
+            $cachePlugin = new CachePlugin($c['cache']);
+            $client->addSubscriber($cachePlugin);
+
+            return $client;
+        });
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+date_default_timezone_set('UTC');
+
 require '../vendor/autoload.php';
 
 $config = require_once __DIR__ . '/../config.php';
@@ -23,47 +25,6 @@ $app->hook('slim.before.router', function () use ($app, $container) {
     if ($users < 1 && $pathInfo != '/setup') {
         return $app->redirect('/setup');
     }
-});
-
-$app->get('/setup', function () use ($app, $container) {
-    if (count($container['userDao']->findAll()) > 0) {
-        $app->halt(403);
-    }
-
-    $app->render('setup.html');
-});
-
-$app->post('/setup', function () use ($app, $container) {
-    if (count($container['userDao']->findAll()) > 0) {
-        $app->halt(403, 'NO MOAR USERS ALLOWED');
-    }
-
-    $params = $app->request()->post();
-
-    $email = filter_var($params['email'], FILTER_SANITIZE_EMAIL);
-    $email = filter_var($email, FILTER_VALIDATE_EMAIL);
-
-    if ($email) {
-        try {
-            $user = $container['userService']->createUser($email, $params['password'], $params['confirm-password']);
-            $app->log->info(sprintf('New user %s has been created', $user->getEmail()));
-            $app->flash('joinSuccess', sprintf('Congrats %s! Now log in and get started!', $user->getEmail()));
-            $redirectTo = '/login';
-        } catch (\PDOException $p) {
-            $app->log->error(sprintf('Database error creating account for %s: %s', $email, $p->getMessage()));
-            $app->flash('error', sprintf("Database error creating your account. Stop doing whatever bad thing you're doing!", $email));
-            $redirectTo = '/setup';
-        } catch (\Exception $e) {
-            $app->log->error(sprintf('Error creating account for %s: %s', $email, $e->getMessage()));
-            $app->flash('error', $e->getMessage());
-            $redirectTo = '/setup';
-        }
-    } else {
-        $app->flash('error', sprintf("'%s' is not a valid email address", $params['email']));
-        $redirectTo = '/setup';
-    }
-
-    $app->redirect($redirectTo);
 });
 
 // Define routes
@@ -107,7 +68,6 @@ $app->get('/day/:day', function($day) use ($app, $container) {
 })->conditions(array('day' => '([1-9]\d?|[12]\d\d|3[0-5]\d|36[0-6])'));
 
 $app->post('/admin/clear-cache', function() use ($app, $container) {
-    $log = $app->getLog();
     $cleared = null;
     $clear = $app->request()->post('clear');
 
@@ -116,7 +76,7 @@ $app->post('/admin/clear-cache', function() use ($app, $container) {
             $app->flash('cacheSuccess', 'Cache cleared.');
         } else {
             $app->flash('cacheFailure', 'Problem clearing cache!');
-            $log->error('Cache not cleared');
+            $container['logger.app']->error('Cache not cleared');
         }
     }
 
@@ -159,18 +119,18 @@ $app->post('/admin/user', function () use ($app, $container) {
     if (filter_var($email, FILTER_VALIDATE_EMAIL) && ($email != $user->getEmail())) {
         $user->setEmail($email);
         $container['userService']->updateEmail($user);
-        $app->log->info(sprintf('Email changed from %s to %s', $user->getEmail(), $email));
+        $container['logger.app']->info(sprintf('Email changed from %s to %s', $user->getEmail(), $email));
         $app->flash('emailSuccess', 'Your email is now ' . $email);
     }
 
     if ($params['form-type'] == 'change-password' && $params['password']) {
-        $app->log->info(sprintf('About to change password for %s', $user->getEmail()));
+        $container['logger.app']->info(sprintf('About to change password for %s', $user->getEmail()));
         try {
             $result = $container['userService']->changePassword($user->getEmail(), $params['password'], $params['new-password'], $params['confirm-password']);
-            $app->log->info(sprintf('Password changed for %s', $user->getEmail()));
+            $container['logger.app']->info(sprintf('Password changed for %s', $user->getEmail()));
             $app->flash('passwordSuccess', 'Password changed!');
         } catch (\Exception $e) {
-            $app->log->error(sprintf('Error changing password: %s', $e->getMessage()));
+            $container['logger.app']->error(sprintf('Error changing password: %s', $e->getMessage()));
             $app->flash('passwordError', $e->getMessage());
         }
     }
@@ -191,11 +151,11 @@ $app->post('/admin/add-photo', function() use ($app, $container) {
         } else {
             $app->flash('addPhotoError', "Database error trying to add a photo. Try again?");
         }
-        $app->log->error(sprintf('Database error adding a photo with data %s: %s', $data, $p->getMessage()));
+        $container['logger.app']->error(sprintf('Database error adding a photo with data %s: %s', $data, $p->getMessage()));
     } catch (\Exception $e) {
         $data = json_encode($data);
         $app->flash('addPhotoError', "Error trying to add a photo. Try again?");
-        $app->log->error(sprintf('Error adding a photo with data: %s: %s', $data, $e->getMessage()));
+        $container['logger.app']->error(sprintf('Error adding a photo with data: %s: %s', $data, $e->getMessage()));
     }
     $app->redirect('/admin');
 });
@@ -204,7 +164,7 @@ $app->post('/admin/delete-photo', function() use ($app, $container) {
     $params = $app->request()->post();
     $photo = new Photo($params);
     $container['imageService']->delete($photo);
-    $container['cache']->removeItem($params['photo_id']);
+    $container['cache']->removeItem($params['photoId']);
     $container['cache']->clearByPrefix($container['paginatorAdapter']::CACHE_KEY_PREFIX);
     $app->redirect('/admin');
 });
@@ -229,11 +189,6 @@ $app->map('/login', function() use ($app, $container) {
     $app->render('login.html', array('email' => $email));
 })->via('GET', 'POST');
 
-$app->post('/csp-report', function() use ($app) {
-    $app->log->error(trim($app->request()->getBody()));
-    $app->halt(200);
-});
-
 $app->get('/feed(/:format)', function($format = 'rss') use ($app, $container) {
     $container['baseUrl'] = sprintf('%s%s', $app->request->getUrl(), $app->request->getRootUri());
     $app->response->headers->set('Content-Type', 'application/atom+xml; charset=utf-8');
@@ -241,6 +196,47 @@ $app->get('/feed(/:format)', function($format = 'rss') use ($app, $container) {
     $feedWriter->setView($app->view);
 
     echo $feedWriter->get($format);
+});
+
+$app->get('/setup', function () use ($app, $container) {
+    if (count($container['userDao']->findAll()) > 0) {
+        $app->halt(403);
+    }
+
+    $app->render('setup.html');
+});
+
+$app->post('/setup', function () use ($app, $container) {
+    if (count($container['userDao']->findAll()) > 0) {
+        $app->halt(403, 'NO MOAR USERS ALLOWED');
+    }
+
+    $params = $app->request()->post();
+
+    $email = filter_var($params['email'], FILTER_SANITIZE_EMAIL);
+    $email = filter_var($email, FILTER_VALIDATE_EMAIL);
+
+    if ($email) {
+        try {
+            $user = $container['userService']->createUser($email, $params['password'], $params['confirm-password']);
+            $container['logger.app']->info(sprintf('New user %s has been created', $user->getEmail()));
+            $app->flash('joinSuccess', sprintf('Congrats %s! Now log in and get started!', $user->getEmail()));
+            $redirectTo = '/login';
+        } catch (\PDOException $p) {
+            $container['logger.app']->error(sprintf('Database error creating account for %s: %s', $email, $p->getMessage()));
+            $app->flash('error', sprintf("Database error creating your account. Stop doing whatever bad thing you're doing!", $email));
+            $redirectTo = '/setup';
+        } catch (\Exception $e) {
+            $container['logger.app']->error(sprintf('Error creating account for %s: %s', $email, $e->getMessage()));
+            $app->flash('error', $e->getMessage());
+            $redirectTo = '/setup';
+        }
+    } else {
+        $app->flash('error', sprintf("'%s' is not a valid email address", $params['email']));
+        $redirectTo = '/setup';
+    }
+
+    $app->redirect($redirectTo);
 });
 
 $app->get('/logout', function() use ($app, $container) {

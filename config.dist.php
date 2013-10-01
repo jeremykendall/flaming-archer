@@ -26,6 +26,7 @@ $userConfig = array(
         'tagline' => "@@@ Some clever tagline @@@",
         'external_url' => '@@@ Website, Flickr profile, blog, etc. @@@',
         'twitter_username' => '@YOUR_TWITTER_USERNAME',
+        'timezone' => 'America/Chicago',
     ),
     // Change this to a random-ish string. It's used for encrypting cookies.
     'cookies.secret_key' => 'CHANGE_ME',
@@ -33,16 +34,8 @@ $userConfig = array(
 
 // Slim configuration
 $slim = array(
+    'debug' => false,
     'templates.path' => __DIR__ . '/templates',
-    'log.level' => Slim\Log::ERROR,
-    'log.enabled' => true,
-    'log.writer' => new Slim\Extras\Log\DateTimeFileWriter(
-        array(
-            'path' => __DIR__ . '/logs',
-            'name_format' => 'Y-m-d'
-        )
-    ),
-    // Global, not SessionCookie, cookie settings
     'cookies.secret_key' => $userConfig['cookies.secret_key'],
     'cookies.encrypt' => false, // must be false until https://github.com/codeguy/Slim/pull/606 is merged
     'cookies.cipher' => MCRYPT_RIJNDAEL_256,
@@ -53,6 +46,11 @@ $slim = array(
 $sqlite = __DIR__ . '/db/flaming-archer.db';
 
 $config = array(
+    'flickr.api.endpoint' => 'http://api.flickr.com/services/rest',
+    'logger.app.logfile' => __DIR__ . '/logs/app.log',
+    'logger.app.level' => \Psr\Log\LogLevel::ERROR,
+    'logger.guzzle.logfile' => __DIR__ . '/logs/guzzle.log',
+    'logger.guzzle.level' => \Psr\Log\LogLevel::ERROR,
     'slim' => $slim,
     'twig' => array(
         'environment' => array(

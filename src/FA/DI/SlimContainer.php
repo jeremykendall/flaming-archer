@@ -2,6 +2,11 @@
 
 namespace FA\DI;
 
+use Guzzle\Log\MessageFormatter;
+use Guzzle\Log\MonologLogAdapter;
+use Guzzle\Plugin\Log\LogPlugin;
+use Monolog\Handler\ChromePHPHandler;
+use Psr\Log\LogLevel;
 use Slim\Log;
 use Slim\Slim;
 use Slim\Views\Twig;
@@ -22,34 +27,23 @@ class SlimContainer extends Container
         $c = $this;
         $config = $this['config'];
 
-        $directives = array(
-            'default-src' => "'none'",
-            'font-src' => "'self' netdna.bootstrapcdn.com",
-            'img-src' => "'self' *.staticflickr.com www.google-analytics.com data:",
-            'script-src' => "'self' 'unsafe-inline' cdnjs.cloudflare.com netdna.bootstrapcdn.com www.google-analytics.com",
-            'style-src' => "'self' netdna.bootstrapcdn.com",
-            'report-uri' => '/csp-report',
-        );
-
-        $policy = null;
-
-        foreach ($directives as $name => $value) {
-            $policy .= sprintf('%s %s;', $name, $value);
-        }
-
         // Set default headers
         $app->response->headers->set('Content-Type', 'text/html; charset=utf-8');
-        $app->response->headers->set('Content-Security-Policy', $policy);
-        $app->response->headers->set('X-Webkit-CSP', $policy);
 
-        $app->configureMode('development', function() use ($app, &$config) {
-            $app->config(array(
-                'log.level' => Log::DEBUG,
-            ));
-
+        $app->configureMode('development', function() use ($app, $c, &$config) {
+            $app->config('debug', true);
+            $config['logger.app.level'] = LogLevel::DEBUG;
+            $config['logger.guzzle.level'] = LogLevel::DEBUG;
             $config['twig']['environment']['auto_reload'] = true;
             $config['twig']['environment']['debug'] = true;
+
+            $c['logger.app']->pushHandler(new ChromePHPHandler($config['logger.app.level']));
+            $c['logger.guzzle']->pushHandler(new ChromePHPHandler($config['logger.guzzle.level']));
         });
+
+        $adapter = new MonologLogAdapter($c['logger.guzzle']);
+        $logPlugin = new LogPlugin($adapter, MessageFormatter::DEBUG_FORMAT);
+        $c['guzzleFlickrClient']->addSubscriber($logPlugin);
 
         // Add Middleware
         $app->add($c['profileMiddleware']);
@@ -64,5 +58,6 @@ class SlimContainer extends Container
         $app->view($c['twig']);
         $app->view->parserOptions = $config['twig']['environment'];
         $app->view->parserExtensions = array($c['slimTwigExtension'], $c['twigExtensionDebug']);
+        $app->view->getInstance()->getExtension('core')->setTimezone($c['config']['profile']['timezone']);
     }
 }
