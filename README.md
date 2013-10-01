@@ -26,7 +26,8 @@ Real documentation is on its way.  Here's the quick and dirty.
 * Deploy to your server
 * Make sure your docroot is `/public`
 * `composer install`
-* Make sure `/db`, `/logs`, and `/tmp` are writeable by the web user
+* Make sure `/db`, `/logs`, `templates/cache` and `/tmp` are writeable by the web user
+    * Tip: I used the Symfony2 ["Setting up Permissions"](http://symfony.com/doc/current/book/installation.html#configuration-and-setup) directions (#1 on my Mac and #2 on Ubuntu)
 * Edit the `$userConfig` portion of `/config.php` (only available after running `composer install`)
 * Visit http://your-project-site.com
 * Fill out the setup form
