@@ -34,7 +34,7 @@ class SlimContainer extends Container
             $c['logger']->pushHandler(new ChromePHPHandler(LogLevel::DEBUG));
 
             $adapter = new MonologLogAdapter($c['logger']);
-            $logPlugin = new LogPlugin($adapter, MessageFormatter::DEFAULT_FORMAT);
+            $logPlugin = new LogPlugin($adapter, MessageFormatter::DEBUG_FORMAT);
             $c['guzzleFlickrClient']->addSubscriber($logPlugin);
 
             $config['twig']['environment']['auto_reload'] = true;
