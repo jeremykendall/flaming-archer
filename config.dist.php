@@ -47,8 +47,10 @@ $sqlite = __DIR__ . '/db/flaming-archer.db';
 
 $config = array(
     'flickr.api.endpoint' => 'http://api.flickr.com/services/rest',
-    'log.file' => __DIR__ . '/logs/app.log',
-    'log.level' => \Psr\Log\LogLevel::ERROR,
+    'logger.app.logfile' => __DIR__ . '/logs/app.log',
+    'logger.app.level' => \Psr\Log\LogLevel::ERROR,
+    'logger.guzzle.logfile' => __DIR__ . '/logs/guzzle.log',
+    'logger.guzzle.level' => \Psr\Log\LogLevel::ERROR,
     'slim' => $slim,
     'twig' => array(
         'environment' => array(

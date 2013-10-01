@@ -31,14 +31,17 @@ class SlimContainer extends Container
         $app->response->headers->set('Content-Type', 'text/html; charset=utf-8');
 
         $app->configureMode('development', function() use ($app, $c, &$config) {
-            $c['logger']->pushHandler(new ChromePHPHandler(LogLevel::DEBUG));
-
-            $config['slim']['debug'] = true;
+            $app->config('debug', true);
+            $config['logger.app.level'] = LogLevel::DEBUG;
+            $config['logger.guzzle.level'] = LogLevel::DEBUG;
             $config['twig']['environment']['auto_reload'] = true;
             $config['twig']['environment']['debug'] = true;
+
+            $c['logger.app']->pushHandler(new ChromePHPHandler($config['logger.app.level']));
+            $c['logger.guzzle']->pushHandler(new ChromePHPHandler($config['logger.guzzle.level']));
         });
 
-        $adapter = new MonologLogAdapter($c['logger']);
+        $adapter = new MonologLogAdapter($c['logger.guzzle']);
         $logPlugin = new LogPlugin($adapter, MessageFormatter::DEBUG_FORMAT);
         $c['guzzleFlickrClient']->addSubscriber($logPlugin);
 

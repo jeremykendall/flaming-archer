@@ -76,7 +76,7 @@ $app->post('/admin/clear-cache', function() use ($app, $container) {
             $app->flash('cacheSuccess', 'Cache cleared.');
         } else {
             $app->flash('cacheFailure', 'Problem clearing cache!');
-            $container['logger']->error('Cache not cleared');
+            $container['logger.app']->error('Cache not cleared');
         }
     }
 
@@ -119,18 +119,18 @@ $app->post('/admin/user', function () use ($app, $container) {
     if (filter_var($email, FILTER_VALIDATE_EMAIL) && ($email != $user->getEmail())) {
         $user->setEmail($email);
         $container['userService']->updateEmail($user);
-        $container['logger']->info(sprintf('Email changed from %s to %s', $user->getEmail(), $email));
+        $container['logger.app']->info(sprintf('Email changed from %s to %s', $user->getEmail(), $email));
         $app->flash('emailSuccess', 'Your email is now ' . $email);
     }
 
     if ($params['form-type'] == 'change-password' && $params['password']) {
-        $container['logger']->info(sprintf('About to change password for %s', $user->getEmail()));
+        $container['logger.app']->info(sprintf('About to change password for %s', $user->getEmail()));
         try {
             $result = $container['userService']->changePassword($user->getEmail(), $params['password'], $params['new-password'], $params['confirm-password']);
-            $container['logger']->info(sprintf('Password changed for %s', $user->getEmail()));
+            $container['logger.app']->info(sprintf('Password changed for %s', $user->getEmail()));
             $app->flash('passwordSuccess', 'Password changed!');
         } catch (\Exception $e) {
-            $container['logger']->error(sprintf('Error changing password: %s', $e->getMessage()));
+            $container['logger.app']->error(sprintf('Error changing password: %s', $e->getMessage()));
             $app->flash('passwordError', $e->getMessage());
         }
     }
@@ -151,11 +151,11 @@ $app->post('/admin/add-photo', function() use ($app, $container) {
         } else {
             $app->flash('addPhotoError', "Database error trying to add a photo. Try again?");
         }
-        $container['logger']->error(sprintf('Database error adding a photo with data %s: %s', $data, $p->getMessage()));
+        $container['logger.app']->error(sprintf('Database error adding a photo with data %s: %s', $data, $p->getMessage()));
     } catch (\Exception $e) {
         $data = json_encode($data);
         $app->flash('addPhotoError', "Error trying to add a photo. Try again?");
-        $container['logger']->error(sprintf('Error adding a photo with data: %s: %s', $data, $e->getMessage()));
+        $container['logger.app']->error(sprintf('Error adding a photo with data: %s: %s', $data, $e->getMessage()));
     }
     $app->redirect('/admin');
 });
@@ -219,15 +219,15 @@ $app->post('/setup', function () use ($app, $container) {
     if ($email) {
         try {
             $user = $container['userService']->createUser($email, $params['password'], $params['confirm-password']);
-            $container['logger']->info(sprintf('New user %s has been created', $user->getEmail()));
+            $container['logger.app']->info(sprintf('New user %s has been created', $user->getEmail()));
             $app->flash('joinSuccess', sprintf('Congrats %s! Now log in and get started!', $user->getEmail()));
             $redirectTo = '/login';
         } catch (\PDOException $p) {
-            $container['logger']->error(sprintf('Database error creating account for %s: %s', $email, $p->getMessage()));
+            $container['logger.app']->error(sprintf('Database error creating account for %s: %s', $email, $p->getMessage()));
             $app->flash('error', sprintf("Database error creating your account. Stop doing whatever bad thing you're doing!", $email));
             $redirectTo = '/setup';
         } catch (\Exception $e) {
-            $container['logger']->error(sprintf('Error creating account for %s: %s', $email, $e->getMessage()));
+            $container['logger.app']->error(sprintf('Error creating account for %s: %s', $email, $e->getMessage()));
             $app->flash('error', $e->getMessage());
             $redirectTo = '/setup';
         }

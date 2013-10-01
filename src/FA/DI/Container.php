@@ -61,12 +61,24 @@ class Container extends Pimple
             }
         });
 
-        $this['logger'] = $this->share(function () use ($c) {
-            $log = new Logger('fa-logger');
+        $this['logger.app'] = $this->share(function () use ($c) {
+            $log = new Logger('app');
             $log->pushHandler(
                 new StreamHandler(
-                    $c['config']['log.file'], 
-                    $c['config']['log.level']
+                    $c['config']['logger.app.logfile'], 
+                    $c['config']['logger.app.level']
+                )
+            );
+
+            return $log;
+        });
+
+        $this['logger.guzzle'] = $this->share(function () use ($c) {
+            $log = new Logger('guzzle');
+            $log->pushHandler(
+                new StreamHandler(
+                    $c['config']['logger.guzzle.logfile'], 
+                    $c['config']['logger.guzzle.level']
                 )
             );
 
@@ -86,11 +98,11 @@ class Container extends Pimple
         });
 
         $this['flickrService'] = function () use ($c) {
-            return new FlickrService($c['guzzleFlickrClient'], $c['logger']);
+            return new FlickrService($c['guzzleFlickrClient'], $c['logger.app']);
         };
 
         $this['flickrServiceCache'] = function () use ($c) {
-            return new FlickrService($c['guzzleFlickrCachingClient'], $c['logger']);
+            return new FlickrService($c['guzzleFlickrCachingClient'], $c['logger.app']);
         };
 
         $this['imageService'] = function () use ($c) {
