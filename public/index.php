@@ -33,7 +33,14 @@ $app->get('/', function ($page = 1) use ($app, $container) {
     $paginator->setItemCountPerPage(10);
     $paginator->setCurrentPageNumber($page);
 
-    $app->render('index.html', array('paginator' => $paginator, 'pages' => $paginator->getPages(), 'home' => true));
+    try {
+        $pages = $paginator->getPages();
+    } catch (\FA\Service\FlickrServiceException $e) {
+        $app->render('flickr-down.html');
+        $app->stop();
+    }
+
+    $app->render('index.html', array('paginator' => $paginator, 'pages' => $pages, 'home' => true));
 });
 
 $app->get('/page/:page', function ($page = 1) use ($app, $container) {
@@ -41,13 +48,25 @@ $app->get('/page/:page', function ($page = 1) use ($app, $container) {
     $paginator->setItemCountPerPage(10);
     $paginator->setCurrentPageNumber($page);
 
+    try {
+        $pages = $paginator->getPages();
+    } catch (\FA\Service\FlickrServiceException $e) {
+        $app->render('flickr-down.html');
+        $app->stop();
+    }
+
     $home = ($page == 1) ? true : false;
 
-    $app->render('index.html', array('paginator' => $paginator, 'pages' => $paginator->getPages(), 'home' => $home));
+    $app->render('index.html', array('paginator' => $paginator, 'pages' => $pages, 'home' => $home));
 });
 
 $app->get('/day/:day', function($day) use ($app, $container) {
-    $image = $container['imageService']->find($day);
+    try {
+        $image = $container['imageService']->find($day);
+    } catch (\FA\Service\FlickrServiceException $e) {
+        $app->render('flickr-down.html');
+        $app->stop();
+    }
 
     if (!$image) {
         $app->notFound();
@@ -88,14 +107,23 @@ $app->get('/admin(/page/:page)', function ($page = 1) use ($app, $container) {
     $paginator->setItemCountPerPage(25);
     $paginator->setCurrentPageNumber($page);
 
-    $projectDay = $container['imageService']->getProjectDay();
+    try {
+        $pages = $paginator->getPages();
+    } catch (\FA\Service\FlickrServiceException $e) {
+        $app->render('flickr-down.html');
+        $app->stop();
+    }
+
+    $tz = new \DateTimeZone($container['config']['profile']['timezone']);
+    $now = new \DateTime('now', $tz);
+    $projectDay = $container['imageService']->getProjectDay($now);
     $daysLeft = 365 - $projectDay;
     $photoCount = $container['imageService']->countImages();
     $percentage = ($photoCount / $projectDay) * 100;
 
     $viewData = array(
         'paginator' => $paginator,
-        'pages' => $paginator->getPages(),
+        'pages' => $pages,
         'projectDay' => $projectDay,
         'photoCount' => $photoCount,
         'percentage' => $percentage,

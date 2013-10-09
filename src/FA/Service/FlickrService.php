@@ -12,6 +12,7 @@ namespace FA\Service;
 use Doctrine\Common\Collections\ArrayCollection;
 use FA\Model\Photo\Photo;
 use FA\Model\Photo\Size;
+use FA\Service\FlickrException;
 use Guzzle\Common\Exception\MultiTransferException;
 use Guzzle\Http\Client;
 use Psr\Log\LoggerInterface;
@@ -115,7 +116,7 @@ class FlickrService implements FlickrInterface
             $sizeData = array();
 
             foreach ($responses as $response) {
-                $body = $response->json();
+                $body = $this->parseResponse($response->json());
 
                 if (array_key_exists('photo', $body)) {
                     $photoData[$body['photo']['id']] = $body;
@@ -165,9 +166,21 @@ class FlickrService implements FlickrInterface
                     sprintf('Guzzle successful request: %s', $request)
                 );
             }
+        } catch (FlickrServiceException $e) {
+            $this->log->error($e->getMessage());
+            throw $e;
         } catch (\Exception $e) {
             $this->log->error(sprintf('Exception processing photos: %s', $e->getMessage()));
         }
+    }
+
+    public function parseResponse($body)
+    {
+        if ($body['stat'] == 'ok') {
+            return $body;
+        }
+
+        throw new FlickrServiceException(sprintf('Flickr crapped out: %s', $body['message']), $body['code']);
     }
 
     /**
@@ -212,10 +225,9 @@ class FlickrService implements FlickrInterface
     {
         $request = $this->client->get(sprintf('?%s', http_build_query($options)));
         $response = $request->send();
-
-        return $response->json();
+        return $this->parseResponse($response->json());
     }
-    
+
     /**
      * Get client
      *
