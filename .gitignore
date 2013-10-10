@@ -3,6 +3,7 @@
 .DS_STORE
 *.un~
 config.php
+config/config.user.php
 docs
 build
 tags
