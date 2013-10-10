@@ -403,21 +403,21 @@
         },
         {
             "name": "guzzle/guzzle",
-            "version": "v3.7.3",
+            "version": "v3.7.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "0f16aad385528b5cf790392cb4a4d16cf600e944"
+                "reference": "b170b028c6bb5799640e46c8803015b0f9a45ed9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/0f16aad385528b5cf790392cb4a4d16cf600e944",
-                "reference": "0f16aad385528b5cf790392cb4a4d16cf600e944",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/b170b028c6bb5799640e46c8803015b0f9a45ed9",
+                "reference": "b170b028c6bb5799640e46c8803015b0f9a45ed9",
                 "shasum": ""
             },
             "require": {
                 "ext-curl": "*",
-                "php": ">=5.3.2",
+                "php": ">=5.3.3",
                 "symfony/event-dispatcher": ">=2.1"
             },
             "replace": {
@@ -491,7 +491,7 @@
                 "rest",
                 "web service"
             ],
-            "time": "2013-09-08 21:09:18"
+            "time": "2013-10-02 20:47:00"
         },
         {
             "name": "ircmaxell/password-compat",
@@ -731,16 +731,16 @@
         },
         {
             "name": "slim/slim",
-            "version": "2.3.2",
+            "version": "2.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeguy/Slim.git",
-                "reference": "5932fcb53e727f7fd3bd8411b3ad1d54217b4a48"
+                "reference": "bc5f5a80d9f89620ad1a15db57f6a6bc88c2d3a6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeguy/Slim/zipball/5932fcb53e727f7fd3bd8411b3ad1d54217b4a48",
-                "reference": "5932fcb53e727f7fd3bd8411b3ad1d54217b4a48",
+                "url": "https://api.github.com/repos/codeguy/Slim/zipball/bc5f5a80d9f89620ad1a15db57f6a6bc88c2d3a6",
+                "reference": "bc5f5a80d9f89620ad1a15db57f6a6bc88c2d3a6",
                 "shasum": ""
             },
             "require": {
@@ -771,7 +771,7 @@
                 "rest",
                 "router"
             ],
-            "time": "2013-09-27 01:48:57"
+            "time": "2013-10-08 18:00:27"
         },
         {
             "name": "slim/views",
@@ -1712,12 +1712,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/composer.git",
-                "reference": "46e55541e73256b8a5acb9dba4e1af6209dfdf53"
+                "reference": "cc37e4b0b826bf5dbcbb7b43c69d00ed21ac3e69"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/composer/zipball/46e55541e73256b8a5acb9dba4e1af6209dfdf53",
-                "reference": "46e55541e73256b8a5acb9dba4e1af6209dfdf53",
+                "url": "https://api.github.com/repos/composer/composer/zipball/cc37e4b0b826bf5dbcbb7b43c69d00ed21ac3e69",
+                "reference": "cc37e4b0b826bf5dbcbb7b43c69d00ed21ac3e69",
                 "shasum": ""
             },
             "require": {
@@ -1773,7 +1773,7 @@
                 "dependency",
                 "package"
             ],
-            "time": "2013-09-26 13:51:49"
+            "time": "2013-10-09 22:44:53"
         },
         {
             "name": "jeremykendall/phpctagger",
