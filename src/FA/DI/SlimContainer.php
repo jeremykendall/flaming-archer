@@ -30,8 +30,12 @@ class SlimContainer extends Container
         // Set default headers
         $app->response->headers->set('Content-Type', 'text/html; charset=utf-8');
 
+        $app->error(function(\FA\Service\FlickrServiceUnavailableException $e) use ($app) {
+            $app->render('flickr-down.html');
+        });
+
         $app->configureMode('development', function() use ($app, $c, &$config) {
-            $app->config('debug', true);
+            $app->config('debug', false);
             $config['logger.app.level'] = LogLevel::DEBUG;
             $config['logger.guzzle.level'] = LogLevel::DEBUG;
             $config['twig']['environment']['auto_reload'] = true;
@@ -39,6 +43,10 @@ class SlimContainer extends Container
 
             $c['logger.app']->pushHandler(new ChromePHPHandler($config['logger.app.level']));
             $c['logger.guzzle']->pushHandler(new ChromePHPHandler($config['logger.guzzle.level']));
+        });
+
+        $app->container->singleton('log', function () use ($c) {
+            return $c['logger.app'];
         });
 
         $adapter = new MonologLogAdapter($c['logger.guzzle']);

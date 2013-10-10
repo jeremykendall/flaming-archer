@@ -32,13 +32,7 @@ $app->get('/', function ($page = 1) use ($app, $container) {
     $paginator = $container['zendPaginator'];
     $paginator->setItemCountPerPage(10);
     $paginator->setCurrentPageNumber($page);
-
-    try {
-        $pages = $paginator->getPages();
-    } catch (\FA\Service\FlickrServiceException $e) {
-        $app->render('flickr-down.html');
-        $app->stop();
-    }
+    $pages = $paginator->getPages();
 
     $app->render('index.html', array('paginator' => $paginator, 'pages' => $pages, 'home' => true));
 });
@@ -47,13 +41,7 @@ $app->get('/page/:page', function ($page = 1) use ($app, $container) {
     $paginator = $container['zendPaginator'];
     $paginator->setItemCountPerPage(10);
     $paginator->setCurrentPageNumber($page);
-
-    try {
-        $pages = $paginator->getPages();
-    } catch (\FA\Service\FlickrServiceException $e) {
-        $app->render('flickr-down.html');
-        $app->stop();
-    }
+    $pages = $paginator->getPages();
 
     $home = ($page == 1) ? true : false;
 
@@ -61,12 +49,7 @@ $app->get('/page/:page', function ($page = 1) use ($app, $container) {
 });
 
 $app->get('/day/:day', function($day) use ($app, $container) {
-    try {
-        $image = $container['imageService']->find($day);
-    } catch (\FA\Service\FlickrServiceException $e) {
-        $app->render('flickr-down.html');
-        $app->stop();
-    }
+    $image = $container['imageService']->find($day);
 
     if (!$image) {
         $app->notFound();
@@ -106,13 +89,7 @@ $app->get('/admin(/page/:page)', function ($page = 1) use ($app, $container) {
     $paginator = $container['zendPaginator'];
     $paginator->setItemCountPerPage(25);
     $paginator->setCurrentPageNumber($page);
-
-    try {
-        $pages = $paginator->getPages();
-    } catch (\FA\Service\FlickrServiceException $e) {
-        $app->render('flickr-down.html');
-        $app->stop();
-    }
+    $pages = $paginator->getPages();
 
     $tz = new \DateTimeZone($container['config']['profile']['timezone']);
     $now = new \DateTime('now', $tz);
