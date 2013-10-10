@@ -12,7 +12,8 @@ namespace FA\Service;
 use Doctrine\Common\Collections\ArrayCollection;
 use FA\Model\Photo\Photo;
 use FA\Model\Photo\Size;
-use FA\Service\FlickrException;
+use FA\Service\FlickrServiceException;
+use FA\Service\FlickrServiceUnavailableException;
 use Guzzle\Common\Exception\MultiTransferException;
 use Guzzle\Http\Client;
 use Psr\Log\LoggerInterface;
@@ -24,6 +25,14 @@ use Psr\Log\LoggerInterface;
  */
 class FlickrService implements FlickrInterface
 {
+    /**
+     * Flickr API error codes
+     */
+    const PHOTO_NOT_FOUND = 1;
+    const PERMISSION_DENIED = 2;
+    const INVALID_API_KEY = 100;
+    const SERVICE_UNAVAILABLE = 105;
+
     /**
      * Guzzle Client
      * 
@@ -166,11 +175,12 @@ class FlickrService implements FlickrInterface
                     sprintf('Guzzle successful request: %s', $request)
                 );
             }
-        } catch (FlickrServiceException $e) {
+        } catch (FlickrServiceUnavailableException $e) {
             $this->log->error($e->getMessage());
             throw $e;
         } catch (\Exception $e) {
             $this->log->error(sprintf('Exception processing photos: %s', $e->getMessage()));
+            throw $e;
         }
     }
 
@@ -178,6 +188,10 @@ class FlickrService implements FlickrInterface
     {
         if ($body['stat'] == 'ok') {
             return $body;
+        }
+
+        if ($body['stat'] == 'fail' && $body['code'] == self::SERVICE_UNAVAILABLE) {
+            throw new FlickrServiceUnavailableException(sprintf('FLICKR IS DOWN: %s', $body['message']), self::SERVICE_UNAVAILABLE);
         }
 
         throw new FlickrServiceException(sprintf('Flickr crapped out: %s', $body['message']), $body['code']);
