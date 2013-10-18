@@ -10,13 +10,16 @@ if (getenv('SLIM_MODE')) {
     $config['slim']['mode'] = getenv('SLIM_MODE');
 }
 
-use FA\DI\SlimContainer;
+use FA\Bootstrap\SlimBootstrap;
+use FA\DI\Container;
 use FA\Model\Photo\Photo;
 use Slim\Slim;
 
 // Prepare app
 $app = new Slim($config['slim']);
-$container = new SlimContainer($app, $config);
+$container = new Container($config);
+$bootstrap = new SlimBootstrap($app, $container);
+$bootstrap->bootstrap();
 
 $app->hook('slim.before.router', function () use ($app, $container) {
     $users = count($container['userDao']->findAll());
