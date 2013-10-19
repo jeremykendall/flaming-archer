@@ -56,9 +56,9 @@ class SlimBootstrap
     {
         $config = $container['config'];
 
-
         $app->configureMode('development', function() use ($app, $container, &$config) {
             $app->config('debug', false);
+
             $config['logger.app.level'] = LogLevel::DEBUG;
             $config['logger.guzzle.level'] = LogLevel::DEBUG;
             $config['twig']['environment']['auto_reload'] = true;
