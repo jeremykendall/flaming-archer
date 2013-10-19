@@ -10,22 +10,16 @@ if (getenv('SLIM_MODE')) {
     $config['slim']['mode'] = getenv('SLIM_MODE');
 }
 
-use FA\DI\SlimContainer;
+use FA\Bootstrap\SlimBootstrap;
+use FA\DI\Container;
 use FA\Model\Photo\Photo;
 use Slim\Slim;
 
 // Prepare app
 $app = new Slim($config['slim']);
-$container = new SlimContainer($app, $config);
-
-$app->hook('slim.before.router', function () use ($app, $container) {
-    $users = count($container['userDao']->findAll());
-    $pathInfo = $app->request->getPathInfo();
-
-    if ($users < 1 && $pathInfo != '/setup') {
-        return $app->redirect('/setup');
-    }
-});
+$container = new Container($config);
+$bootstrap = new SlimBootstrap($app, $container);
+$app = $bootstrap->bootstrap();
 
 // Define routes
 $app->get('/', function ($page = 1) use ($app, $container) {
@@ -152,7 +146,10 @@ $app->post('/admin/add-photo', function() use ($app, $container) {
     } catch (\PDOException $p) {
         $data = json_encode($data);
         if ($p->getCode() == 23000) {
-            $app->flash('addPhotoError', "Whoops, something bad happened. Make sure the Day and Photo Id you're adding are unique.");
+            $app->flash(
+                'addPhotoError', 
+                "Whoops, something bad happened. Make sure the Day and Photo Id you're adding are unique."
+            );
         } else {
             $app->flash('addPhotoError', "Database error trying to add a photo. Try again?");
         }
