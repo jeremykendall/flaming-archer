@@ -42,8 +42,8 @@ class NavigationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('/', $navigation[0]['href']);
         $this->assertEquals('active', $navigation[0]['class']);
 
-        $this->assertEquals('Login', $navigation[1]['caption']);
-        $this->assertEquals('/login', $navigation[1]['href']);
+        $this->assertEquals('Feed', $navigation[1]['caption']);
+        $this->assertEquals('/feed', $navigation[1]['href']);
         $this->assertEquals('', $navigation[1]['class']);
     }
 
@@ -77,22 +77,41 @@ class NavigationTest extends \PHPUnit_Framework_TestCase
 
         $this->assertNotNull($navigation);
         $this->assertInternalType('array', $navigation);
-        $this->assertEquals(4, count($navigation));
+        $this->assertEquals(5, count($navigation));
 
-        $this->assertEquals('Home', $navigation[0]['caption']);
-        $this->assertEquals('/', $navigation[0]['href']);
-        $this->assertEquals('', $navigation[0]['class']);
+        $expected = array (
+            0 => 
+            array (
+                'caption' => 'Home',
+                'href' => '/',
+                'class' => '',
+            ),
+            1 => 
+            array (
+                'caption' => 'Feed',
+                'href' => '/feed',
+                'class' => '',
+            ),
+            2 => 
+            array (
+                'caption' => 'Admin',
+                'href' => '/admin',
+                'class' => 'active',
+            ),
+            3 => 
+            array (
+                'caption' => 'Settings',
+                'href' => '/admin/settings',
+                'class' => '',
+            ),
+            4 => 
+            array (
+                'caption' => 'Logout',
+                'href' => '/logout',
+                'class' => '',
+            ),
+        );
 
-        $this->assertEquals('Admin', $navigation[1]['caption']);
-        $this->assertEquals('/admin', $navigation[1]['href']);
-        $this->assertEquals('active', $navigation[1]['class']);
-
-        $this->assertEquals('Settings', $navigation[2]['caption']);
-        $this->assertEquals('/admin/settings', $navigation[2]['href']);
-        $this->assertEquals('', $navigation[2]['class']);
-
-        $this->assertEquals('Logout', $navigation[3]['caption']);
-        $this->assertEquals('/logout', $navigation[3]['href']);
-        $this->assertEquals('', $navigation[3]['class']);
+        $this->assertEquals($expected, $navigation);
     }
 }
