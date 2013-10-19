@@ -24,7 +24,6 @@
         "ircmaxell/password-compat": "1.*",
         "monolog/monolog": "1.*",
         "pimple/pimple": "v1.0.2",
-        "slim/extras": "2.0.*",
         "slim/slim": "2.3.*",
         "slim/views": "0.1.*",
         "twig/twig": "1.13.*",
