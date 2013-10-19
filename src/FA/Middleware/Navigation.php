@@ -10,7 +10,8 @@
 
 namespace FA\Middleware;
 
-use \Zend\Authentication\AuthenticationService;
+use Slim\Middleware;
+use Zend\Authentication\AuthenticationService;
 
 /**
  * Navigation Middleware
@@ -18,20 +19,20 @@ use \Zend\Authentication\AuthenticationService;
  * Constructs array of navigation items and appends them to the view. Navigation
  * items differ if user is authenticated or not.
  */
-class Navigation extends \Slim\Middleware
+class Navigation extends Middleware
 {
 
     /**
      * Authentication service
      *
-     * @var \Zend\Authentication\AuthenticationService
+     * @var Zend\Authentication\AuthenticationService
      */
     private $auth;
 
     /**
      * Public constructor
      *
-     * @param \Zend\Authentication\AuthenticationService $auth Authentication service
+     * @param Zend\Authentication\AuthenticationService $auth Authentication service
      */
     public function __construct(AuthenticationService $auth)
     {
@@ -47,13 +48,13 @@ class Navigation extends \Slim\Middleware
         $home = array('caption' => 'Home', 'href' => '/');
         $admin = array('caption' => 'Admin', 'href' => '/admin');
         $settings = array('caption' => 'Settings', 'href' => '/admin/settings');
-        $login = array('caption' => 'Login', 'href' => '/login');
+        $feed = array('caption' => 'Feed', 'href' => '/feed');
         $logout = array('caption' => 'Logout', 'href' => '/logout');
 
         if ($this->auth->hasIdentity()) {
-            $navigation = array($home, $admin, $settings, $logout);
+            $navigation = array($home, $feed, $admin, $settings, $logout);
         } else {
-            $navigation = array($home, $login);
+            $navigation = array($home, $feed);
         }
 
         foreach ($navigation as &$link) {
