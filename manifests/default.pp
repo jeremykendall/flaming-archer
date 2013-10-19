@@ -56,7 +56,7 @@ apache::vhost { 'flaming-archer.dev':
   server_name   => 'flaming-archer.dev',
   serveraliases => [
 ],
-  docroot       => '/var/www/public/',
+  docroot       => '/var/www/public',
   port          => '80',
   env_variables => [
     'SLIM_MODE development'
