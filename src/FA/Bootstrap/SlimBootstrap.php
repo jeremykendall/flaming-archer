@@ -38,49 +38,88 @@ class SlimBootstrap
 
     public function bootstrap()
     {
-        $app = $this->app;;
-        $c = $this->container;
-        $config = $c['config'];
+        $app = $this->app;
+        $container = $this->container;
 
-        // Set default headers
-        $app->response->headers->set('Content-Type', 'text/html; charset=utf-8');
+        $this->configureDevelopmentMode($app, $container);
+        $this->configureLogging($app, $container);
+        $this->configureView($app, $container);
+        $this->addDefaultHeaders($app);
+        $this->configureCustomErrorHandling($app);
+        $this->addHooks($app, $container);
+        $this->addMiddleware($app, $container);
 
-        $app->error(function(\FA\Service\FlickrServiceUnavailableException $e) use ($app) {
-            $app->render('flickr-down.html');
-        });
+        return $app;
+    }
 
-        $app->configureMode('development', function() use ($app, $c, &$config) {
+    public function configureDevelopmentMode(Slim $app, Container $container)
+    {
+        $config = $container['config'];
+
+
+        $app->configureMode('development', function() use ($app, $container, &$config) {
             $app->config('debug', false);
             $config['logger.app.level'] = LogLevel::DEBUG;
             $config['logger.guzzle.level'] = LogLevel::DEBUG;
             $config['twig']['environment']['auto_reload'] = true;
             $config['twig']['environment']['debug'] = true;
 
-            $c['logger.app']->pushHandler(new ChromePHPHandler($config['logger.app.level']));
-            $c['logger.guzzle']->pushHandler(new ChromePHPHandler($config['logger.guzzle.level']));
+            $container['logger.app']->pushHandler(new ChromePHPHandler($config['logger.app.level']));
+            $container['logger.guzzle']->pushHandler(new ChromePHPHandler($config['logger.guzzle.level']));
+        });
+    }
+
+    public function configureLogging(Slim $app, Container $container)
+    {
+        $app->container->singleton('log', function () use ($container) {
+            return $container['logger.app'];
         });
 
-        $app->container->singleton('log', function () use ($c) {
-            return $c['logger.app'];
-        });
-
-        $adapter = new MonologLogAdapter($c['logger.guzzle']);
+        $adapter = new MonologLogAdapter($container['logger.guzzle']);
         $logPlugin = new LogPlugin($adapter, MessageFormatter::DEBUG_FORMAT);
-        $c['guzzleFlickrClient']->addSubscriber($logPlugin);
+        $container['guzzleFlickrClient']->addSubscriber($logPlugin);
+    }
 
-        // Add Middleware
-        $app->add($c['profileMiddleware']);
-        if ($c['googleAnalyticsMiddleware']) {
-            $app->add($c['googleAnalyticsMiddleware']);
+    public function configureView(Slim $app, Container $container)
+    {
+        $app->view($container['twig']);
+        $app->view->parserOptions = $container['config']['twig']['environment'];
+        $app->view->parserExtensions = array($container['slimTwigExtension'], $container['twigExtensionDebug']);
+        $app->view->getInstance()->getExtension('core')->setTimezone($container['config']['profile']['timezone']);
+    }
+
+    public function addHooks(Slim $app, Container $container)
+    {
+        $app->hook('slim.before.router', function () use ($app, $container) {
+            $users = count($container['userDao']->findAll());
+            $pathInfo = $app->request->getPathInfo();
+
+            if ($users < 1 && $pathInfo != '/setup') {
+                return $app->redirect('/setup');
+            }
+        });
+    }
+
+    public function configureCustomErrorHandling(Slim $app)
+    {
+        $app->error(function(\FA\Service\FlickrServiceUnavailableException $e) use ($app) {
+            $app->render('flickr-down.html');
+        });
+    }
+
+    public function addDefaultHeaders(Slim $app)
+    {
+        $app->response->headers->set('Content-Type', 'text/html; charset=utf-8');
+    }
+
+    public function addMiddleware(Slim $app, Container $container)
+    {
+        $app->add($container['profileMiddleware']);
+        if ($container['googleAnalyticsMiddleware']) {
+            $app->add($container['googleAnalyticsMiddleware']);
         }
-        $app->add($c['navigationMiddleware']);
-        $app->add($c['authenticationMiddleware']);
-        $app->add($c['sessionCookieMiddleware']);
-
-        // Prepare view
-        $app->view($c['twig']);
-        $app->view->parserOptions = $config['twig']['environment'];
-        $app->view->parserExtensions = array($c['slimTwigExtension'], $c['twigExtensionDebug']);
-        $app->view->getInstance()->getExtension('core')->setTimezone($c['config']['profile']['timezone']);
+        $app->add($container['navigationMiddleware']);
+        $app->add($container['authenticationMiddleware']);
+        $app->add($container['sessionCookieMiddleware']);
     }
 }

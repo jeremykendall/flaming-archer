@@ -19,16 +19,7 @@ use Slim\Slim;
 $app = new Slim($config['slim']);
 $container = new Container($config);
 $bootstrap = new SlimBootstrap($app, $container);
-$bootstrap->bootstrap();
-
-$app->hook('slim.before.router', function () use ($app, $container) {
-    $users = count($container['userDao']->findAll());
-    $pathInfo = $app->request->getPathInfo();
-
-    if ($users < 1 && $pathInfo != '/setup') {
-        return $app->redirect('/setup');
-    }
-});
+$app = $bootstrap->bootstrap();
 
 // Define routes
 $app->get('/', function ($page = 1) use ($app, $container) {
@@ -155,7 +146,10 @@ $app->post('/admin/add-photo', function() use ($app, $container) {
     } catch (\PDOException $p) {
         $data = json_encode($data);
         if ($p->getCode() == 23000) {
-            $app->flash('addPhotoError', "Whoops, something bad happened. Make sure the Day and Photo Id you're adding are unique.");
+            $app->flash(
+                'addPhotoError', 
+                "Whoops, something bad happened. Make sure the Day and Photo Id you're adding are unique."
+            );
         } else {
             $app->flash('addPhotoError', "Database error trying to add a photo. Try again?");
         }
