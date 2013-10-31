@@ -67,7 +67,7 @@ class Authentication extends \Slim\Middleware
             }
         };
 
-        $this->app->hook('slim.before.router', $checkAuth);
+        $app->hook('slim.before.router', $checkAuth);
 
         $this->next->call();
     }
