@@ -2,6 +2,7 @@
 
 namespace FA\Tests\Composer\Script;
 
+use Composer\Util\Filesystem;
 use FA\Composer\Script\SQLite;
 
 class SQLiteTest extends ComposerScriptTestCase
@@ -35,7 +36,7 @@ class SQLiteTest extends ComposerScriptTestCase
         $this->localConfigPath = $this->rootPath . '/config';
         $this->localConfigFile = sprintf('%s/config.php', $this->localConfigPath);
 
-        $filesystem = new \Composer\Util\Filesystem();
+        $filesystem = new Filesystem();
         $filesystem->ensureDirectoryExists($this->localConfigPath);
 
         // Copy the application config over to the test directory
@@ -83,7 +84,7 @@ class SQLiteTest extends ComposerScriptTestCase
     protected function tearDown()
     {
         if (file_exists($this->rootPath)) {
-            $filesystem = new \Composer\Util\Filesystem();
+            $filesystem = new Filesystem();
             $filesystem->removeDirectory($this->rootPath);
         }
         parent::tearDown();
