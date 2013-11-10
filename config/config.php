@@ -7,55 +7,32 @@
  * @license   http://github.com/jeremykendall/flaming-archer/blob/master/LICENSE MIT License
  */
 
-/**
- * EDIT THE ITEMS IN THE $userConfig ARRAY TO COMPLETE APPLICATION CONFIGURATION
- *
- * Remember, you must have a Flickr API key in order to use Flaming Archer
- */
-$userConfig = array(
-    'flickr.api.key' => '@@@ Your Flickr API key @@@',
-    // Leave blank unless you'd like to use Google Analytics
-    'googleAnalyticsTrackingId' => '',
-    'googleAnalyticsDomain' => '',
-    // Change these settings to whatever you like
-    'profile' => array(
-        'brand' => 'Flaming Archer',
-        'site_name' => '365 Days of Photography',
-        'flickr_username' => '@@@ Your Flickr username @@@',
-        'photographer' => '@@@ Your name @@@',
-        'tagline' => "@@@ Some clever tagline @@@",
-        'external_url' => '@@@ Website, Flickr profile, blog, etc. @@@',
-        'twitter_username' => '@YOUR_TWITTER_USERNAME',
-        'timezone' => 'America/Chicago',
-    ),
-    // Change this to a random-ish string. It's used for encrypting cookies.
-    'cookies.secret_key' => 'CHANGE_ME',
-);
+$local = include __DIR__ . '/local.php';
 
 // Slim configuration
 $slim = array(
     'debug' => false,
-    'templates.path' => __DIR__ . '/templates',
-    'cookies.secret_key' => $userConfig['cookies.secret_key'],
-    'cookies.encrypt' => false, // must be false until https://github.com/codeguy/Slim/pull/606 is merged
+    'templates.path' => __DIR__ . '/../templates',
+    'cookies.secret_key' => $local['cookies.secret_key'],
+    'cookies.encrypt' => true,
     'cookies.cipher' => MCRYPT_RIJNDAEL_256,
     'cookies.cipher_mode' => MCRYPT_MODE_CBC,
 );
 
 // SQLite database file
-$sqlite = __DIR__ . '/db/flaming-archer.db';
+$sqlite = __DIR__ . '/../db/flaming-archer.db';
 
 $config = array(
     'flickr.api.endpoint' => 'http://api.flickr.com/services/rest',
-    'logger.app.logfile' => __DIR__ . '/logs/app.log',
+    'logger.app.logfile' => __DIR__ . '/../logs/app.log',
     'logger.app.level' => \Psr\Log\LogLevel::ERROR,
-    'logger.guzzle.logfile' => __DIR__ . '/logs/guzzle.log',
+    'logger.guzzle.logfile' => __DIR__ . '/../logs/guzzle.log',
     'logger.guzzle.level' => \Psr\Log\LogLevel::ERROR,
     'slim' => $slim,
     'twig' => array(
         'environment' => array(
             'charset' => 'utf-8',
-            'cache' => realpath(__DIR__ . '/templates/cache'),
+            'cache' => realpath($slim['templates.path'] . '/cache'),
             'auto_reload' => false,
             'strict_variables' => true,
             'autoescape' => true,
@@ -69,7 +46,7 @@ $config = array(
         'secure' => false,
         'httponly' => false,
         'name' => 'slim_session',
-        'secret' => $userConfig['cookies.secret_key'],
+        'secret' => $local['cookies.secret_key'],
         'cipher' => $slim['cookies.cipher'],
         'cipher_mode' => $slim['cookies.cipher_mode'],
     ),
@@ -88,16 +65,15 @@ $config = array(
     // http://framework.zend.com/manual/2.0/en/index.html#zend-cache
     'cache' => array(
         'adapter' => array(
-            'name' => 'filesystem',
+            'name' => 'apc',
             'options' => array(
                 'ttl' => 60 * 60 * 24, // One day
                 'namespace' => 'flaming-archer',
-                'cache_dir' => realpath('../tmp')
             )
         ),
         'plugins' => array(
             'ExceptionHandler' => array(
-                'throw_exceptions' => false
+                'throw_exceptions' => true
             ),
             'Serializer'
         ),
@@ -109,4 +85,4 @@ $config = array(
     ),
 );
 
-return array_merge($userConfig, $config);
+return array_merge($local, $config);

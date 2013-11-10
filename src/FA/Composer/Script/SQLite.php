@@ -19,17 +19,16 @@ use Composer\Script\Event;
  */
 class SQLite
 {
-
     /**
      * Checks for database and configures database if it does not exist
      *
-     * @param  \Composer\Script\Event           $event
-     * @throws \FA\Composer\Script\PDOException
+     * @param  Event        $event
+     * @throws PDOException
      */
     public static function prepare(Event $event)
     {
         $root = dirname($event->getComposer()->getConfig()->get('vendor-dir'));
-        $config = include $root . '/config.php';
+        $config = include $root . '/config/config.php';
 
         $io = $event->getIO();
 

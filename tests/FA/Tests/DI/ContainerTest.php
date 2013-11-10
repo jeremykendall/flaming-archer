@@ -12,7 +12,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->config = require APPLICATION_PATH . '/config.dist.php';
+        $this->config = require APPLICATION_CONFIG_PATH . '/config.php';
         $this->container = new Container($this->config);
     }
 
@@ -23,7 +23,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
     public function testGoogleAnalyticsReturnsNullIfConfigKeysEmtpy()
     {
-        $config = require APPLICATION_PATH . '/config.dist.php';
+        $config = require APPLICATION_CONFIG_PATH . '/config.php';
         $config['googleAnalyticsTrackingId'] = '';
         $config['googleAnalyticsDomain'] = '';
 
@@ -34,7 +34,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
     public function testGoogleAnalyticsReturnsMiddlewareIfConfigKeysProvided()
     {
-        $config = require APPLICATION_PATH . '/config.dist.php';
+        $config = require APPLICATION_CONFIG_PATH . '/config.php';
         $config['googleAnalyticsTrackingId'] = '1234';
         $config['googleAnalyticsDomain'] = 'example.com';
 

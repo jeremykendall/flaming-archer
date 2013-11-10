@@ -2,6 +2,7 @@
 
 namespace FA\Tests\Composer\Script;
 
+use Composer\Util\Filesystem;
 use FA\Composer\Script\SQLite;
 
 class SQLiteTest extends ComposerScriptTestCase
@@ -32,22 +33,43 @@ class SQLiteTest extends ComposerScriptTestCase
     protected function setUp()
     {
         $this->rootPath = APPLICATION_PATH . '/tests/_files/tmp';
-        $filesystem = new \Composer\Util\Filesystem();
-        $filesystem->ensureDirectoryExists($this->rootPath);
+        $this->localConfigPath = $this->rootPath . '/config';
+        $this->localConfigFile = sprintf('%s/config.php', $this->localConfigPath);
 
-        // Copy the application config over the test directory
-        copy(APPLICATION_PATH . '/config.dist.php', $this->rootPath . '/config.php');
-        $this->assertFileExists($this->rootPath . '/config.php', 'Application config was not copied correctly during setup.');
+        $filesystem = new Filesystem();
+        $filesystem->ensureDirectoryExists($this->localConfigPath);
+
+        // Copy the application config over to the test directory
+        copy(sprintf('%s/config.php', APPLICATION_CONFIG_PATH), $this->localConfigFile);
+        copy(
+            sprintf('%s/local.dist.php', APPLICATION_CONFIG_PATH), 
+            sprintf('%s/local.php', $this->localConfigPath)
+        );
+        $this->assertFileExists(
+            $this->localConfigFile, 
+            'Application config was not copied correctly during setup.'
+        );
+        $this->assertFileExists(
+            sprintf('%s/local.php', $this->localConfigPath),
+            'Local config was not copied correctly during setup.'
+        );
 
         // Get application config and ensure path to db exists
-        $this->applicationConfig = include $this->rootPath . '/config.php';
+        $this->applicationConfig = include $this->localConfigFile;
         $this->dbFile = $this->applicationConfig['database'];
+
         $filesystem->ensureDirectoryExists(pathinfo($this->dbFile, PATHINFO_DIRNAME));
+        $filesystem->ensureDirectoryExists($this->rootPath . '/scripts/sql');
 
         // Copy the sql schema used to create the database
-        $filesystem->ensureDirectoryExists($this->rootPath . '/scripts/sql');
-        copy(APPLICATION_PATH . '/scripts/sql/schema.sql', $this->rootPath . '/scripts/sql/schema.sql');
-        $this->assertFileExists($this->rootPath . '/scripts/sql/schema.sql', 'Database schema file was not copied correctly during setup.');
+        copy(
+            APPLICATION_PATH . '/scripts/sql/schema.sql', 
+            $this->rootPath . '/scripts/sql/schema.sql'
+        );
+        $this->assertFileExists(
+            $this->rootPath . '/scripts/sql/schema.sql', 
+            'Database schema file was not copied correctly during setup.'
+        );
 
         parent::setUp();
 
@@ -62,7 +84,7 @@ class SQLiteTest extends ComposerScriptTestCase
     protected function tearDown()
     {
         if (file_exists($this->rootPath)) {
-            $filesystem = new \Composer\Util\Filesystem();
+            $filesystem = new Filesystem();
             $filesystem->removeDirectory($this->rootPath);
         }
         parent::tearDown();
@@ -142,8 +164,8 @@ class SQLiteTest extends ComposerScriptTestCase
         );
 
         // Copy the application config over the test directory
-        copy($this->rootPath . '/../config-bad-db.php', $this->rootPath . '/config.php');
-        $this->assertFileExists($this->rootPath . '/config.php', 'Application config was not copied correctly in ' . __METHOD__);
+        copy($this->rootPath . '/../config-bad-db.php', $this->localConfigPath . '/config.php');
+        $this->assertFileExists($this->localConfigPath . '/config.php', 'Application config was not copied correctly in ' . __METHOD__);
 
         // Configure expectations
         foreach ($output as $index => $message) {

@@ -2,7 +2,7 @@
 /vendor/
 .DS_STORE
 *.un~
-config.php
+config/local.php
 docs
 build
 tags

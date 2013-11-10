@@ -15,7 +15,7 @@ use FA\Model\Photo\Size;
 use FA\Service\FlickrServiceException;
 use FA\Service\FlickrServiceUnavailableException;
 use Guzzle\Common\Exception\MultiTransferException;
-use Guzzle\Http\Client;
+use Guzzle\Http\ClientInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -35,7 +35,7 @@ class FlickrService implements FlickrInterface
 
     /**
      * Guzzle Client
-     * 
+     *
      * @var Client
      */
     private $client;
@@ -48,10 +48,10 @@ class FlickrService implements FlickrInterface
     /**
      * Public constructor
      *
-     * @param Client $client Guzzle client
-     * @param LoggerInterface $log Logger
+     * @param Client          $client Guzzle client
+     * @param LoggerInterface $log    Logger
      */
-    public function __construct(Client $client, LoggerInterface $log)
+    public function __construct(ClientInterface $client, LoggerInterface $log)
     {
         $this->client = $client;
         $this->log = $log;
@@ -142,7 +142,7 @@ class FlickrService implements FlickrInterface
                 $photo->setDescription($info['photo']['description']['_content']);
                 $photo->setTags($info['photo']['tags']['tag']);
 
-                $sizes = array_filter($sizeData, function($size) use ($photo) {
+                $sizes = array_filter($sizeData, function ($size) use ($photo) {
                     $url = $size['sizes']['size'][0]['url'];
                     if (strpos($url, (string) $photo->getPhotoId()) !== false) {
                         return $size;
@@ -150,7 +150,7 @@ class FlickrService implements FlickrInterface
                 });
 
                 foreach ($sizes as $data) {
-                    foreach($data['sizes']['size'] as $size) {
+                    foreach ($data['sizes']['size'] as $size) {
                         $photo->setSize($size['label'], new Size($size));
                     }
                 }
@@ -239,26 +239,7 @@ class FlickrService implements FlickrInterface
     {
         $request = $this->client->get(sprintf('?%s', http_build_query($options)));
         $response = $request->send();
-        return $this->parseResponse($response->json());
-    }
 
-    /**
-     * Get client
-     *
-     * @return Client Guzzle client
-     */
-    public function getClient()
-    {
-        return $this->client;
-    }
-    
-    /**
-     * Set client
-     *
-     * @param Client $client Guzzle client
-     */
-    public function setClient(Client $client)
-    {
-        $this->client = $client;
+        return $this->parseResponse($response->json());
     }
 }
