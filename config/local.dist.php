@@ -12,7 +12,7 @@
  *
  * Remember, you MUST have a Flickr API key in order to use Flaming Archer
  */
-$userConfig = array(
+return array(
     'flickr.api.key' => '@@@ Your Flickr API key @@@',
     // Leave blank unless you'd like to use Google Analytics
     'googleAnalyticsTrackingId' => '',
