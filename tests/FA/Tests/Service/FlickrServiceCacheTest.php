@@ -87,4 +87,9 @@ class FlickrServiceCacheTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->photo, $result);
     }
+
+    public function testFindPhotos()
+    {
+        $this->assertNull($this->serviceCache->findPhotos(array()));
+    }
 }
