@@ -68,8 +68,6 @@ class GoogleAnalyticsTest extends \PHPUnit_Framework_TestCase
             'PATH_INFO' => '/'
         ));
 
-        $this->auth = $this->getMock('Zend\Authentication\AuthenticationService');
-
         $this->auth->expects($this->once())
             ->method('hasIdentity')
             ->will($this->returnValue(true));
@@ -91,8 +89,6 @@ class GoogleAnalyticsTest extends \PHPUnit_Framework_TestCase
             'SCRIPT_NAME' => '',
             'PATH_INFO' => '/login'
         ));
-
-        $this->auth = $this->getMock('Zend\Authentication\AuthenticationService');
 
         $this->auth->expects($this->once())
             ->method('hasIdentity')
