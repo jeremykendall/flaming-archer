@@ -30,15 +30,14 @@ class ConfigTest extends ComposerScriptTestCase
 
     protected function setUp()
     {
-        $this->distFile = 'config.user.dist.php';
-        $this->configFile = 'config.user.php';
+        $this->distFile = Config::LOCAL_DIST;
+        $this->configFile = Config::LOCAL_CONFIG;
         $this->structure = array(
             'vendor' => array(),
-            'config' => array(
-                $this->distFile => 'config settings',
-            ),
+            'config' => array(),
         );
         $this->root = vfsStream::setup('dev.flaming-archer', null, $this->structure);
+        $this->root->addChild(new vfsStreamFile($this->distFile));
         $webroot = vfsStream::url('dev.flaming-archer');
 
         parent::setUp();
@@ -54,20 +53,16 @@ class ConfigTest extends ComposerScriptTestCase
         parent::tearDown();
     }
 
-    /**
-     * @group vfs
-     */
     public function testVirtualFilesystemDirectoryStructure()
     {
-        $this->assertTrue($this->root->hasChild('config'));
-        $this->assertTrue($this->root->hasChild('config/config.user.dist.php'));
+        $this->assertTrue($this->root->hasChild($this->distFile));
         $this->assertTrue($this->root->hasChild('vendor'));
     }
 
     public function testCreateConfigNotFound()
     {
         // Confirm mock filesystem doesn't contain config file
-        $this->assertFalse($this->root->hasChild('config/' . $this->configFile));
+        $this->assertFalse($this->root->hasChild($this->configFile));
 
         $output = array(
             'Reviewing your Flaming Archer environment . . .',
@@ -87,14 +82,14 @@ class ConfigTest extends ComposerScriptTestCase
                 ->will($this->returnValue($this->composerConfig));
 
         $result = Config::create($this->event);
-        $this->assertTrue($this->root->hasChild('config/' . $this->configFile));
+        $this->assertTrue($this->root->hasChild($this->configFile));
     }
 
     public function testCreateConfigFound()
     {
         // Confirm mock filesystem contains config file
-        $this->root->addChild(new vfsStreamFile(sprintf('config/%s', $this->configFile)));
-        $this->assertTrue($this->root->hasChild(sprintf('config/%s', $this->configFile)));
+        $this->root->addChild(new vfsStreamFile($this->configFile));
+        $this->assertTrue($this->root->hasChild($this->configFile));
 
         $output = array(
             'Reviewing your Flaming Archer environment . . .',

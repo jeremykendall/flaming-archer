@@ -19,6 +19,8 @@ use Composer\Script\Event;
  */
 class Config
 {
+    const LOCAL_DIST = 'config/local.dist.php';
+    const LOCAL_CONFIG = 'config/local.php';
     /**
      * Creates config file if it does not already exist
      *
@@ -32,15 +34,23 @@ class Config
 
         $io->write('Reviewing your Flaming Archer environment . . .', true);
 
-        $configExists = file_exists($dir . '/config/config.user.php');
-        $configDistExists = file_exists($dir . '/config/config.user.dist.php');
+        $dist = sprintf('%s/%s', $dir, self::LOCAL_DIST);
+        $config = sprintf('%s/%s', $dir, self::LOCAL_CONFIG);
 
-        if (!$configExists && $configDistExists) {
-            $io->write('Creating config.user.php by copying config.user.dist.php . . .', true);
-            copy($dir . '/config/config.user.dist.php', $dir . '/config/config.user.php');
-            $io->write("Done! Please edit config.user.php to begin application setup.", true);
+        if (!file_exists($config) && file_exists($dist)) {
+            $message = sprintf(
+                'Creating %s by copying %s . . .', 
+                self::LOCAL_CONFIG, 
+                self::LOCAL_DIST
+            ); 
+            $io->write($message, true);
+            copy($dist, $config);
+            $io->write(
+                sprintf('Done! Please edit %s to begin application setup.', self::LOCAL_CONFIG),
+                true
+            );
         } else {
-            $io->write('Found config.user.php.', true);
+            $io->write(sprintf('Found %s.', self::LOCAL_CONFIG), true);
         }
     }
 }
