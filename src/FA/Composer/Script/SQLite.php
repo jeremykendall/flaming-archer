@@ -29,7 +29,7 @@ class SQLite
     public static function prepare(Event $event)
     {
         $root = dirname($event->getComposer()->getConfig()->get('vendor-dir'));
-        $config = include $root . '/config.php';
+        $config = include $root . '/config/config.php';
 
         $io = $event->getIO();
 

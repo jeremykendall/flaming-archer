@@ -4,6 +4,7 @@ namespace FA\Tests\Composer\Script;
 
 use FA\Composer\Script\Config;
 use org\bovigo\vfs\vfsStream;
+use org\bovigo\vfs\vfsStreamFile;
 
 class ConfigTest extends ComposerScriptTestCase
 {
@@ -12,16 +13,32 @@ class ConfigTest extends ComposerScriptTestCase
      */
     protected $root;
 
+    /**
+     * @var string Config dist file name
+     */
+    protected $distFile;
+
+    /**
+     * @var string Config file name
+     */
+    protected $configFile;
+
+    /**
+     * @var array Directory structure
+     */
+    protected $structure;
+
     protected function setUp()
     {
-        $this->root = vfsStream::setup('dev.flaming-archer');
-        vfsStream::create(
-            array(
-                'config.dist.php' => 'config without secure data',
-                'vendor' => array()
+        $this->distFile = 'config.user.dist.php';
+        $this->configFile = 'config.user.php';
+        $this->structure = array(
+            'vendor' => array(),
+            'config' => array(
+                $this->distFile => 'config settings',
             ),
-            $this->root
         );
+        $this->root = vfsStream::setup('dev.flaming-archer', null, $this->structure);
         $webroot = vfsStream::url('dev.flaming-archer');
 
         parent::setUp();
@@ -37,15 +54,25 @@ class ConfigTest extends ComposerScriptTestCase
         parent::tearDown();
     }
 
+    /**
+     * @group vfs
+     */
+    public function testVirtualFilesystemDirectoryStructure()
+    {
+        $this->assertTrue($this->root->hasChild('config'));
+        $this->assertTrue($this->root->hasChild('config/config.user.dist.php'));
+        $this->assertTrue($this->root->hasChild('vendor'));
+    }
+
     public function testCreateConfigNotFound()
     {
-        // Confirm mock filesystem doesn't contain config.php
-        $this->assertFAlse($this->root->hasChild('config.php'));
+        // Confirm mock filesystem doesn't contain config file
+        $this->assertFalse($this->root->hasChild('config/' . $this->configFile));
 
         $output = array(
             'Reviewing your Flaming Archer environment . . .',
-            'Creating config.php by copying config.dist.php . . .',
-            "Done! Please edit config.php and add your Flickr API key to 'flickr.api.key' and change 'cookie['secret']'."
+            sprintf('Creating %s by copying %s . . .', $this->configFile, $this->distFile),
+            sprintf("Done! Please edit %s to begin application setup.", $this->configFile),
         );
 
         // Configure expectations
@@ -60,18 +87,18 @@ class ConfigTest extends ComposerScriptTestCase
                 ->will($this->returnValue($this->composerConfig));
 
         $result = Config::create($this->event);
-        $this->assertTrue($this->root->hasChild('config.php'));
+        $this->assertTrue($this->root->hasChild('config/' . $this->configFile));
     }
 
     public function testCreateConfigFound()
     {
-        // Confirm mock filesystem contains config.php
-        vfsStream::create(array('config.php' => 'config without secure data'), $this->root);
-        $this->assertTrue($this->root->hasChild('config.php'));
+        // Confirm mock filesystem contains config file
+        $this->root->addChild(new vfsStreamFile(sprintf('config/%s', $this->configFile)));
+        $this->assertTrue($this->root->hasChild(sprintf('config/%s', $this->configFile)));
 
         $output = array(
             'Reviewing your Flaming Archer environment . . .',
-            'Found config.php.'
+            sprintf('Found %s.', $this->configFile),
         );
 
         // Configure expectations

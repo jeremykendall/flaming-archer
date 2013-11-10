@@ -32,15 +32,15 @@ class Config
 
         $io->write('Reviewing your Flaming Archer environment . . .', true);
 
-        $configExists = file_exists($dir . '/config.php');
-        $configDistExists = file_exists($dir . '/config.dist.php');
+        $configExists = file_exists($dir . '/config/config.user.php');
+        $configDistExists = file_exists($dir . '/config/config.user.dist.php');
 
         if (!$configExists && $configDistExists) {
-            $io->write('Creating config.php by copying config.dist.php . . .', true);
-            copy($dir . '/config.dist.php', $dir . '/config.php');
-            $io->write("Done! Please edit config.php and add your Flickr API key to 'flickr.api.key' and change 'cookie['secret']'.", true);
+            $io->write('Creating config.user.php by copying config.user.dist.php . . .', true);
+            copy($dir . '/config/config.user.dist.php', $dir . '/config/config.user.php');
+            $io->write("Done! Please edit config.user.php to begin application setup.", true);
         } else {
-            $io->write('Found config.php.', true);
+            $io->write('Found config.user.php.', true);
         }
     }
 }
