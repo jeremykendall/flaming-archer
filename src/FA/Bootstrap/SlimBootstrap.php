@@ -100,6 +100,7 @@ class SlimBootstrap
         });
     }
 
+    // TODO: Make sure other exceptions get handled!
     public function configureCustomErrorHandling(Slim $app)
     {
         $app->error(function(\FA\Service\FlickrServiceUnavailableException $e) use ($app) {
