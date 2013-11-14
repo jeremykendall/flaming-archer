@@ -24,7 +24,7 @@ $app = $bootstrap->bootstrap();
 // Define routes
 $app->get('/', function ($page = 1) use ($app, $container) {
     $paginator = $container['zendPaginator'];
-    $paginator->setItemCountPerPage(10);
+    $paginator->setItemCountPerPage($container['config']['pagination']['public.itemCountPerPage']);
     $paginator->setCurrentPageNumber($page);
     $pages = $paginator->getPages();
 
@@ -33,7 +33,7 @@ $app->get('/', function ($page = 1) use ($app, $container) {
 
 $app->get('/page/:page', function ($page = 1) use ($app, $container) {
     $paginator = $container['zendPaginator'];
-    $paginator->setItemCountPerPage(10);
+    $paginator->setItemCountPerPage($container['config']['pagination']['admin.itemCountPerPage']);
     $paginator->setCurrentPageNumber($page);
     $pages = $paginator->getPages();
 
@@ -81,7 +81,7 @@ $app->post('/admin/clear-cache', function() use ($app, $container) {
 
 $app->get('/admin(/page/:page)', function ($page = 1) use ($app, $container) {
     $paginator = $container['zendPaginator'];
-    $paginator->setItemCountPerPage(25);
+    $paginator->setItemCountPerPage($container['config']['pagination']['public.itemCountPerPage']);
     $paginator->setCurrentPageNumber($page);
     $pages = $paginator->getPages();
 

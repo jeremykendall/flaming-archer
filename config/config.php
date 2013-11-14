@@ -28,6 +28,10 @@ $config = array(
     'logger.app.level' => \Psr\Log\LogLevel::ERROR,
     'logger.guzzle.logfile' => __DIR__ . '/../logs/guzzle.log',
     'logger.guzzle.level' => \Psr\Log\LogLevel::ERROR,
+    'pagination' => array(
+        'admin.itemCountPerPage' => 25,
+        'public.itemCountPerPage' => 25,
+    ),
     'slim' => $slim,
     'twig' => array(
         'environment' => array(
