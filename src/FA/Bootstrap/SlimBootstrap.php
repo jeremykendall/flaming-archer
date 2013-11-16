@@ -56,7 +56,7 @@ class SlimBootstrap
     {
         $config = $container['config'];
 
-        $app->configureMode('development', function() use ($app, $container, &$config) {
+        $app->configureMode('development', function() use ($app, $container, $config) {
             $app->config('debug', false);
 
             $config['logger.app.level'] = LogLevel::DEBUG;
@@ -66,6 +66,8 @@ class SlimBootstrap
 
             $container['logger.app']->pushHandler(new ChromePHPHandler($config['logger.app.level']));
             $container['logger.guzzle']->pushHandler(new ChromePHPHandler($config['logger.guzzle.level']));
+
+            $container['config'] = $config;
         });
     }
 
