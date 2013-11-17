@@ -15,4 +15,8 @@ return array(
     'pdo' => array(
         'dsn' => 'sqlite:' . $sqlite,
     ),
+    'profile' => array(
+        'tagline' => 'tagline',
+        'twitter_username' => '@Username',
+    ),
 );
