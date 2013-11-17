@@ -7,36 +7,31 @@
  * @license   http://github.com/jeremykendall/flaming-archer/blob/master/LICENSE MIT License
  */
 
-$local = include __DIR__ . '/local.php';
-
-// Slim configuration
-$slim = array(
-    'debug' => false,
-    'templates.path' => __DIR__ . '/../templates',
-    'cookies.secret_key' => $local['cookies.secret_key'],
-    'cookies.encrypt' => true,
-    'cookies.cipher' => MCRYPT_RIJNDAEL_256,
-    'cookies.cipher_mode' => MCRYPT_MODE_CBC,
-);
-
 // SQLite database file
 $sqlite = __DIR__ . '/../db/flaming-archer.db';
 
-$config = array(
+return array(
     'flickr.api.endpoint' => 'http://api.flickr.com/services/rest',
     'logger.app.logfile' => __DIR__ . '/../logs/app.log',
-    'logger.app.level' => \Psr\Log\LogLevel::ERROR,
+    'logger.app.level' => \Monolog\Logger::ERROR,
     'logger.guzzle.logfile' => __DIR__ . '/../logs/guzzle.log',
-    'logger.guzzle.level' => \Psr\Log\LogLevel::ERROR,
+    'logger.guzzle.level' => \Monolog\Logger::ERROR,
     'pagination' => array(
         'admin.itemCountPerPage' => 25,
         'public.itemCountPerPage' => 25,
     ),
-    'slim' => $slim,
+    'slim' => array(
+        'debug' => false,
+        'templates.path' => __DIR__ . '/../templates',
+        'cookies.encrypt' => true,
+        'cookies.secret_key' => 'CHANGE_ME',
+        'cookies.cipher' => MCRYPT_RIJNDAEL_256,
+        'cookies.cipher_mode' => MCRYPT_MODE_CBC,
+    ),
     'twig' => array(
         'environment' => array(
             'charset' => 'utf-8',
-            'cache' => realpath($slim['templates.path'] . '/cache'),
+            'cache' => realpath(__DIR__ . '/../templates/cache'),
             'auto_reload' => false,
             'strict_variables' => true,
             'autoescape' => true,
@@ -44,15 +39,7 @@ $config = array(
         ),
     ),
     'session_cookies' => array(
-        'expires' => '20 minutes',
-        'path' => '/',
-        'domain' => null,
-        'secure' => false,
-        'httponly' => false,
-        'name' => 'slim_session',
-        'secret' => $local['cookies.secret_key'],
-        'cipher' => $slim['cookies.cipher'],
-        'cipher_mode' => $slim['cookies.cipher_mode'],
+        'expires' => '2 weeks',
     ),
     'database' => $sqlite,
     'pdo' => array(
@@ -88,5 +75,3 @@ $config = array(
         array('path' => '/admin/.+')
     ),
 );
-
-return array_merge($local, $config);
