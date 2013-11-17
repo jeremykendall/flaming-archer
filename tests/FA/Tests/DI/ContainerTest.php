@@ -4,16 +4,21 @@ namespace FA\Tests\DI;
 
 use FA\DI\Container;
 use FA\Model\Photo\Photo;
+use FA\Tests\CustomTestCase;
 
-class ContainerTest extends \PHPUnit_Framework_TestCase
+class ContainerTest extends CustomTestCase
 {
-    protected $config;
     protected $container;
 
     protected function setUp()
     {
-        $this->config = require APPLICATION_CONFIG_PATH . '/config.php';
+        parent::setUp();
         $this->container = new Container($this->config);
+    }
+
+    protected function tearDown()
+    {
+        parent::tearDown();
     }
 
     public function testContainerCreation()
@@ -23,22 +28,20 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
     public function testGoogleAnalyticsReturnsNullIfConfigKeysEmtpy()
     {
-        $config = require APPLICATION_CONFIG_PATH . '/config.php';
-        $config['googleAnalyticsTrackingId'] = '';
-        $config['googleAnalyticsDomain'] = '';
+        $this->config['googleAnalyticsTrackingId'] = '';
+        $this->config['googleAnalyticsDomain'] = '';
 
-        $container = new Container($config);
+        $container = new Container($this->config);
         
         $this->assertNull($container['googleAnalyticsMiddleware']);
     }
 
     public function testGoogleAnalyticsReturnsMiddlewareIfConfigKeysProvided()
     {
-        $config = require APPLICATION_CONFIG_PATH . '/config.php';
-        $config['googleAnalyticsTrackingId'] = '1234';
-        $config['googleAnalyticsDomain'] = 'example.com';
+        $this->config['googleAnalyticsTrackingId'] = '1234';
+        $this->config['googleAnalyticsDomain'] = 'example.com';
 
-        $container = new Container($config);
+        $container = new Container($this->config);
         
         $this->assertInstanceOf('FA\Middleware\GoogleAnalytics', $container['googleAnalyticsMiddleware']);
     }
