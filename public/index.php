@@ -4,19 +4,19 @@ date_default_timezone_set('UTC');
 
 require '../vendor/autoload.php';
 
+define('APPLICATION_PATH', realpath(dirname(__DIR__)));
+
 if (!defined('SLIM_MODE')) {
     $mode = getenv('SLIM_MODE') ? getenv('SLIM_MODE') : 'production';
     define('SLIM_MODE', $mode);
 }
 
-$configGlobPaths = sprintf(
+$configPaths = sprintf(
     '%s/config/{,*.}{global,%s,local}.php', 
-    realpath(__DIR__ . '/..'),
+    APPLICATION_PATH,
     SLIM_MODE
 );
-$config = Zend\Config\Factory::fromFiles(
-    glob($configGlobPaths, GLOB_BRACE)
-);
+$config = Zend\Config\Factory::fromFiles(glob($configPaths, GLOB_BRACE));
 
 use FA\Bootstrap\SlimBootstrap;
 use FA\DI\Container;
