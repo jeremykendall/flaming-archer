@@ -7,14 +7,18 @@
  * @license   http://github.com/jeremykendall/flaming-archer/blob/master/LICENSE MIT License
  */
 
+if (!defined('APPLICATION_PATH')) {
+    define('APPLICATION_PATH', realpath(dirname(__DIR__)));
+}
+
 // SQLite database file
-$sqlite = __DIR__ . '/../db/flaming-archer.db';
+$sqlite = APPLICATION_PATH . '/db/flaming-archer.db';
 
 return array(
     'flickr.api.endpoint' => 'http://api.flickr.com/services/rest',
-    'logger.app.logfile' => __DIR__ . '/../logs/app.log',
+    'logger.app.logfile' => APPLICATION_PATH . '/logs/app.log',
     'logger.app.level' => \Monolog\Logger::ERROR,
-    'logger.guzzle.logfile' => __DIR__ . '/../logs/guzzle.log',
+    'logger.guzzle.logfile' => APPLICATION_PATH . '/logs/guzzle.log',
     'logger.guzzle.level' => \Monolog\Logger::ERROR,
     'pagination' => array(
         'admin.itemCountPerPage' => 25,
@@ -22,7 +26,7 @@ return array(
     ),
     'slim' => array(
         'debug' => false,
-        'templates.path' => __DIR__ . '/../templates',
+        'templates.path' => APPLICATION_PATH . '/templates',
         'cookies.encrypt' => true,
         'cookies.secret_key' => 'CHANGE_ME',
         'cookies.cipher' => MCRYPT_RIJNDAEL_256,
@@ -31,7 +35,7 @@ return array(
     'twig' => array(
         'environment' => array(
             'charset' => 'utf-8',
-            'cache' => realpath(__DIR__ . '/../templates/cache'),
+            'cache' => APPLICATION_PATH . '/templates/cache',
             'auto_reload' => false,
             'strict_variables' => true,
             'autoescape' => true,
