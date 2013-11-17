@@ -30,6 +30,7 @@
         "wp-cli/php-cli-tools": "v0.9.4",
         "zendframework/zend-authentication": "2.2.*",
         "zendframework/zend-cache": "2.2.*",
+        "zendframework/zend-config": "2.2.*",
         "zendframework/zend-feed": "2.2.*",
         "zendframework/zend-inputfilter": "2.2.*",
         "zendframework/zend-paginator": "2.2.*",
@@ -50,11 +51,6 @@
     },
     "scripts": {
         "post-install-cmd": [
-            "FA\\Composer\\Script\\Config::create",
-            "FA\\Composer\\Script\\SQLite::prepare"
-        ],
-        "post-update-cmd": [
-            "FA\\Composer\\Script\\Config::create",
             "FA\\Composer\\Script\\SQLite::prepare"
         ]
     }
