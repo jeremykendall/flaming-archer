@@ -20,6 +20,12 @@ return array(
         'twitter_username' => '@Username',
     ),
     'cache' => array(
+        'adapter' => array(
+            'name' => 'filesystem',
+            'options' => array(
+                'cache_dir' => '/tmp',
+            ),
+        ),
         'plugins' => array(
             'ExceptionHandler' => array(
                 'throw_exceptions' => true
