@@ -21,4 +21,11 @@ return array(
             'debug' => true,
         ),
     ),
+    'cache' => array(
+        'plugins' => array(
+            'ExceptionHandler' => array(
+                'throw_exceptions' => true
+            ),
+        ),
+    ),
 );

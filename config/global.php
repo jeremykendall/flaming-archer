@@ -68,7 +68,7 @@ return array(
         ),
         'plugins' => array(
             'ExceptionHandler' => array(
-                'throw_exceptions' => true
+                'throw_exceptions' => false,
             ),
             'Serializer'
         ),

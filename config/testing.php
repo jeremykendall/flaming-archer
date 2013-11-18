@@ -19,4 +19,11 @@ return array(
         'tagline' => 'tagline',
         'twitter_username' => '@Username',
     ),
+    'cache' => array(
+        'plugins' => array(
+            'ExceptionHandler' => array(
+                'throw_exceptions' => true
+            ),
+        ),
+    ),
 );
