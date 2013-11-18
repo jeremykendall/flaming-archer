@@ -52,6 +52,9 @@
     "scripts": {
         "post-install-cmd": [
             "FA\\Composer\\Script\\SQLite::prepare"
+        ],
+        "post-update-cmd": [
+            "rm -rf templates/cache/*"
         ]
     }
 }
