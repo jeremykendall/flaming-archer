@@ -26,7 +26,7 @@
             {{ flash.addPhotoError }}
         </div>
         {% endif %}
-        <form name="add-photo" id="add-photo" class="well" role="form" method="post" action="/admin/add-photo">
+        <form name="add-photo" id="add-photo" class="well" role="form" method="post" action="/admin/photo">
             <div class="form-group">
                 <label for="day">Day</label>
                 <input type="number" class="form-control" min="1" max="366" id="day" name="day" placeholder="Day" value={{ projectDay }} required />
@@ -54,10 +54,8 @@
             <td>{{image.photoId}}</td>
             <td>{{image.posted|date("m/d/Y")}}</td>
             <td>
-                <form action="/admin/delete-photo" method="post">
-                    <input type="hidden" name="delete" value="1" />
-                    <input type="hidden" name="photoId" value="{{image.photoId}}" />
-                    <input type="hidden" name="day" value="{{image.day}}" />
+                <form action="/admin/photo/{{image.day}}" method="post">
+                    <input type="hidden" name="_METHOD" value="DELETE" />
                     <button class="btn btn-danger btn-xs" type="submit">
                         <span class="glyphicon glyphicon-trash"></span> Delete
                     </button>

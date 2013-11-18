@@ -148,7 +148,7 @@ $app->group('/admin', function () use ($app, $container) {
         $app->redirect('/admin/settings');
     });
 
-    $app->post('/add-photo', function() use ($app, $container) {
+    $app->post('/photo', function() use ($app, $container) {
         $data = $app->request()->post();
         $photo = new Photo($data);
         try {
@@ -173,14 +173,12 @@ $app->group('/admin', function () use ($app, $container) {
         $app->redirect('/admin');
     });
 
-    $app->post('/delete-photo', function() use ($app, $container) {
-        $params = $app->request()->post();
-        $photo = new Photo($params);
+    $app->delete('/photo/:day', function($day) use ($app, $container) {
+        $photo = $container['imageService']->find($day);
         $container['imageService']->delete($photo);
         $container['dispatcher']->dispatch('photo.delete', new PhotoEvent($photo));
         $app->redirect('/admin');
     });
-
 });
 
 $app->map('/login', function() use ($app, $container) {
