@@ -20,6 +20,7 @@ $config = Zend\Config\Factory::fromFiles(glob($configPaths, GLOB_BRACE));
 
 use FA\Bootstrap\SlimBootstrap;
 use FA\DI\Container;
+use FA\Event\PhotoEvent;
 use FA\Model\Photo\Photo;
 use Slim\Slim;
 
@@ -41,7 +42,7 @@ $app->get('/', function ($page = 1) use ($app, $container) {
 
 $app->get('/page/:page', function ($page = 1) use ($app, $container) {
     $paginator = $container['zendPaginator'];
-    $paginator->setItemCountPerPage($container['config']['pagination']['admin.itemCountPerPage']);
+    $paginator->setItemCountPerPage($container['config']['pagination']['public.itemCountPerPage']);
     $paginator->setCurrentPageNumber($page);
     $pages = $paginator->getPages();
 
@@ -71,112 +72,115 @@ $app->get('/day/:day', function($day) use ($app, $container) {
     ));
 })->conditions(array('day' => '([1-9]\d?|[12]\d\d|3[0-5]\d|36[0-6])'));
 
-$app->post('/admin/clear-cache', function() use ($app, $container) {
-    $cleared = null;
-    $clear = $app->request()->post('clear');
+$app->group('/admin', function () use ($app, $container) {
 
-    if ($clear == 1) {
-        if ($container['cache']->flush()) {
-            $app->flash('cacheSuccess', 'Cache cleared.');
-        } else {
-            $app->flash('cacheFailure', 'Problem clearing cache!');
-            $container['logger.app']->error('Cache not cleared');
+    $app->post('/clear-cache', function() use ($app, $container) {
+        $cleared = null;
+        $clear = $app->request()->post('clear');
+
+        if ($clear == 1) {
+            if ($container['cache']->flush()) {
+                $app->flash('cacheSuccess', 'Cache cleared.');
+            } else {
+                $app->flash('cacheFailure', 'Problem clearing cache!');
+                $container['logger.app']->error('Cache not cleared');
+            }
         }
-    }
 
-    $app->redirect('/admin/settings');
-});
+        $app->redirect('/admin/settings');
+    });
 
-$app->get('/admin(/page/:page)', function ($page = 1) use ($app, $container) {
-    $paginator = $container['zendPaginator'];
-    $paginator->setItemCountPerPage($container['config']['pagination']['public.itemCountPerPage']);
-    $paginator->setCurrentPageNumber($page);
-    $pages = $paginator->getPages();
+    $app->get('(/page/:page)', function ($page = 1) use ($app, $container) {
+        $paginator = $container['zendPaginator'];
+        $paginator->setItemCountPerPage($container['config']['pagination']['admin.itemCountPerPage']);
+        $paginator->setCurrentPageNumber($page);
+        $pages = $paginator->getPages();
 
-    $tz = new \DateTimeZone($container['config']['profile']['timezone']);
-    $now = new \DateTime('now', $tz);
-    $projectDay = $container['imageService']->getProjectDay($now);
-    $daysLeft = 365 - $projectDay;
-    $photoCount = $container['imageService']->countImages();
-    $percentage = ($photoCount / $projectDay) * 100;
+        $tz = new \DateTimeZone($container['config']['profile']['timezone']);
+        $now = new \DateTime('now', $tz);
+        $projectDay = $container['imageService']->getProjectDay($now);
+        $daysLeft = 365 - $projectDay;
+        $photoCount = $container['imageService']->countImages();
+        $percentage = ($photoCount / $projectDay) * 100;
 
-    $viewData = array(
-        'paginator' => $paginator,
-        'pages' => $pages,
-        'projectDay' => $projectDay,
-        'photoCount' => $photoCount,
-        'percentage' => $percentage,
-        'daysLeft' => $daysLeft,
-    );
+        $viewData = array(
+            'paginator' => $paginator,
+            'pages' => $pages,
+            'projectDay' => $projectDay,
+            'photoCount' => $photoCount,
+            'percentage' => $percentage,
+            'daysLeft' => $daysLeft,
+        );
 
-    $app->render('admin/index.html', $viewData);
-});
+        $app->render('admin/index.html', $viewData);
+    });
 
-$app->get('/admin/settings', function () use ($app, $container) {
-    $user = $container['userService']->getLoggedInUser();
-    $app->render('admin/settings.html', array('user' => $user));
-});
+    $app->get('/settings', function () use ($app, $container) {
+        $user = $container['userService']->getLoggedInUser();
+        $app->render('admin/settings.html', array('user' => $user));
+    });
 
-$app->post('/admin/user', function () use ($app, $container) {
-    $user = $container['userService']->getLoggedInUser();
-    $params = $app->request()->post();
+    $app->post('/user', function () use ($app, $container) {
+        $user = $container['userService']->getLoggedInUser();
+        $params = $app->request()->post();
 
-    $email = filter_var($params['email'], FILTER_SANITIZE_EMAIL);
+        $email = filter_var($params['email'], FILTER_SANITIZE_EMAIL);
 
-    if (filter_var($email, FILTER_VALIDATE_EMAIL) && ($email != $user->getEmail())) {
-        $user->setEmail($email);
-        $container['userService']->updateEmail($user);
-        $container['logger.app']->info(sprintf('Email changed from %s to %s', $user->getEmail(), $email));
-        $app->flash('emailSuccess', 'Your email is now ' . $email);
-    }
+        if (filter_var($email, FILTER_VALIDATE_EMAIL) && ($email != $user->getEmail())) {
+            $user->setEmail($email);
+            $container['userService']->updateEmail($user);
+            $container['logger.app']->info(sprintf('Email changed from %s to %s', $user->getEmail(), $email));
+            $app->flash('emailSuccess', 'Your email is now ' . $email);
+        }
 
-    if ($params['form-type'] == 'change-password' && $params['password']) {
-        $container['logger.app']->info(sprintf('About to change password for %s', $user->getEmail()));
+        if ($params['form-type'] == 'change-password' && $params['password']) {
+            $container['logger.app']->info(sprintf('About to change password for %s', $user->getEmail()));
+            try {
+                $result = $container['userService']->changePassword($user->getEmail(), $params['password'], $params['new-password'], $params['confirm-password']);
+                $container['logger.app']->info(sprintf('Password changed for %s', $user->getEmail()));
+                $app->flash('passwordSuccess', 'Password changed!');
+            } catch (\Exception $e) {
+                $container['logger.app']->error(sprintf('Error changing password: %s', $e->getMessage()));
+                $app->flash('passwordError', $e->getMessage());
+            }
+        }
+
+        $app->redirect('/admin/settings');
+    });
+
+    $app->post('/add-photo', function() use ($app, $container) {
+        $data = $app->request()->post();
+        $photo = new Photo($data);
         try {
-            $result = $container['userService']->changePassword($user->getEmail(), $params['password'], $params['new-password'], $params['confirm-password']);
-            $container['logger.app']->info(sprintf('Password changed for %s', $user->getEmail()));
-            $app->flash('passwordSuccess', 'Password changed!');
+            $container['imageService']->save($photo);
+            $container['dispatcher']->dispatch('photo.save', new PhotoEvent($photo));
+        } catch (\PDOException $p) {
+            $data = json_encode($data);
+            if ($p->getCode() == 23000) {
+                $app->flash(
+                    'addPhotoError', 
+                    "Whoops, something bad happened. Make sure the Day and Photo Id you're adding are unique."
+                );
+            } else {
+                $app->flash('addPhotoError', "Database error trying to add a photo. Try again?");
+            }
+            $container['logger.app']->error(sprintf('Database error adding a photo with data %s: %s', $data, $p->getMessage()));
         } catch (\Exception $e) {
-            $container['logger.app']->error(sprintf('Error changing password: %s', $e->getMessage()));
-            $app->flash('passwordError', $e->getMessage());
+            $data = json_encode($data);
+            $app->flash('addPhotoError', "Error trying to add a photo. Try again?");
+            $container['logger.app']->error(sprintf('Error adding a photo with data: %s: %s', $data, $e->getMessage()));
         }
-    }
+        $app->redirect('/admin');
+    });
 
-    $app->redirect('/admin/settings');
-});
+    $app->post('/delete-photo', function() use ($app, $container) {
+        $params = $app->request()->post();
+        $photo = new Photo($params);
+        $container['imageService']->delete($photo);
+        $container['dispatcher']->dispatch('photo.delete', new PhotoEvent($photo));
+        $app->redirect('/admin');
+    });
 
-$app->post('/admin/add-photo', function() use ($app, $container) {
-    $data = $app->request()->post();
-    $photo = new Photo($data);
-    try {
-        $container['imageService']->save($photo);
-        $container['cache']->clearByPrefix($container['paginatorAdapter']::CACHE_KEY_PREFIX);
-    } catch (\PDOException $p) {
-        $data = json_encode($data);
-        if ($p->getCode() == 23000) {
-            $app->flash(
-                'addPhotoError', 
-                "Whoops, something bad happened. Make sure the Day and Photo Id you're adding are unique."
-            );
-        } else {
-            $app->flash('addPhotoError', "Database error trying to add a photo. Try again?");
-        }
-        $container['logger.app']->error(sprintf('Database error adding a photo with data %s: %s', $data, $p->getMessage()));
-    } catch (\Exception $e) {
-        $data = json_encode($data);
-        $app->flash('addPhotoError', "Error trying to add a photo. Try again?");
-        $container['logger.app']->error(sprintf('Error adding a photo with data: %s: %s', $data, $e->getMessage()));
-    }
-    $app->redirect('/admin');
-});
-
-$app->post('/admin/delete-photo', function() use ($app, $container) {
-    $params = $app->request()->post();
-    $photo = new Photo($params);
-    $container['imageService']->delete($photo);
-    $container['cache']->removeItem($params['photoId']);
-    $container['cache']->clearByPrefix($container['paginatorAdapter']::CACHE_KEY_PREFIX);
-    $app->redirect('/admin');
 });
 
 $app->map('/login', function() use ($app, $container) {
