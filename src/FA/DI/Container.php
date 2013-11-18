@@ -6,6 +6,7 @@ use FA\Authentication\Adapter\DbAdapter;
 use FA\Dao\ImageDao;
 use FA\Dao\UserDao;
 use FA\Feed\Feed;
+use FA\Listener\PhotoListener;
 use FA\Middleware\Authentication;
 use FA\Middleware\GoogleAnalytics;
 use FA\Middleware\Navigation;
@@ -27,6 +28,7 @@ use Slim\Middleware\SessionCookie;
 use Slim\Slim;
 use Slim\Views\Twig;
 use Slim\Views\TwigExtension;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 use Zend\Authentication\AuthenticationService;
 use Zend\Cache\StorageFactory;
 use Zend\Paginator\Paginator;
@@ -203,5 +205,23 @@ class Container extends Pimple
 
             return $client;
         });
+
+        $this['dispatcher'] = function () use ($c) {
+            $dispatcher = new EventDispatcher();
+            $dispatcher->addListener(
+                'photo.save', 
+                array($c['photo.listener'], 'onPhotoSave')
+            );
+            $dispatcher->addListener(
+                'photo.delete', 
+                array($c['photo.listener'], 'onPhotoDelete')
+            );
+
+            return $dispatcher;
+        };
+
+        $this['photo.listener'] = function () use ($c) {
+            return new PhotoListener($c['cache'], $c['logger.app']);
+        };
     }
 }

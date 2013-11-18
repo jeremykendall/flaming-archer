@@ -26,6 +26,7 @@
         "pimple/pimple": "v1.0.2",
         "slim/slim": "2.3.*",
         "slim/views": "0.1.*",
+        "symfony/event-dispatcher": "2.3.*",
         "twig/twig": "1.13.*",
         "wp-cli/php-cli-tools": "v0.9.4",
         "zendframework/zend-authentication": "2.2.*",
@@ -40,6 +41,7 @@
     "require-dev": {
         "composer/composer": "1.0.*@dev",
         "mikey179/vfsStream": "1.2.*",
+        "mockery/mockery": "0.8.0",
         "jeremykendall/phpctagger": "dev-master",
         "phpunit/phpunit": "3.7.*"
     },

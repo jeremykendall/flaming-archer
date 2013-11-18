@@ -55,4 +55,28 @@ class ContainerTest extends CustomTestCase
 
         $this->assertInstanceOf('FA\Social\MetaTags', $this->container['metaTags']);
     }
+
+    public function testEventDispatcher()
+    {
+        $this->assertInstanceOf(
+            'Symfony\Component\EventDispatcher\EventDispatcher', 
+            $this->container['dispatcher']
+        );
+    }
+
+    public function testCache()
+    {
+        $this->assertInstanceOf(
+            'Zend\Cache\Storage\Adapter\Filesystem', 
+            $this->container['cache']
+        );
+    }
+
+    public function testPhotoListener()
+    {
+        $this->assertInstanceOf(
+            'FA\Listener\PhotoListener', 
+            $this->container['photo.listener']
+        );
+    }
 }
