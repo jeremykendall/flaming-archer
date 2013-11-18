@@ -6,22 +6,18 @@ use Doctrine\Common\Collections\ArrayCollection;
 use FA\Model\Photo\Photo;
 use FA\Model\Photo\Size;
 use FA\Service\FlickrService;
+use FA\Tests\CustomTestCase;
 use Guzzle\Http\Client;
 
 /**
  * @group internet
  */
-class FlickrServiceIntegrationTest extends \PHPUnit_Framework_TestCase
+class FlickrServiceIntegrationTest extends CustomTestCase
 {
     /**
      * @var FlickrService
      */
     protected $service;
-
-    /**
-     * @var array
-     */
-    protected static $config;
 
     /**
      * @var ArrayCollection
@@ -43,21 +39,16 @@ class FlickrServiceIntegrationTest extends \PHPUnit_Framework_TestCase
      */
     protected $log;
 
-    public static function setUpBeforeClass()
-    {
-        parent::setUpBeforeClass();
-        self::$config = include APPLICATION_CONFIG_PATH . '/config.php';
-    }
-
     /**
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
      */
     protected function setUp()
     {
-        $this->client = new Client(self::$config['flickr.api.endpoint']);
+        parent::setUp();
+        $this->client = new Client($this->config['flickr.api.endpoint']);
         $this->client->setDefaultOption('query', array(
-            'api_key' => self::$config['flickr.api.key'],
+            'api_key' => $this->config['flickr.api.key'],
             'format' => 'json',
             'nojsoncallback' => 1,
         ));
@@ -98,6 +89,7 @@ class FlickrServiceIntegrationTest extends \PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         $this->service = null;
+        parent::tearDown();
     }
 
     public function testFind()

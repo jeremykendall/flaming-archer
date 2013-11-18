@@ -2,62 +2,58 @@
 
 namespace FA\Tests\Composer\Script;
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+use Composer\Config as ComposerConfig;
+use Composer\IO\ConsoleIO;
+use Composer\Script\Event;
+use FA\Tests\CustomTestCase;
 
-/**
- * Description of ComposerScriptTestCase
- *
- * @author jkendall
- */
-class ComposerScriptTestCase extends \PHPUnit_Framework_TestCase
+class ComposerScriptTestCase extends CustomTestCase
 {
-
     /**
-     * @var \Composer\Composer
+     * @var Composer\Composer
      */
     protected $composerMock;
 
     /**
-     * @var \Composer\Config
+     * @var ComposerConfig
      */
     protected $composerConfig;
 
     /**
-     * @var \Symfony\Component\Console\Output\OutputInterface
+     * @var Symfony\Component\Console\Output\OutputInterface
      */
     protected $outputMock;
 
     /**
-     * @var \Composer\Script\Event
+     * @var Composer\Package\Package
+     */
+    protected $package;
+
+    /**
+     * @var Event
      */
     protected $event;
 
-    /**
-     * Sets up the fixture, for example, opens a network connection.
-     * This method is called before a test is executed.
-     */
     protected function setUp()
     {
+        parent::setUp();
+
         // Create Composer config
-        $this->composerConfig = new \Composer\Config();
+        $this->composerConfig = new ComposerConfig();
 
         // Set up Composer environment
         $this->composerMock = $this->getMock('Composer\Composer');
         $inputMock = $this->getMock('Symfony\Component\Console\Input\InputInterface');
         $this->outputMock = $this->getMock('Symfony\Component\Console\Output\OutputInterface');
         $helperMock = $this->getMock('Symfony\Component\Console\Helper\HelperSet');
-        $consoleIO = new \Composer\IO\ConsoleIO($inputMock, $this->outputMock, $helperMock);
-        $this->event = new \Composer\Script\Event('post-install-cmd', $this->composerMock, $consoleIO, true);
+        $consoleIO = new ConsoleIO($inputMock, $this->outputMock, $helperMock);
+        $this->package = $this->getMock('Composer\Package\PackageInterface');
+
+        $this->event = new Event('post-install-cmd', $this->composerMock, $consoleIO, true);
     }
 
-    /**
-     * Tears down the fixture, for example, closes a network connection.
-     * This method is called after a test is executed.
-     */
     protected function tearDown()
     {
+        parent::tearDown();
     }
 }

@@ -54,20 +54,13 @@ class SlimBootstrap
 
     public function configureDevelopmentMode(Slim $app, Container $container)
     {
-        $config = $container['config'];
-
-        $app->configureMode('development', function() use ($app, $container, $config) {
-            $app->config('debug', false);
-
-            $config['logger.app.level'] = LogLevel::DEBUG;
-            $config['logger.guzzle.level'] = LogLevel::DEBUG;
-            $config['twig']['environment']['auto_reload'] = true;
-            $config['twig']['environment']['debug'] = true;
-
-            $container['logger.app']->pushHandler(new ChromePHPHandler($config['logger.app.level']));
-            $container['logger.guzzle']->pushHandler(new ChromePHPHandler($config['logger.guzzle.level']));
-
-            $container['config'] = $config;
+        $app->configureMode('development', function() use ($app, $container) {
+            $container['logger.app']->pushHandler(
+                new ChromePHPHandler($container['config']['logger.app.level'])
+            );
+            $container['logger.guzzle']->pushHandler(
+                new ChromePHPHandler($container['config']['logger.guzzle.level'])
+            );
         });
     }
 

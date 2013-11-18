@@ -14,11 +14,6 @@ class FlickrServiceTest extends \PHPUnit_Framework_TestCase
     protected $service;
 
     /**
-     * @var array
-     */
-    protected static $config;
-
-    /**
      * @var ArrayCollection
      */
     protected $sizes;
@@ -37,12 +32,6 @@ class FlickrServiceTest extends \PHPUnit_Framework_TestCase
      * @var Log
      */
     protected $log;
-
-    public static function setUpBeforeClass()
-    {
-        parent::setUpBeforeClass();
-        self::$config = include APPLICATION_CONFIG_PATH . '/config.php';
-    }
 
     /**
      * Sets up the fixture, for example, opens a network connection.

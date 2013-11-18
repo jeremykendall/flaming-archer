@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Flaming Archer
  *
@@ -11,6 +10,7 @@
 namespace FA\Composer\Script;
 
 use Composer\Script\Event;
+use Zend\Config\Factory as ConfigFactory;
 
 /**
  * SQLite class
@@ -28,7 +28,13 @@ class SQLite
     public static function prepare(Event $event)
     {
         $root = dirname($event->getComposer()->getConfig()->get('vendor-dir'));
-        $config = include $root . '/config/config.php';
+
+        $configPaths = sprintf(
+            '%s/config/{,*.}{global,%s,local}.php',
+            $root,
+            self::getConfigEnvironment($event)
+        );
+        $config = ConfigFactory::fromFiles(glob($configPaths, GLOB_BRACE));
 
         $io = $event->getIO();
 
@@ -54,5 +60,20 @@ class SQLite
         } else {
             $io->write('Database found.', true);
         }
+    }
+
+    public static function getConfigEnvironment(Event $event)
+    {
+        $extra = $event->getComposer()->getPackage()->getExtra();
+
+        if (isset($extra['configEnvironment'])) {
+            return $extra['configEnvironment'];
+        } 
+        
+        if ($event->isDevMode()) {
+            return 'development';
+        }
+
+        return 'production';
     }
 }
