@@ -1,15 +1,15 @@
 <?php
 
-namespace FA\Listener;
+namespace FA\Event\Subscriber;
 
 use FA\Event\PhotoEvent;
 use FA\Paginator\Adapter\DbAdapter as PaginatorAdapter;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Zend\Cache\Storage\ClearByPrefixInterface;
 use Zend\Cache\Storage\StorageInterface;
 
-class PhotoListener
+class PhotoSubscriber implements EventSubscriberInterface
 {
     /**
      * @var AbstractAdapter
@@ -41,6 +41,14 @@ class PhotoListener
 
         $this->cache = $cache;
         $this->logger = $logger;
+    }
+
+    public static function getSubscribedEvents()
+    {
+        return array(
+            'photo.save' => array('onPhotoSave', 0),
+            'photo.delete' => array('onPhotoDelete', 0),
+        );
     }
 
     public function onPhotoSave(PhotoEvent $event)

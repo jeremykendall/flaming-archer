@@ -1,20 +1,23 @@
 <?php
 
-namespace FA\Tests\Listener;
+namespace FA\Tests\Event\Subscriber;
 
 use FA\Event\PhotoEvent;
-use FA\Listener\PhotoListener;
+use FA\Event\Subscriber\PhotoSubscriber;
 use FA\Model\Photo\Photo;
 use FA\Paginator\Adapter\DbAdapter as PaginatorAdapter;
 use FA\Tests\CustomTestCase;
 use Mockery as m;
 
-class PhotoListenerTest extends CustomTestCase
+/**
+ * @group events
+ */
+class PhotoSubscriberTest extends CustomTestCase
 {
     /**
-     * @var PhotoListener
+     * @var PhotoSubscriber
      */
-    protected $listener;
+    protected $subscriber;
 
     /**
      * @var Mock implementing both ClearByPrefixInterface and StorageInterface
@@ -38,7 +41,7 @@ class PhotoListenerTest extends CustomTestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->listener = new PhotoListener($this->cache, $this->logger);
+        $this->subscriber = new PhotoSubscriber($this->cache, $this->logger);
     }
 
     protected function tearDown()
@@ -59,7 +62,7 @@ class PhotoListenerTest extends CustomTestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        new PhotoListener($cache, $this->logger);
+        new PhotoSubscriber($cache, $this->logger);
     }
 
     public function testStorageInterfaceRequired()
@@ -74,7 +77,7 @@ class PhotoListenerTest extends CustomTestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        new PhotoListener($cache, $this->logger);
+        new PhotoSubscriber($cache, $this->logger);
     }
 
     public function testOnPhotoSave()
@@ -89,7 +92,7 @@ class PhotoListenerTest extends CustomTestCase
             ->method('info')
             ->with(sprintf(
                 'Calling %s for %s',
-                'FA\Listener\PhotoListener::onPhotoSave',
+                'FA\Event\Subscriber\PhotoSubscriber::onPhotoSave',
                 $event->getName()
             ));
 
@@ -97,7 +100,7 @@ class PhotoListenerTest extends CustomTestCase
             ->with(PaginatorAdapter::CACHE_KEY_PREFIX)
             ->once();
 
-        $this->listener->onPhotoSave($event);
+        $this->subscriber->onPhotoSave($event);
     }
 
     public function testOnPhotoDelete()
@@ -112,7 +115,7 @@ class PhotoListenerTest extends CustomTestCase
             ->method('info')
             ->with(sprintf(
                 'Calling %s for %s',
-                'FA\Listener\PhotoListener::onPhotoDelete',
+                'FA\Event\Subscriber\PhotoSubscriber::onPhotoDelete',
                 $event->getName()
             ));
 
@@ -124,6 +127,6 @@ class PhotoListenerTest extends CustomTestCase
             ->with(PaginatorAdapter::CACHE_KEY_PREFIX)
             ->once();
 
-        $this->listener->onPhotoDelete($event);
+        $this->subscriber->onPhotoDelete($event);
     }
 }
