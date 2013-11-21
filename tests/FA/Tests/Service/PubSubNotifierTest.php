@@ -53,9 +53,17 @@ class PubSubNotifierTest extends \PHPUnit_Framework_TestCase
             ->method('send')
             ->will($this->returnValue($response));
 
-        $this->logger->expects($this->once())
+        $this->logger->expects($this->at(0))
             ->method('debug')
             ->with('Notification request send to pubsubhubbub');
+
+        $this->logger->expects($this->at(1))
+            ->method('debug')
+            ->with($this->request);
+
+        $this->logger->expects($this->at(2))
+            ->method('debug')
+            ->with($response);
 
         $this->notifier->notify($this->feedUrl);
     }
