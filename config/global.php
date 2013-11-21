@@ -16,6 +16,9 @@ $sqlite = APPLICATION_PATH . '/db/flaming-archer.db';
 
 return array(
     'flickr.api.endpoint' => 'http://api.flickr.com/services/rest',
+    'pubsubhubbub.url' => 'https://pubsubhubbub.appspot.com/',
+    'feed.outfile' => 'feed.xml',
+    'feed.format' => 'rss',
     'logger.app.logfile' => APPLICATION_PATH . '/logs/app.log',
     'logger.app.level' => \Monolog\Logger::ERROR,
     'logger.guzzle.logfile' => APPLICATION_PATH . '/logs/guzzle.log',
