@@ -2,6 +2,7 @@
 
 namespace FA\Tests\Composer\Script;
 
+use Composer\Script\Event;
 use Composer\Util\Filesystem;
 use FA\Composer\Script\SQLite;
 
@@ -95,6 +96,36 @@ class SQLiteTest extends ComposerScriptTestCase
         $this->configureExpectations($output, 'testing-bad-dsn');
 
         SQLite::prepare($this->event);
+    }
+
+    public function testGetConfigEnvironmentDevEnvironment()
+    {
+        $event = new Event('post-install-cmd', $this->composerMock, $this->consoleIO, true);
+
+        $this->composerMock->expects($this->once())
+                ->method('getPackage')
+                ->will($this->returnValue($this->package));
+
+        $this->package->expects($this->once())
+            ->method('getExtra')
+            ->will($this->returnValue(array()));
+
+        $this->assertEquals('development', SQLite::getConfigEnvironment($event));
+    }
+
+    public function testGetConfigEnvironmentProdEnvironment()
+    {
+        $event = new Event('post-install-cmd', $this->composerMock, $this->consoleIO, false);
+
+        $this->composerMock->expects($this->once())
+                ->method('getPackage')
+                ->will($this->returnValue($this->package));
+
+        $this->package->expects($this->once())
+            ->method('getExtra')
+            ->will($this->returnValue(array()));
+
+        $this->assertEquals('production', SQLite::getConfigEnvironment($event));
     }
 
     protected function configureExpectations(array $output, $configEnv)
