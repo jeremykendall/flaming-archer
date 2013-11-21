@@ -77,9 +77,9 @@ class SlimBootstrap
 
     public function configureView(Slim $app, Container $container)
     {
-        $app->view($container['twig']);
+        $app->view($container['slim.twig']);
         $app->view->parserOptions = $container['config']['twig']['environment'];
-        $app->view->parserExtensions = array($container['slimTwigExtension'], $container['twigExtensionDebug']);
+        $app->view->parserExtensions = array($container['slim.twig.extension'], $container['twig.extension.debug']);
         $app->view->getInstance()->getExtension('core')->setTimezone($container['config']['profile']['timezone']);
     }
 
@@ -110,6 +110,7 @@ class SlimBootstrap
 
     public function addMiddleware(Slim $app, Container $container)
     {
+        $app->add($container['settingsMiddleware']);
         $app->add($container['profileMiddleware']);
         if ($container['googleAnalyticsMiddleware']) {
             $app->add($container['googleAnalyticsMiddleware']);
