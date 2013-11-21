@@ -5,22 +5,24 @@ namespace FA\DI;
 use FA\Authentication\Adapter\DbAdapter;
 use FA\Dao\ImageDao;
 use FA\Dao\UserDao;
+use FA\Event\FeedEvent;
+use FA\Event\Subscriber\FeedSubscriber;
+use FA\Event\Subscriber\PhotoSubscriber;
 use FA\Feed\Feed;
-use FA\Listener\PhotoListener;
 use FA\Middleware\Authentication;
 use FA\Middleware\GoogleAnalytics;
 use FA\Middleware\Navigation;
 use FA\Middleware\Profile;
+use FA\Middleware\Settings;
 use FA\Pagination;
 use FA\Paginator\Adapter\DbAdapter as PaginatorAdapter;
 use FA\Service\FlickrService;
 use FA\Service\ImageService;
+use FA\Service\PubSubNotifier;
 use FA\Service\UserService;
 use FA\Social\MetaTags;
-use Guzzle\Cache\Zf2CacheAdapter;
 use Guzzle\Http\Client;
 use Guzzle\Plugin\Cache\CachePlugin;
-use Guzzle\Plugin\Cache\DefaultCacheStorage;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Pimple;
@@ -29,6 +31,9 @@ use Slim\Slim;
 use Slim\Views\Twig;
 use Slim\Views\TwigExtension;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use \Twig_Environment;
+use \Twig_Extension_Debug;
+use \Twig_Loader_String;
 use Zend\Authentication\AuthenticationService;
 use Zend\Cache\StorageFactory;
 use Zend\Paginator\Paginator;
@@ -46,6 +51,9 @@ class Container extends Pimple
     protected function configureContainer()
     {
         $c = $this;
+
+        $c['baseUrl'] = null;
+        $c['feedUri'] = null;
 
         $this['db'] = $this->share(function () use ($c) {
             try {
@@ -67,7 +75,7 @@ class Container extends Pimple
             $log = new Logger('app');
             $log->pushHandler(
                 new StreamHandler(
-                    $c['config']['logger.app.logfile'], 
+                    $c['config']['logger.app.logfile'],
                     $c['config']['logger.app.level']
                 )
             );
@@ -79,7 +87,7 @@ class Container extends Pimple
             $log = new Logger('guzzle');
             $log->pushHandler(
                 new StreamHandler(
-                    $c['config']['logger.guzzle.logfile'], 
+                    $c['config']['logger.guzzle.logfile'],
                     $c['config']['logger.guzzle.level']
                 )
             );
@@ -111,8 +119,23 @@ class Container extends Pimple
             return new ImageService(new ImageDao($c['db']), $c['flickrServiceCache']);
         };
 
-        $this['feedWriter'] = function () use ($c) {
-            return new Feed($c['imageService'], $c['twig'], $c['config']['profile'], $c['baseUrl']);
+        $this['feed.event'] = function () use ($c) {
+            return new FeedEvent(
+                $c['config']['feed.format'],
+                $c['config']['feed.outfile'],
+                sprintf('%s%s', $c['baseUrl'], $c['feedUri'])
+            );
+        };
+
+        $this['feed.writer'] = function () use ($c) {
+            return new Feed(
+                $c['imageService'], 
+                $c['twig.loader.string'], 
+                $c['config']['profile'], 
+                $c['baseUrl'],
+                $c['feedUri'],
+                $c['config']['pubsubhubbub.url']
+            );
         };
 
         $this['paginatorAdapter'] = function () use ($c) {
@@ -159,19 +182,30 @@ class Container extends Pimple
             }
         };
 
+        $this['settingsMiddleware'] = function () use ($c) {
+            return new Settings($c);
+        };
+
         $this['userService'] = function () use ($c) {
             return new UserService($c['userDao'], $c['auth']);
         };
 
-        $this['twig'] = function () {
+        $this['twig.loader.string'] = function () {
+            $loader = new Twig_Loader_String();
+            $twig = new Twig_Environment($loader);
+
+            return $twig;
+        };
+
+        $this['slim.twig'] = function () {
             return new Twig();
         };
 
-        $this['twigExtensionDebug'] = function () {
-            return new \Twig_Extension_Debug();
+        $this['twig.extension.debug'] = function () {
+            return new Twig_Extension_Debug();
         };
 
-        $this['slimTwigExtension'] = function () {
+        $this['slim.twig.extension'] = function () {
             return new TwigExtension();
         };
 
@@ -208,20 +242,33 @@ class Container extends Pimple
 
         $this['dispatcher'] = function () use ($c) {
             $dispatcher = new EventDispatcher();
-            $dispatcher->addListener(
-                'photo.save', 
-                array($c['photo.listener'], 'onPhotoSave')
-            );
-            $dispatcher->addListener(
-                'photo.delete', 
-                array($c['photo.listener'], 'onPhotoDelete')
-            );
+            $dispatcher->addSubscriber($c['event_subscriber.photo']);
+            $dispatcher->addSubscriber($c['event_subscriber.feed']);
 
             return $dispatcher;
         };
 
-        $this['photo.listener'] = function () use ($c) {
-            return new PhotoListener($c['cache'], $c['logger.app']);
+        $this['event_subscriber.photo'] = function () use ($c) {
+            return new PhotoSubscriber(
+                $c['cache'],
+                $c['logger.app']
+            );
+        };
+
+        $this['event_subscriber.feed'] = function () use ($c) {
+            return new FeedSubscriber(
+                $c['feed.writer'],
+                $c['pubSubNotifier'],
+                $c['logger.app']
+            );
+        };
+
+        $this['pubSubNotifier'] = function () use ($c) {
+            return new PubSubNotifier(
+                new Client(),
+                $c['logger.app'],
+                $c['config']['pubsubhubbub.url']
+            );
         };
     }
 }

@@ -72,11 +72,11 @@ class ContainerTest extends CustomTestCase
         );
     }
 
-    public function testPhotoListener()
+    public function testPhotoSubscriber()
     {
         $this->assertInstanceOf(
-            'FA\Listener\PhotoListener', 
-            $this->container['photo.listener']
+            'FA\Event\Subscriber\PhotoSubscriber', 
+            $this->container['event_subscriber.photo']
         );
     }
 }
