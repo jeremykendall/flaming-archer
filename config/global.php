@@ -16,6 +16,7 @@ $sqlite = APPLICATION_PATH . '/db/flaming-archer.db';
 
 return array(
     'flickr.api.endpoint' => 'http://api.flickr.com/services/rest',
+    'flickr.api.key' => '1234abcd1234abcd1234abcd1234abcd',
     'pubsubhubbub.url' => 'https://pubsubhubbub.appspot.com/',
     'feed.outfile' => 'feed.xml',
     'feed.format' => 'rss',
