@@ -20,6 +20,7 @@ $config = Zend\Config\Factory::fromFiles(glob($configPaths, GLOB_BRACE));
 
 use FA\Bootstrap\SlimBootstrap;
 use FA\DI\Container;
+use FA\Event\FeedEvent;
 use FA\Event\PhotoEvent;
 use FA\Model\Photo\Photo;
 use Slim\Slim;
@@ -154,6 +155,14 @@ $app->group('/admin', function () use ($app, $container) {
         try {
             $container['imageService']->save($photo);
             $container['dispatcher']->dispatch('photo.save', new PhotoEvent($photo));
+            $container['dispatcher']->dispatch(
+                'content.change', 
+                new FeedEvent(
+                    $container['config']['feed.format'],
+                    $container['config']['feed.outfile'],
+                    sprintf('%s%s', $c['baseUrl'], $c['feedUri'])
+                )
+            );
         } catch (\PDOException $p) {
             $data = json_encode($data);
             if ($p->getCode() == 23000) {
@@ -177,6 +186,14 @@ $app->group('/admin', function () use ($app, $container) {
         $photo = $container['imageService']->find($day);
         $container['imageService']->delete($photo);
         $container['dispatcher']->dispatch('photo.delete', new PhotoEvent($photo));
+        $container['dispatcher']->dispatch(
+            'content.change', 
+            new FeedEvent(
+                $container['config']['feed.format'],
+                $container['config']['feed.outfile'],
+                sprintf('%s%s', $container['baseUrl'], $container['feedUri'])
+            )
+        );
         $app->redirect('/admin');
     });
 });
@@ -201,14 +218,25 @@ $app->map('/login', function() use ($app, $container) {
     $app->render('login.html', array('email' => $email));
 })->via('GET', 'POST');
 
-$app->get('/feed(/:format)', function($format = 'rss') use ($app, $container) {
-    $container['baseUrl'] = sprintf('%s%s', $app->request->getUrl(), $app->request->getRootUri());
-    $app->response->headers->set('Content-Type', 'application/atom+xml; charset=utf-8');
-    $feedWriter = $container['feedWriter'];
-    $feedWriter->setView($app->view);
+$app->get('/feed', function() use ($app, $container) {
+    if (!file_exists(sprintf('%s/public/%s', APPLICATION_PATH, $container['config']['feed.outfile']))) {
+        $container['feed.writer']->publish(
+            $container['config']['feed.format'], 
+            $container['config']['feed.outfile']
+        );
+        $container['dispatcher']->dispatch(
+            'feed.publish', 
+            new FeedEvent(
+                $container['config']['feed.format'],
+                $container['config']['feed.outfile'],
+                sprintf('%s%s', $container['baseUrl'], $container['feedUri'])
+            )
+        );
+    }
 
-    echo $feedWriter->get($format);
-});
+    $app->response->headers->set('Content-Type', 'application/atom+xml; charset=utf-8');
+    echo file_get_contents(APPLICATION_PATH . '/public/feed.xml');
+})->name('feed');
 
 $app->get('/setup', function () use ($app, $container) {
     if (count($container['userDao']->findAll()) > 0) {
