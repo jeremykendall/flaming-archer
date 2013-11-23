@@ -152,6 +152,27 @@ $app->group('/admin', function () use ($app, $container) {
         $app->redirect('/admin/settings');
     });
 
+    $app->get('/feed', function() use ($app, $container) {
+        try {
+            $container['feed.writer']->publish(
+                $container['config']['feed.format'], 
+                $container['config']['feed.outfile']
+            );
+            $container['dispatcher']->dispatch(
+                'feed.publish', 
+                new FeedEvent(
+                    $container['config']['feed.format'],
+                    $container['config']['feed.outfile'],
+                    sprintf('%s%s', $container['baseUrl'], $container['feedUri'])
+                )
+            );
+        } catch (\Exception $e) {
+            $container['logger.app']->error(sprintf('Error refreshing feed: %s', $e->getMessage()));
+        }
+
+        $app->redirect('/admin');
+    });
+
     $app->post('/photo', function() use ($app, $container) {
         $data = $app->request()->post();
         $photo = new Photo($data);
@@ -163,7 +184,7 @@ $app->group('/admin', function () use ($app, $container) {
                 new FeedEvent(
                     $container['config']['feed.format'],
                     $container['config']['feed.outfile'],
-                    sprintf('%s%s', $c['baseUrl'], $c['feedUri'])
+                    sprintf('%s%s', $container['baseUrl'], $container['feedUri'])
                 )
             );
         } catch (\PDOException $p) {
