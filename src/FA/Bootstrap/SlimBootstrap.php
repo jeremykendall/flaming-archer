@@ -99,7 +99,11 @@ class SlimBootstrap
     public function configureCustomErrorHandling(Slim $app)
     {
         $app->error(function(\FA\Service\FlickrServiceUnavailableException $e) use ($app) {
-            $app->render('flickr-down.html');
+            if ($e instanceof \FA\Service\FlickrServiceUnavailableException) {
+                $app->render('flickr-down.html');
+            }
+            
+            throw $e;
         });
     }
 
