@@ -81,7 +81,7 @@ $app->group('/admin', function () use ($app, $container) {
 
         if ($clear == 1) {
             try {
-                $container['cache']->flush()
+                $container['cache']->flush();
                 $app->flash('cacheSuccess', 'Cache cleared.');
             } catch (\Exception $e) {
                 $app->flash('cacheFailure', 'Problem clearing cache!');
