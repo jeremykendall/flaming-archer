@@ -80,11 +80,14 @@ $app->group('/admin', function () use ($app, $container) {
         $clear = $app->request()->post('clear');
 
         if ($clear == 1) {
-            if ($container['cache']->flush()) {
+            try {
+                $container['cache']->flush()
                 $app->flash('cacheSuccess', 'Cache cleared.');
-            } else {
+            } catch (\Exception $e) {
                 $app->flash('cacheFailure', 'Problem clearing cache!');
-                $container['logger.app']->error('Cache not cleared');
+                $container['logger.app']->error(
+                    sprintf('Exception clearing cache: %s', $e->getMessage())
+                );
             }
         }
 
