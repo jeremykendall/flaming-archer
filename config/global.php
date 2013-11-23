@@ -67,7 +67,7 @@ return array(
             'name' => 'apc',
             'options' => array(
                 'ttl' => 60 * 60 * 24, // One day
-                'namespace' => 'flaming-archer',
+                'namespace' => 'flaming-archer-cache',
             )
         ),
         'plugins' => array(
