@@ -259,6 +259,11 @@ class Photo extends BaseModel
             $featured = $this->getSize('Medium 800');
         }
 
+        // TODO: Temporary fix, must refactor
+        if (!$featured) {
+            $featured = $this->getSize('Medium 640');
+        }
+
         return $featured;
     }
 
