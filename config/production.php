@@ -15,7 +15,7 @@ return array(
         'adapter' => array(
             'name' => 'filesystem',
             'options' => array(
-                'cache_dir' => '/tmp',
+                'cache_dir' => '/tmp/flaming-archer-cache',
             ),
         ),
     ),
