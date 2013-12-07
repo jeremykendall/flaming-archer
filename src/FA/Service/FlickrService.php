@@ -184,6 +184,13 @@ class FlickrService implements FlickrInterface
         }
     }
 
+    public function search(array $options)
+    {
+        $options['method'] = 'flickr.photos.search';
+
+        return $this->makeRequest($options);
+    }
+
     public function parseResponse($body)
     {
         if ($body['stat'] == 'ok') {
