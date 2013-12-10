@@ -6,6 +6,11 @@
 <div class="row">
     <div class="col-md-12">
         <h2>Project Photos</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
         <table class="admin table table-striped table-bordered table-hover">
             <thead>
                 <tr>
@@ -41,19 +46,19 @@
             {% if pages.previous is not defined %}
             <span>Prev</span>
             {% else %}
-            <a id="previous-day" href="{{ baseUrl() }}/admin/page/{{ pages.previous }}">Prev</a>
+            <a id="previous-day" href="{{ baseUrl() }}/admin/photos/{{ pages.previous }}">Prev</a>
             {% endif %}
         </li>
 
         {% for page in pages.pagesInRange %}
-        <li{% if page == pages.current %} class="active"{% endif %}><a href="{{ baseUrl() }}/admin/page/{{ page }}">{{ page }}</a></li>
+        <li{% if page == pages.current %} class="active"{% endif %}><a href="{{ baseUrl() }}/admin/photos/{{ page }}">{{ page }}</a></li>
         {% endfor %}
 
         <li{% if pages.next is not defined %} class="disabled"{% endif %}>
             {% if pages.next is not defined %}
             <span>Next</span>
             {% else %}
-            <a id="next-day" href="{{ baseUrl() }}/admin/page/{{ pages.next }}">Next</a>
+            <a id="next-day" href="{{ baseUrl() }}/admin/photos/{{ pages.next }}">Next</a>
             {% endif %}
         </li>
     </ul>

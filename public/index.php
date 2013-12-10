@@ -102,7 +102,7 @@ $app->group('/admin', function () use ($app, $container) {
         $app->render('admin/today.twig', $viewData);
     })->name('today');
 
-    $app->get('(/page/:page)', function ($page = 1) use ($app, $container) {
+    $app->get('/photos(/:page)', function ($page = 1) use ($app, $container) {
         $paginator = $container['zendPaginator'];
         $paginator->setItemCountPerPage($container['config']['pagination']['admin.itemCountPerPage']);
         $paginator->setCurrentPageNumber($page);
@@ -116,7 +116,7 @@ $app->group('/admin', function () use ($app, $container) {
             'projectDay' => $projectDay,
         );
 
-        $app->render('admin/index.html', $viewData);
+        $app->render('admin/photos.html', $viewData);
     });
 
     $app->post('/clear-cache', function() use ($app, $container) {
