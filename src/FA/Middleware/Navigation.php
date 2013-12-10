@@ -46,13 +46,14 @@ class Navigation extends Middleware
     public function call()
     {
         $home = array('caption' => 'Home', 'href' => '/');
-        $admin = array('caption' => 'Admin', 'href' => '/admin');
+        $today = array('caption' => 'Today', 'href' => '/admin');
+        $photos = array('caption' => 'Photos', 'href' => '/admin/photos');
         $settings = array('caption' => 'Settings', 'href' => '/admin/settings');
         $feed = array('caption' => 'Feed', 'href' => '/feed');
         $logout = array('caption' => 'Logout', 'href' => '/logout');
 
         if ($this->auth->hasIdentity()) {
-            $navigation = array($home, $feed, $admin, $settings, $logout);
+            $navigation = array($home, $feed, $today, $photos, $settings, $logout);
         } else {
             $navigation = array($home, $feed);
         }
