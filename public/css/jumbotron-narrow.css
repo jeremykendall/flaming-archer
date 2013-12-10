@@ -96,3 +96,8 @@ table.admin thead tr th {
 input#day.form-control {
     width: 40%;
 }
+
+.img-thumbnail-today {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}

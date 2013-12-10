@@ -64,15 +64,28 @@ class ImageService
     }
 
     /**
+     * Searches Flickr for photos based on provided options
+     *
+     * @see http://www.flickr.com/services/api/flickr.photos.search.html flickr.photos.search docs
+     * @param  array $options Search options
+     * @return array Search results
+     */
+    public function search(array $options)
+    {
+        return $this->flickr->search($options);
+    }
+
+    /**
      * Returns an collection of items for a page.
      *
-     * @param  int   $offset           Page offset
-     * @param  int   $itemCountPerPage Number of items per page
+     * @param  int     $offset           Page offset
+     * @param  int     $itemCountPerPage Number of items per page
      * @return Photo[] Page items
      */
     public function findPage($offset, $itemCountPerPage)
     {
         $photos = $this->dao->findPage($offset, $itemCountPerPage);
+
         return $this->flickr->findPhotos($photos);
     }
 
@@ -106,6 +119,7 @@ class ImageService
     public function findAll()
     {
         $photos = $this->dao->findAll();
+
         return $this->flickr->findPhotos($photos);
     }
 
@@ -134,8 +148,8 @@ class ImageService
     /**
      * Determines what project day it is by diffing project start and current date
      *
-     * @param DateTime $today Today's date OPTIONAL
-     * @return int Project day (n of 365)
+     * @param  DateTime $today Today's date OPTIONAL
+     * @return int      Project day (n of 365)
      */
     public function getProjectDay(\DateTime $today = null)
     {

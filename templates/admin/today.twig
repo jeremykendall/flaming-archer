@@ -1,0 +1,119 @@
+{% extends 'layout.html' %}
+
+{% block page_title %}{{ parent() }} | Admin{% endblock %}
+
+{% block content %}
+<div class="row text-center">
+    <div class="col-md-3 col-sm-3 col-xs-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Project Day</h3>
+            </div>
+            <div class="panel-body">
+                <span class="h1">{{ projectDay }}</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-3 col-xs-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Pics Posted</h3>
+            </div>
+            <div class="panel-body">
+                 <span class="h1">{{ photoCount }}</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-3 col-xs-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Days Posted</h3>
+            </div>
+            <div class="panel-body">
+                 <span class="h1">{{ percentage|number_format(1) }}%</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-3 col-xs-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Days Left</h3>
+            </div>
+            <div class="panel-body">
+                 <span class="h1">{{ daysLeft }}</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if photoOfTheDay != null %}
+{% set image = photoOfTheDay %}
+<div class="row">
+    <div class="text-center col-md-12">
+        <h1>Check Out Today's Photo!</h1>
+        <form role="form" id="delete-photo" action="/admin/photo/{{image.day}}" method="post">
+            <input type="hidden" name="_METHOD" value="DELETE" />
+            <p><em>You can always 
+            <button class="btn btn-danger btn-xs" type="submit">
+                <span class="glyphicon glyphicon-trash"></span> Delete
+            </button> it and add another . . .</em></p>
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    <div class="day-photo text-center col-md-12">
+        <p class="lead"><em>{{ image.posted|date("d F Y") }}, Day {{ image.day }}</em></p>
+        <a href="http://flickr.com/photos/{{ profile.flickr_username }}/{{ image.photoId }}/lightbox" target="_blank" title="View on Flickr">
+            <img class="img-responsive img-thumbnail" src="{{ image.featureSize.source }}" />
+        </a>
+    </div>
+    <div class="photo-meta col-md-12">
+        <h3>{{ image.title }}</h3>
+        <p>{{ image.description|raw }}</p>
+    </div>
+</div>
+{% else %}
+<div class="row">
+    <div class="col-md-12">
+        {% set recentPhotos = recent.photos.total %}
+        <h2>{{ recentPhotos }} {{ (recentPhotos != 1) ? 'Photos' : 'Photo' }} Uploaded to Flickr Today</h2>
+    </div>
+</div>
+
+<div class="row">
+    {% if flash['addPhotoError'] is defined %}
+    <div class="alert alert-danger alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        {{ flash.addPhotoError }}
+    </div>
+    {% endif %}
+    {% for photo in recent.photos.photo %}
+    <div class="col-xs-4 col-md-3 col-lg-3">
+        <div class="img-thumbnail img-thumbnail-today">
+            <a href="http://www.flickr.com/photos/{{ profile.flickr_username }}/{{ photo.id }}" target="_blank">
+                <img data-src="{{ photo.url_q }}" src="{{ photo.url_q }}" height="{{ photo.height_q }}" width="{{ photo.width_q }}" alt="{{ photo.title }}">
+            </a>
+            <div class="caption">
+                &nbsp;
+                <form name="add-photo-thumb" id="add-photo-thumb" role="form" method="post" action="/admin/photo">
+                    <input type="hidden" name="day" value={{ projectDay }} />
+                    <input type="hidden" name="photoId" value={{ photo.id }} />
+                    <button type="submit" class="btn btn-default btn-block">Use This</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="col-md-6">
+        <p class="lead">You haven't <a href="http://www.flickr.com/photos/upload/" target="_blank">uploaded any photos today</a>. What are you waiting for?</p>
+        <p class="lead"><em><strong>or</strong></em></p>
+        <p class="lead">You can add Day {{ projectDay }}'s photo by its Flickr photo id.</p>
+    </div>
+    <div class="col-md-6">
+        {% include "includes/admin/add-photo-form.html" with { 'projectDay': projectDay } %}
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+{% endblock %}

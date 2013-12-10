@@ -33,4 +33,13 @@ interface FlickrInterface
      * @return Photo[] Array of Photo objects with Flickr data
      */
     public function findPhotos(array $photos);
+
+    /**
+     * Searches Flickr for photos based on provided options
+     *
+     * @see http://www.flickr.com/services/api/flickr.photos.search.html flickr.photos.search docs
+     * @param  array $options Search options
+     * @return array Search results
+     */
+    public function search(array $options);
 }

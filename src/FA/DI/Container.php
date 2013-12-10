@@ -21,8 +21,12 @@ use FA\Service\ImageService;
 use FA\Service\PubSubNotifier;
 use FA\Service\UserService;
 use FA\Social\MetaTags;
+use Guzzle\Cache\Zf2CacheAdapter as ZendCacheAdapter;
+use Guzzle\Common\Event;
 use Guzzle\Http\Client;
 use Guzzle\Plugin\Cache\CachePlugin;
+use Guzzle\Plugin\Cache\CallbackCanCacheStrategy;
+use Guzzle\Plugin\Cache\DefaultCacheStorage;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Pimple;
@@ -233,12 +237,60 @@ class Container extends Pimple
         });
 
         $this['guzzleFlickrCachingClient'] = $this->share(function () use ($c) {
+            $canCache = new CallbackCanCacheStrategy(
+                function ($request) { 
+                    if ($request->getQuery()->get('method') === 'flickr.photos.search') {
+                        $params = $request->getParams();
+                        $params['cache.disallowed-by-callback'] = true;
+                        return false; 
+                    }
+
+                    return true;
+                }
+            );
+
+            $storage = new DefaultCacheStorage(new ZendCacheAdapter($c['cache']));
+
+            $cachePlugin = new CachePlugin(array(
+                'can_cache' => $canCache,
+                'storage' => $storage,
+            ));
+
             $client = $c['guzzleFlickrClient'];
-            $cachePlugin = new CachePlugin($c['cache']);
             $client->addSubscriber($cachePlugin);
+
+            $client->getEventDispatcher()->addListener('request.before_send', function (Event $event) use ($c) {
+                $request = $event['request'];
+
+                $cacheResult = array(
+                    'flickr.method' => $request->getQuery()->get('method'),
+                    'params' => $request->getParams(),
+                );
+
+                $c['logger.guzzle']->debug('CACHE RESULT', $cacheResult);
+            },
+            -999);
 
             return $client;
         });
+
+        $this['defaultFlickrSearchOptions'] = function () use ($c) {
+            $tz = new \DateTimeZone($c['config']['profile']['timezone']);
+            $date = new \DateTime('today', $tz);
+            $minUpload = $date->format('Y-m-d H:i:sP');
+
+            $date->modify('+23 hours 59 minutes');
+            $maxUpload = $date->format('Y-m-d H:i:sP');
+
+            $options = array(
+                'user_id' => $c['config']['flickr.user.id'],
+                'min_upload_date' => $minUpload,
+                'max_upload_date' => $maxUpload,
+                'extras' => 'url_sq, url_t, url_q',
+            );
+
+            return $options;
+        };
 
         $this['dispatcher'] = function () use ($c) {
             $dispatcher = new EventDispatcher();
@@ -269,6 +321,11 @@ class Container extends Pimple
                 $c['logger.app'],
                 $c['config']['pubsubhubbub.url']
             );
+        };
+
+        $this['now'] = function () use ($c) {
+            $tz = new \DateTimeZone($c['config']['profile']['timezone']);
+            return new \DateTime('now', $tz);
         };
     }
 }

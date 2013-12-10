@@ -75,4 +75,15 @@ class FlickrServiceCache implements FlickrInterface
     {
         return null;
     }
+
+    /**
+     * PLACEHOLDER
+     *
+     * This method is a placeholder intended only to satisfy the requirements of the
+     * interface. This class is *probably* cruft and will likely be removed.
+     */
+    public function search(array $options)
+    {
+        return null;
+    }
 }

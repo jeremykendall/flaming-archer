@@ -1,0 +1,11 @@
+<form name="add-photo" id="add-photo" class="well" role="form" method="post" action="/admin/photo">
+    <div class="form-group">
+        <label for="day">Day</label>
+        <input type="number" class="form-control" min="1" max="366" id="day" name="day" placeholder="Day" value={{ projectDay }} required />
+    </div>
+    <div class="form-group">
+        <label for="photoId">Photo Id</label>
+        <input type="number" class="form-control" id="photoId" name="photoId" placeholder="Flickr photo id" required />
+    </div>
+    <button type="submit" class="btn btn-default">Add Photo</button>
+</form>

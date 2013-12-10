@@ -66,6 +66,20 @@ class ImageServiceTest extends \PHPUnit_Framework_TestCase
         $this->service->find($data['day']);
     }
 
+    public function testSearch()
+    {
+        $options = array(
+            'option1' => 1,
+            'option2' => 2,
+        );
+
+        $this->flickr->expects($this->once())
+            ->method('search')
+            ->with($options);
+
+        $this->service->search($options);
+    }
+
     public function testFindPage()
     {
         $photosDb = array(

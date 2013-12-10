@@ -184,6 +184,9 @@ class FlickrService implements FlickrInterface
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function search(array $options)
     {
         $options['method'] = 'flickr.photos.search';

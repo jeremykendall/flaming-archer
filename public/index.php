@@ -75,6 +75,50 @@ $app->get('/day/:day', function($day) use ($app, $container) {
 
 $app->group('/admin', function () use ($app, $container) {
 
+    $app->get('/', function () use ($app, $container) {
+        $projectDay = $container['imageService']->getProjectDay($container['now']);
+        $daysLeft = 365 - $projectDay;
+        $photoCount = $container['imageService']->countImages();
+        $percentage = ($photoCount / $projectDay) * 100;
+
+        $photoOfTheDay = $container['imageService']->find($projectDay);
+        $flickrRecent = null;
+
+        if ($photoOfTheDay === null) {
+            $flickrRecent = $container['flickrService']->search($container['defaultFlickrSearchOptions']);
+            $container['logger.app']->debug('Search options', $container['defaultFlickrSearchOptions']);
+            $container['logger.app']->debug('Search results', $flickrRecent);
+        }
+
+        $viewData = array(
+            'projectDay' => $projectDay,
+            'photoCount' => $photoCount,
+            'percentage' => $percentage,
+            'daysLeft' => $daysLeft,
+            'recent' => $flickrRecent,
+            'photoOfTheDay' => $photoOfTheDay,
+        );
+
+        $app->render('admin/today.twig', $viewData);
+    })->name('today');
+
+    $app->get('(/page/:page)', function ($page = 1) use ($app, $container) {
+        $paginator = $container['zendPaginator'];
+        $paginator->setItemCountPerPage($container['config']['pagination']['admin.itemCountPerPage']);
+        $paginator->setCurrentPageNumber($page);
+        $pages = $paginator->getPages();
+
+        $projectDay = $container['imageService']->getProjectDay($container['now']);
+
+        $viewData = array(
+            'paginator' => $paginator,
+            'pages' => $pages,
+            'projectDay' => $projectDay,
+        );
+
+        $app->render('admin/index.html', $viewData);
+    });
+
     $app->post('/clear-cache', function() use ($app, $container) {
         $cleared = null;
         $clear = $app->request()->post('clear');
@@ -92,31 +136,6 @@ $app->group('/admin', function () use ($app, $container) {
         }
 
         $app->redirect('/admin/settings');
-    });
-
-    $app->get('(/page/:page)', function ($page = 1) use ($app, $container) {
-        $paginator = $container['zendPaginator'];
-        $paginator->setItemCountPerPage($container['config']['pagination']['admin.itemCountPerPage']);
-        $paginator->setCurrentPageNumber($page);
-        $pages = $paginator->getPages();
-
-        $tz = new \DateTimeZone($container['config']['profile']['timezone']);
-        $now = new \DateTime('now', $tz);
-        $projectDay = $container['imageService']->getProjectDay($now);
-        $daysLeft = 365 - $projectDay;
-        $photoCount = $container['imageService']->countImages();
-        $percentage = ($photoCount / $projectDay) * 100;
-
-        $viewData = array(
-            'paginator' => $paginator,
-            'pages' => $pages,
-            'projectDay' => $projectDay,
-            'photoCount' => $photoCount,
-            'percentage' => $percentage,
-            'daysLeft' => $daysLeft,
-        );
-
-        $app->render('admin/index.html', $viewData);
     });
 
     $app->get('/settings', function () use ($app, $container) {
