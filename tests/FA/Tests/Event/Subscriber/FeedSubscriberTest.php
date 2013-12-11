@@ -55,6 +55,13 @@ class FeedSubscriberTest extends CustomTestCase
         parent::tearDown();
     }
 
+    public function testGetSubscribedEvents()
+    {
+        $events = FeedSubscriber::getSubscribedEvents();
+        $this->assertArrayHasKey('content.change', $events);
+        $this->assertArrayHasKey('feed.publish', $events);
+    }
+
     public function testOnContentChange()
     {
         $format = 'rss'; 
