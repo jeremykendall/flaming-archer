@@ -77,34 +77,34 @@ class NavigationTest extends \PHPUnit_Framework_TestCase
 
         $this->assertNotNull($navigation);
         $this->assertInternalType('array', $navigation);
-        $this->assertEquals(5, count($navigation));
+        $this->assertEquals(6, count($navigation));
 
         $expected = array (
-            0 => 
             array (
                 'caption' => 'Home',
                 'href' => '/',
                 'class' => '',
             ),
-            1 => 
             array (
                 'caption' => 'Feed',
                 'href' => '/feed',
                 'class' => '',
             ),
-            2 => 
             array (
-                'caption' => 'Admin',
+                'caption' => 'Today',
                 'href' => '/admin',
                 'class' => 'active',
             ),
-            3 => 
+            array (
+                'caption' => 'Photos',
+                'href' => '/admin/photos',
+                'class' => '',
+            ),
             array (
                 'caption' => 'Settings',
                 'href' => '/admin/settings',
                 'class' => '',
             ),
-            4 => 
             array (
                 'caption' => 'Logout',
                 'href' => '/logout',
