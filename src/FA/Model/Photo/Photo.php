@@ -253,18 +253,7 @@ class Photo extends BaseModel
 
     public function getFeatureSize()
     {
-        $featured = $this->getSize('Large');
-
-        if (!$featured) {
-            $featured = $this->getSize('Medium 800');
-        }
-
-        // TODO: Temporary fix, must refactor
-        if (!$featured) {
-            $featured = $this->getSize('Medium 640');
-        }
-
-        return $featured;
+        return $this->getSize('Medium 640');
     }
 
     public function toArray()
