@@ -168,15 +168,14 @@ class PhotoTest extends \PHPUnit_Framework_TestCase
 
     public function testGetFeatureSize()
     {
+        $med640 = new Size(array('label' => 'Medium 640'));
         $med800 = new Size(array('label' => 'Medium 800'));
         $large1024 = new Size(array('label' => 'Large'));
 
+        $this->photo->setSize('Medium 640', $med640);
         $this->photo->setSize('Medium 800', $med800);
-
-        $this->assertEquals($med800, $this->photo->getFeatureSize());
-
         $this->photo->setSize('Large', $large1024);
 
-        $this->assertEquals($large1024, $this->photo->getFeatureSize());
+        $this->assertEquals($med640, $this->photo->getFeatureSize());
     }
 }
