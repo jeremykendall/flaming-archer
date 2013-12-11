@@ -14,7 +14,7 @@ class PhotoEvent extends Event
 
     public function __construct(Photo $photo)
     {
-        $this->photo = $photo;
+        $this->setPhoto($photo);
     }
     
     /**
