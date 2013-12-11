@@ -33,16 +33,6 @@ class FeedEvent extends Event
     }
 
     /**
-     * Set format
-     *
-     * @param $format the value to set
-     */
-    public function setFormat($format)
-    {
-        $this->format = $format;
-    }
-
-    /**
      * Get outfile
      *
      * @return outfile
@@ -50,16 +40,6 @@ class FeedEvent extends Event
     public function getOutfile()
     {
         return $this->outfile;
-    }
-
-    /**
-     * Set outfile
-     *
-     * @param $outfile the value to set
-     */
-    public function setOutfile($outfile)
-    {
-        $this->outfile = $outfile;
     }
 
     /**
@@ -73,16 +53,6 @@ class FeedEvent extends Event
     }
 
     /**
-     * Set feedUrl
-     *
-     * @param string $feedUrl Feed url
-     */
-    public function setFeedUrl($feedUrl)
-    {
-        $this->feedUrl = $feedUrl;
-    }
-
-    /**
      * Get notifyMode
      *
      * @return notifyMode
@@ -90,15 +60,5 @@ class FeedEvent extends Event
     public function getNotifyMode()
     {
         return $this->notifyMode;
-    }
-
-    /**
-     * Set notifyMode
-     *
-     * @param $notifyMode the value to set
-     */
-    public function setNotifyMode($notifyMode)
-    {
-        $this->notifyMode = $notifyMode;
     }
 }
