@@ -30,14 +30,14 @@
                 <h3 class="panel-title">Days Posted</h3>
             </div>
             <div class="panel-body">
-                 <span class="h1">{{ percentage|number_format(1) }}%</span>
+                 <span class="h1">{{ percentage|number_format(0) }}%</span>
             </div>
         </div>
     </div>
     <div class="col-md-3 col-sm-3 col-xs-6">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Days Left</h3>
+                <h3 class="panel-title">Days Remaining</h3>
             </div>
             <div class="panel-body">
                  <span class="h1">{{ daysLeft }}</span>
@@ -89,7 +89,7 @@
     </div>
     {% endif %}
     {% for photo in recent.photos.photo %}
-    <div class="col-xs-4 col-md-3 col-lg-3">
+    <div class="col-xs-6 col-sm-4 col-md-3 col-lg-3">
         <div class="img-thumbnail img-thumbnail-today">
             <a href="http://www.flickr.com/photos/{{ profile.flickr_username }}/{{ photo.id }}" target="_blank">
                 <img class="img-responsive" data-src="{{ photo.url_q }}" src="{{ photo.url_q }}" alt="{{ photo.title }}">
