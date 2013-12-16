@@ -11,7 +11,6 @@ namespace FA\Middleware;
 
 use FA\DI\Container;
 use Slim\Middleware;
-use Zend\Authentication\AuthenticationService;
 
 /**
  * Settings middleware
