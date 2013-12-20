@@ -1,4 +1,4 @@
-{% extends 'layout.html' %}
+{% extends 'layout.twig' %}
 
 {% block content %}
 {% for image in paginator %}
@@ -47,5 +47,5 @@
 {% block javascript %}
 <script type="text/javascript" src="/js/jquery.scrollTo.min.js"></script>
 <script type="text/javascript" src="/js/keyboard-navigation.js"></script>
-{% include "includes/addthis.html" %}
+{% include "includes/addthis.twig" %}
 {% endblock %}

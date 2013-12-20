@@ -1,4 +1,4 @@
-{% extends 'layout.html' %}
+{% extends 'layout.twig' %}
 
 {% block page_title %}{{ parent() }} | Admin{% endblock %}
 
@@ -111,7 +111,7 @@
         <p class="lead">You can add Day {{ projectDay }}'s photo by its Flickr photo id.</p>
     </div>
     <div class="col-md-6">
-        {% include "includes/admin/add-photo-form.html" with { 'projectDay': projectDay } %}
+        {% include "includes/admin/add-photo-form.twig" with { 'projectDay': projectDay } %}
     </div>
     {% endfor %}
 </div>

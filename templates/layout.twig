@@ -75,7 +75,7 @@
         {% block javascript %} {% endblock %}
 
         {% if ga is defined %}
-        {% include "includes/google-analytics.html" with { 'trackingId': ga.trackingId, 'domain': ga.domain } %}
+        {% include "includes/google-analytics.twig" with { 'trackingId': ga.trackingId, 'domain': ga.domain } %}
         {% endif %}
     </body>
 </html>
