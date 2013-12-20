@@ -20,7 +20,7 @@
                 <h3 class="panel-title">Pics Posted</h3>
             </div>
             <div class="panel-body">
-                 <span class="h1">{{ photoCount }}</span>
+                <span class="h1">{{ photoCount }}</span>
             </div>
         </div>
     </div>
@@ -30,7 +30,7 @@
                 <h3 class="panel-title">Days Posted</h3>
             </div>
             <div class="panel-body">
-                 <span class="h1">{{ percentage|number_format(0) }}%</span>
+                <span class="h1">{{ percentage|number_format(0) }}%</span>
             </div>
         </div>
     </div>
@@ -40,7 +40,7 @@
                 <h3 class="panel-title">Days Remaining</h3>
             </div>
             <div class="panel-body">
-                 <span class="h1">{{ daysLeft }}</span>
+                <span class="h1">{{ daysLeft }}</span>
             </div>
         </div>
     </div>
@@ -54,8 +54,8 @@
         <form role="form" id="delete-photo" action="/admin/photo/{{image.day}}" method="post">
             <input type="hidden" name="_METHOD" value="DELETE" />
             <p><em>You can always 
-            <button class="btn btn-danger btn-xs" type="submit">
-                <span class="glyphicon glyphicon-trash"></span> Delete
+                    <button class="btn btn-danger btn-xs" type="submit">
+                        <span class="glyphicon glyphicon-trash"></span> Delete
             </button> it and add another . . .</em></p>
         </form>
     </div>

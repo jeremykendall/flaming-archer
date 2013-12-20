@@ -2,7 +2,9 @@
 
 namespace FA\Model;
 
-class User extends BaseModel
+use JeremyKendall\Slim\Auth\IdentityInterface;
+
+class User extends BaseModel implements IdentityInterface
 {
     /**
      * @var string User email
@@ -18,6 +20,11 @@ class User extends BaseModel
      * @var string password hash
      */
     protected $passwordHash;
+
+    /**
+     * @var string user role
+     */
+    protected $role;
 
     /**
      * @var DateTime User's last login time
@@ -86,6 +93,25 @@ class User extends BaseModel
     }
 
     /**
+     * Get role
+     *
+     * @return string User role
+     */
+    public function getRole()
+    {
+        return $this->role;
+    }
+    
+    /**
+     * Set role
+     *
+     * @param string $role User role
+     */
+    public function setRole($role)
+    {
+        $this->role = $role;
+    }
+    /**
      * Get lastLogin
      *
      * @return DateTime User's last login time
@@ -117,6 +143,7 @@ class User extends BaseModel
             'email' => $this->getEmail(),
             'emailCanonical' => $this->getEmailCanonical(),
             'passwordHash' => $this->getPasswordHash(),
+            'role' => $this->getRole(),
             'lastLogin' => $this->getLastLogin(),
         );
 

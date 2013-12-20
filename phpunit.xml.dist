@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="tests/bootstrap.php" colors="true">
+<phpunit 
+    bootstrap="tests/bootstrap.php" 
+    colors="true"
+    printerFile="vendor/whatthejeff/nyancat-phpunit-resultprinter/src/NyanCat/PHPUnit/ResultPrinter.php"
+    printerClass="NyanCat\PHPUnit\ResultPrinter" >
 
     <testsuite name="all-tests">
         <directory>tests/FA</directory>

@@ -152,9 +152,16 @@ class UserDao
             throw new \InvalidArgumentException('Password hash must not be null');
         }
 
-        $sql = 'INSERT INTO users (email, emailCanonical, passwordHash) VALUES (:email, :emailCanonical, :passwordHash)';
+        $sql = 'INSERT INTO users (email, emailCanonical, role, passwordHash) VALUES (:email, :emailCanonical, :role, :passwordHash)';
         $stmt = $this->db->prepare($sql);
-        $stmt->execute(array('email' => $email, 'emailCanonical' => strtolower($email), 'passwordHash' => $passwordHash));
+        $stmt->execute(
+            array(
+                'email' => $email,
+                'emailCanonical' => strtolower($email),
+                'passwordHash' => $passwordHash,
+                'role' => 'admin'
+            )
+        );
 
         return $this->findByEmail($email);
     }

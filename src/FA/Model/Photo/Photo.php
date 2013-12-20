@@ -90,7 +90,7 @@ class Photo extends BaseModel
     {
         return $this->owner;
     }
-    
+
     /**
      * Set owner
      *

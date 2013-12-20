@@ -32,7 +32,8 @@ class UserDaoTest extends CommonDbTestCase
             'id' => '1',
             'email' => 'user@example.com',
             'passwordHash' => '$2y$12$pZg9j8DBSIP2R/vfDzTQOeIt5n57r5VigCUl/HH.FrBOadi3YhdPS',
-            'lastLogin' => null
+            'role' => 'admin',
+            'lastLogin' => null,
         );
 
         $this->user = new User($data);

@@ -9,12 +9,17 @@
             "role": "Developer"
         }
     ],
-    "keywords": ["photography", "flickr", "photo-a-day", "photo 365"],
+    "keywords": [
+        "photography",
+        "flickr",
+        "photo-a-day",
+        "photo 365"
+    ],
     "repositories": [
-    {
-        "type": "composer",
-        "url": "http://packages.zendframework.com/"
-    }
+        {
+            "type": "composer",
+            "url": "http://packages.zendframework.com/"
+        }
     ],
     "require": {
         "php": ">=5.3.10",
@@ -22,6 +27,7 @@
         "doctrine/common": "~2.4",
         "guzzle/guzzle": "~3.8",
         "ircmaxell/password-compat": "1.*",
+        "jeremykendall/slim-auth": "dev-develop",
         "monolog/monolog": "1.*",
         "pimple/pimple": "v1.0.2",
         "slim/slim": "~2.4",
@@ -43,11 +49,11 @@
         "mikey179/vfsStream": "1.2.*",
         "mockery/mockery": "0.8.0",
         "jeremykendall/phpctagger": "dev-master",
-        "phpunit/phpunit": "3.7.*"
+        "phpunit/phpunit": "3.7.*",
+        "whatthejeff/nyancat-phpunit-resultprinter": "v1.2.0"
     },
     "autoload": {
-        "psr-0": 
-        {
+        "psr-0": {
             "FA": "src/"
         }
     },

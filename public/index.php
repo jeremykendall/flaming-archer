@@ -283,7 +283,7 @@ $app->get('/feed', function() use ($app, $container) {
 
 $app->get('/setup', function () use ($app, $container) {
     if (count($container['userDao']->findAll()) > 0) {
-        $app->halt(403);
+        $app->halt(403, 'HTTP 403 Forbidden: NO MOAR USERS ALLOWED');
     }
 
     $app->render('setup.html');
@@ -291,7 +291,7 @@ $app->get('/setup', function () use ($app, $container) {
 
 $app->post('/setup', function () use ($app, $container) {
     if (count($container['userDao']->findAll()) > 0) {
-        $app->halt(403, 'NO MOAR USERS ALLOWED');
+        $app->halt(403, 'HTTP 403 Forbidden: NO MOAR USERS ALLOWED');
     }
 
     $params = $app->request()->post();

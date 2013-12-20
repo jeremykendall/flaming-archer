@@ -120,7 +120,7 @@ class SlimBootstrap
             $app->add($container['googleAnalyticsMiddleware']);
         }
         $app->add($container['navigationMiddleware']);
-        $app->add($container['authenticationMiddleware']);
+        $app->add($container['slimAuthMiddleware']);
         $app->add($container['sessionCookieMiddleware']);
     }
 }

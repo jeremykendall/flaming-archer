@@ -24,6 +24,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
             'id' => '1',
             'email' => 'User@Example.COM',
             'passwordHash' => '$2y$12$pZg9j8DBSIP2R/vfDzTQOeIt5n57r5VigCUl/HH.FrBOadi3YhdPS',
+            'role' => 'admin',
             'lastLogin' => $lastLogin,
         );
 

@@ -32,6 +32,7 @@ class CommonDbTestCase extends \PHPUnit_Framework_TestCase
             $this->db->exec(file_get_contents(APPLICATION_PATH . '/scripts/sql/schema.sql'));
             $this->db->exec(file_get_contents(APPLICATION_PATH . '/scripts/sql/seed_data.sql'));
             $this->db->exec(file_get_contents(APPLICATION_PATH . '/scripts/sql/migration/0001.sql'));
+            $this->db->exec(file_get_contents(APPLICATION_PATH . '/scripts/sql/migration/0002.sql'));
         } catch (PDOException $p) {
             die(sprintf('DB setup error: %s', $p->getMessage()));
         }

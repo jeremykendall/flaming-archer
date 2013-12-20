@@ -2,6 +2,7 @@
 
 namespace FA\DI;
 
+use FA\Acl;
 use FA\Authentication\Adapter\DbAdapter;
 use FA\Dao\ImageDao;
 use FA\Dao\UserDao;
@@ -9,7 +10,6 @@ use FA\Event\FeedEvent;
 use FA\Event\Subscriber\FeedSubscriber;
 use FA\Event\Subscriber\PhotoSubscriber;
 use FA\Feed\Feed;
-use FA\Middleware\Authentication;
 use FA\Middleware\GoogleAnalytics;
 use FA\Middleware\Navigation;
 use FA\Middleware\Profile;
@@ -27,6 +27,7 @@ use Guzzle\Http\Client;
 use Guzzle\Plugin\Cache\CachePlugin;
 use Guzzle\Plugin\Cache\CallbackCanCacheStrategy;
 use Guzzle\Plugin\Cache\DefaultCacheStorage;
+use JeremyKendall\Slim\Auth\Middleware\Authorization;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Pimple;
@@ -153,11 +154,19 @@ class Container extends Pimple
             return new Paginator($c['paginatorAdapter']);
         };
 
+        $this['acl'] = function () {
+            return new Acl();
+        };
+
         $this['auth'] = function () use ($c) {
             $auth = new AuthenticationService();
             $auth->setAdapter($c['authAdapter']);
 
             return $auth;
+        };
+
+        $this['slimAuthMiddleware'] = function () use ($c) {
+            return new Authorization($c['auth'], $c['acl']);
         };
 
         $this['profileMiddleware'] = function () use ($c) {
@@ -166,10 +175,6 @@ class Container extends Pimple
 
         $this['navigationMiddleware'] = function () use ($c) {
             return new Navigation($c['auth']);
-        };
-
-        $this['authenticationMiddleware'] = function () use ($c) {
-            return new Authentication($c['auth'], $c['config']);
         };
 
         $this['sessionCookieMiddleware'] = function () use ($c) {
