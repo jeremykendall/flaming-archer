@@ -543,33 +543,33 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/jeremykendall/slim-auth.git",
-                "reference": "4a9a5c5bc32e3c5c45a1673a2af2840ffb773b02"
+                "reference": "f4ac5d5810f9f0f2ec826168de440030e3ac64a3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jeremykendall/slim-auth/zipball/4a9a5c5bc32e3c5c45a1673a2af2840ffb773b02",
-                "reference": "4a9a5c5bc32e3c5c45a1673a2af2840ffb773b02",
+                "url": "https://api.github.com/repos/jeremykendall/slim-auth/zipball/f4ac5d5810f9f0f2ec826168de440030e3ac64a3",
+                "reference": "f4ac5d5810f9f0f2ec826168de440030e3ac64a3",
                 "shasum": ""
             },
             "require": {
                 "ircmaxell/password-compat": "1.*",
                 "php": ">=5.3.3",
+                "symfony/event-dispatcher": "2.3.*",
+                "wp-cli/php-cli-tools": "v0.9.4",
                 "zendframework/zend-authentication": "2.*",
                 "zendframework/zend-permissions-acl": "2.*",
                 "zendframework/zend-session": "2.*"
             },
             "require-dev": {
-                "openwall/phpass": "0.3",
                 "phpunit/phpunit": "3.*",
-                "slim/slim": "~2.4",
-                "symfony/event-dispatcher": "2.3.*",
-                "zendframework/zend-db": "2.*"
+                "slim/slim": "2.*"
             },
             "suggest": {
-                "Openwall PHPass": "For the PHPassCredentialStrategy. Review the jeremykendall/slim-auth composer.json for how to install via Composer.",
-                "symfony/event-dispatcher": "To use in the PdoAdapter",
                 "zendframework/zend-db": "For the Zend\\Authentication\\Adapter\\DbTable adapters."
             },
+            "bin": [
+                "bin/version-check"
+            ],
             "type": "library",
             "autoload": {
                 "psr-0": {
@@ -598,7 +598,7 @@
                 "zend",
                 "zf2"
             ],
-            "time": "2013-12-19 17:05:34"
+            "time": "2013-12-21 19:47:14"
         },
         {
             "name": "monolog/monolog",
@@ -1832,12 +1832,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/composer.git",
-                "reference": "0e9a9a3875c317d610d6a995d94dd598b7bececd"
+                "reference": "fb72d26def99d08ee32e5be7b553817f585f164e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/composer/zipball/0e9a9a3875c317d610d6a995d94dd598b7bececd",
-                "reference": "0e9a9a3875c317d610d6a995d94dd598b7bececd",
+                "url": "https://api.github.com/repos/composer/composer/zipball/fb72d26def99d08ee32e5be7b553817f585f164e",
+                "reference": "fb72d26def99d08ee32e5be7b553817f585f164e",
                 "shasum": ""
             },
             "require": {
@@ -1893,7 +1893,7 @@
                 "dependency",
                 "package"
             ],
-            "time": "2013-12-16 21:58:46"
+            "time": "2013-12-20 10:53:52"
         },
         {
             "name": "jeremykendall/phpctagger",
