@@ -68,8 +68,8 @@ class SQLite
 
         if (isset($extra['configEnvironment'])) {
             return $extra['configEnvironment'];
-        } 
-        
+        }
+
         if ($event->isDevMode()) {
             return 'development';
         }
