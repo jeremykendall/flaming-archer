@@ -64,7 +64,7 @@
 <div class="row">
     <div class="day-photo text-center col-md-12">
         <p class="lead"><em>{{ image.posted|date("d F Y") }}, Day {{ image.day }}</em></p>
-        <a href="http://flickr.com/photos/{{ profile.flickr_username }}/{{ image.photoId }}/lightbox" target="_blank" title="View on Flickr">
+        <a href="/day/{{ image.day }}">
             <img class="img-responsive img-thumbnail" src="{{ image.featureSize.source }}" />
         </a>
     </div>
