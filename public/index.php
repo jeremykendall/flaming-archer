@@ -38,7 +38,7 @@ $app->get('/', function ($page = 1) use ($app, $container) {
     $paginator->setCurrentPageNumber($page);
     $pages = $paginator->getPages();
 
-    $app->render('index.html', array('paginator' => $paginator, 'pages' => $pages, 'home' => true));
+    $app->render('index.twig', array('paginator' => $paginator, 'pages' => $pages, 'home' => true));
 });
 
 $app->get('/page/:page', function ($page = 1) use ($app, $container) {
@@ -49,7 +49,7 @@ $app->get('/page/:page', function ($page = 1) use ($app, $container) {
 
     $home = ($page == 1) ? true : false;
 
-    $app->render('index.html', array('paginator' => $paginator, 'pages' => $pages, 'home' => $home));
+    $app->render('index.twig', array('paginator' => $paginator, 'pages' => $pages, 'home' => $home));
 });
 
 $app->get('/day/:day', function($day) use ($app, $container) {
@@ -65,7 +65,7 @@ $app->get('/day/:day', function($day) use ($app, $container) {
     $container['request'] = $app->request;
     $container['image'] = $image;
 
-    $app->render('day.html', array(
+    $app->render('day.twig', array(
         'image' => $image,
         'tags' => $container['metaTags']->getTags(),
         'next' => $next,
@@ -116,7 +116,7 @@ $app->group('/admin', function () use ($app, $container) {
             'projectDay' => $projectDay,
         );
 
-        $app->render('admin/photos.html', $viewData);
+        $app->render('admin/photos.twig', $viewData);
     });
 
     $app->post('/clear-cache', function() use ($app, $container) {
@@ -140,7 +140,7 @@ $app->group('/admin', function () use ($app, $container) {
 
     $app->get('/settings', function () use ($app, $container) {
         $user = $container['userService']->getLoggedInUser();
-        $app->render('admin/settings.html', array('user' => $user));
+        $app->render('admin/settings.twig', array('user' => $user));
     });
 
     $app->post('/user', function () use ($app, $container) {
@@ -258,7 +258,7 @@ $app->map('/login', function() use ($app, $container) {
         }
     }
 
-    $app->render('login.html', array('email' => $email));
+    $app->render('login.twig', array('email' => $email));
 })->via('GET', 'POST');
 
 $app->get('/feed', function() use ($app, $container) {
@@ -286,7 +286,7 @@ $app->get('/setup', function () use ($app, $container) {
         $app->halt(403, 'HTTP 403 Forbidden: NO MOAR USERS ALLOWED');
     }
 
-    $app->render('setup.html');
+    $app->render('setup.twig');
 });
 
 $app->post('/setup', function () use ($app, $container) {
