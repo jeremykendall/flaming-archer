@@ -259,7 +259,7 @@ $app->map('/login', function() use ($app, $container) {
     }
 
     $app->render('login.twig', array('email' => $email));
-})->via('GET', 'POST');
+})->via('GET', 'POST')->name('login');
 
 $app->get('/feed', function() use ($app, $container) {
     if (!file_exists(sprintf('%s/public/%s', APPLICATION_PATH, $container['config']['feed.outfile']))) {
