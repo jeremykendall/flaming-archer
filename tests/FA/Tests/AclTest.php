@@ -52,13 +52,20 @@ class AclTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $resources);
     }
 
-    public function testGuestPermissions()
+    /**
+     * @dataProvider aclData
+     */
+    public function testPermissions($allowed, $role, $resource, $privilege)
     {
-        $this->markTestSkipped();
+        $this->assertEquals($allowed, $this->acl->isAllowed($role, $resource, $privilege));
     }
 
-    public function testAdminPermissions()
+    public function aclData()
     {
-        $this->markTestSkipped();
+        return array(
+            array(true, 'guest', '/page/:page', 'GET'),
+            array(true, 'guest', '/login', 'POST'),
+            array(false, 'admin', '/login', null),
+        );
     }
 }

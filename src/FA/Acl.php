@@ -34,7 +34,7 @@ class Acl extends ZendAcl
         $this->allow('guest', '/day/:day', 'GET');
         $this->allow('guest', '/feed', 'GET');
         $this->allow('guest', '/login', array('GET', 'POST'));
-        $this->allow('guest', '/page/:page');
+        $this->allow('guest', '/page/:page', 'GET');
         $this->allow('guest', '/setup', array('GET', 'POST'));
         $this->allow('guest', '/logout');
 
