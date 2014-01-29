@@ -28,6 +28,7 @@
         "guzzle/guzzle": "~3.8",
         "ircmaxell/password-compat": "1.*",
         "jeremykendall/slim-auth": "dev-develop",
+        "jeremykendall/password-validator": "@dev",
         "monolog/monolog": "1.*",
         "pimple/pimple": "v1.0.2",
         "slim/slim": "~2.4",
