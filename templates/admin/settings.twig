@@ -18,18 +18,30 @@
             {{ flash['cacheFailure'] }}
         </div>
         {% endif %}
+        <p>
+            <em>
+                Sometimes things get a little wonky. Clearing cache is a good first
+                troubleshooting step.
+            </em>
+        </p>
         <form name="clear-cache" id="clear-cache" action="/admin/clear-cache" method="post">
             <input type="hidden" name="clear" value="1" />
             <button class="btn btn-default btn-lg btn-block" type="submit">
                 <span class="glyphicon glyphicon-remove"></span> Clear Photo Cache
             </button>
         </form>
-        <p></p>
+        <p>{# This is a total css copout. I'm ashamed, but there ya go #}</p>
+        <h2>Force Feed Refresh</h2>
         <p>
             <em>
-                Sometimes things get a little wonky. Clearing cache is a good first
-                troubleshooting step.
+                If you cheat and manually add an image to the database, you should 
+                refresh the feed to ensure the image shows up.
             </em>
+        </p>
+        <p>
+            <a href="/admin/feed" class="btn btn-default btn-lg btn-block">
+                <span class="glyphicon glyphicon-refresh"></span> Refresh Feed
+            </a>
         </p>
     </div>
     <div class="col-md-6">
