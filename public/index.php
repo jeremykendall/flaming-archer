@@ -189,7 +189,7 @@ $app->group('/admin', function () use ($app, $container) {
             $container['logger.app']->error(sprintf('Error refreshing feed: %s', $e->getMessage()));
         }
 
-        $app->redirect('/admin');
+        $app->redirect('/admin/settings');
     });
 
     $app->post('/photo', function() use ($app, $container) {
