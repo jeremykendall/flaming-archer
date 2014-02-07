@@ -22,7 +22,7 @@
         }
     ],
     "require": {
-        "php": ">=5.3.10",
+        "php": ">=5.4",
         "ext-mcrypt": "*",
         "doctrine/common": "~2.4",
         "guzzle/guzzle": "~3.8",
