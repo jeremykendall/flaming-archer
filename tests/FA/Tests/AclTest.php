@@ -26,12 +26,11 @@ class AclTest extends \PHPUnit_Framework_TestCase
     public function testResourcesExist()
     {
         $expected = array (
-            '/',
+            '/(page/:page)',
             '/day/:day',
             '/feed',
             '/login',
             '/logout',
-            '/page/:page',
             '/setup',
             '/admin',
             '/admin/',
@@ -63,7 +62,7 @@ class AclTest extends \PHPUnit_Framework_TestCase
     public function aclData()
     {
         return array(
-            array(true, 'guest', '/page/:page', 'GET'),
+            array(true, 'guest', '/(page/:page)', 'GET'),
             array(true, 'guest', '/login', 'POST'),
             array(false, 'admin', '/login', null),
         );

@@ -11,13 +11,11 @@ class Acl extends ZendAcl
         $this->addRole('guest');
         $this->addRole('admin');
 
-        $this->addResource('/');
         $this->addResource('/(page/:page)');
         $this->addResource('/day/:day');
         $this->addResource('/feed');
         $this->addResource('/login');
         $this->addResource('/logout');
-        $this->addResource('/page/:page');
         $this->addResource('/setup');
 
         // Admin resources
@@ -31,11 +29,10 @@ class Acl extends ZendAcl
         $this->addResource('/admin/settings');
         $this->addResource('/admin/user');
 
-        $this->allow('guest', '/', 'GET');
+        $this->allow('guest', '/(page/:page)', 'GET');
         $this->allow('guest', '/day/:day', 'GET');
         $this->allow('guest', '/feed', 'GET');
         $this->allow('guest', '/login', array('GET', 'POST'));
-        $this->allow('guest', '/page/:page', 'GET');
         $this->allow('guest', '/setup', array('GET', 'POST'));
         $this->allow('guest', '/logout');
 
