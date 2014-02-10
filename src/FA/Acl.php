@@ -12,6 +12,7 @@ class Acl extends ZendAcl
         $this->addRole('admin');
 
         $this->addResource('/');
+        $this->addResource('/(page/:page)');
         $this->addResource('/day/:day');
         $this->addResource('/feed');
         $this->addResource('/login');

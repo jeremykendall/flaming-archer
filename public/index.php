@@ -32,24 +32,13 @@ $bootstrap = new SlimBootstrap($app, $container);
 $app = $bootstrap->bootstrap();
 
 // Define routes
-$app->get('/', function ($page = 1) use ($app, $container) {
+$app->get('/(page/:page)', function ($page = 1) use ($app, $container) {
     $paginator = $container['zendPaginator'];
     $paginator->setItemCountPerPage($container['config']['pagination']['public.itemCountPerPage']);
     $paginator->setCurrentPageNumber($page);
     $pages = $paginator->getPages();
 
     $app->render('index.twig', array('paginator' => $paginator, 'pages' => $pages, 'home' => true));
-});
-
-$app->get('/page/:page', function ($page = 1) use ($app, $container) {
-    $paginator = $container['zendPaginator'];
-    $paginator->setItemCountPerPage($container['config']['pagination']['public.itemCountPerPage']);
-    $paginator->setCurrentPageNumber($page);
-    $pages = $paginator->getPages();
-
-    $home = ($page == 1) ? true : false;
-
-    $app->render('index.twig', array('paginator' => $paginator, 'pages' => $pages, 'home' => $home));
 });
 
 $app->get('/day/:day', function($day) use ($app, $container) {
