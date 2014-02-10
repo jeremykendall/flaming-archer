@@ -71,7 +71,11 @@ class DbAdapter implements AdapterInterface
         $user = $this->dao->findByEmail($this->email);
 
         if ($user === false) {
-            return new Result(Result::FAILURE_IDENTITY_NOT_FOUND, array(), array('Invalid username or password provided'));
+            return new Result(
+                Result::FAILURE_IDENTITY_NOT_FOUND,
+                [],
+                ['Invalid username or password provided']
+            );
         }
 
         if (password_verify($this->password, $user->getPasswordHash())) {
@@ -79,7 +83,11 @@ class DbAdapter implements AdapterInterface
 
             return new Result(Result::SUCCESS, $user, array());
         } else {
-            return new Result(Result::FAILURE_CREDENTIAL_INVALID, array(), array('Invalid username or password provided'));
+            return new Result(
+                Result::FAILURE_CREDENTIAL_INVALID,
+                [],
+                ['Invalid username or password provided']
+            );
         }
     }
 }
