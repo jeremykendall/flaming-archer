@@ -2,4 +2,6 @@
 
 namespace FA\Service;
 
-class FlickrServiceUnavailableException extends \Exception {}
+use FA\Service\FlickrServiceException
+
+class FlickrServiceUnavailableException extends FlickrServiceException {}
