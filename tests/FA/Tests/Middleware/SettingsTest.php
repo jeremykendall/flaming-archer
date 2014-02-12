@@ -4,9 +4,9 @@ namespace FA\Tests\Middleware;
 
 use FA\DI\Container;
 use FA\Middleware\Settings;
-use FA\Tests\CustomTestCase;
+use FA\Tests\ConfigTestCase;
 
-class SettingsTest extends CustomTestCase
+class SettingsTest extends ConfigTestCase
 {
     /**
      * @var Slim

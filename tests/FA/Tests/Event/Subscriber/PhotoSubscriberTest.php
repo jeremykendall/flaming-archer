@@ -6,13 +6,13 @@ use FA\Event\PhotoEvent;
 use FA\Event\Subscriber\PhotoSubscriber;
 use FA\Model\Photo\Photo;
 use FA\Paginator\Adapter\DbAdapter as PaginatorAdapter;
-use FA\Tests\CustomTestCase;
+use FA\Tests\ConfigTestCase;
 use Mockery as m;
 
 /**
  * @group events
  */
-class PhotoSubscriberTest extends CustomTestCase
+class PhotoSubscriberTest extends ConfigTestCase
 {
     /**
      * @var PhotoSubscriber

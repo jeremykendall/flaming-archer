@@ -1,19 +1,21 @@
 <?php
 
-namespace FA\Tests\Dao;
+namespace FA\Tests;
 
 use FA\Tests\FATestCase;
+use Zend\Config\Factory as ConfigFactory;
 
-class CommonDbTestCase extends FATestCase
+class ConfigTestCase extends FATestCase
 {
     protected function setUp()
     {
         parent::setUp();
-        $this->setUpDbInMemory();
+        $this->setUpConfig();
     }
 
     protected function tearDown()
     {
+        $this->config = null;
         parent::tearDown();
     }
 }

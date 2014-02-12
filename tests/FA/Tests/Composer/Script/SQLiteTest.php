@@ -71,8 +71,7 @@ class SQLiteTest extends ComposerScriptTestCase
     public function testPrepareExists()
     {
         $config = $this->config;
-
-        $this->createDb();
+        $this->setUpDbOnFilesystem();
 
         $output = array(
             'Reviewing your Flaming Archer database . . .',

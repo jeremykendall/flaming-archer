@@ -6,13 +6,13 @@ use Doctrine\Common\Collections\ArrayCollection;
 use FA\Model\Photo\Photo;
 use FA\Model\Photo\Size;
 use FA\Service\FlickrService;
-use FA\Tests\CustomTestCase;
+use FA\Tests\ConfigTestCase;
 use Guzzle\Http\Client;
 
 /**
  * @group internet
  */
-class FlickrServiceIntegrationTest extends CustomTestCase
+class FlickrServiceIntegrationTest extends ConfigTestCase
 {
     /**
      * @var FlickrService

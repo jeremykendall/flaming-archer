@@ -4,12 +4,12 @@ namespace FA\Tests\Event\Subscriber;
 
 use FA\Event\FeedEvent;
 use FA\Event\Subscriber\FeedSubscriber;
-use FA\Tests\CustomTestCase;
+use FA\Tests\ConfigTestCase;
 
 /**
  * @group events
  */
-class FeedSubscriberTest extends CustomTestCase
+class FeedSubscriberTest extends ConfigTestCase
 {
     /**
      * @var Feed $feed

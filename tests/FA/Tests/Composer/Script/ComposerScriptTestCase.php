@@ -5,9 +5,9 @@ namespace FA\Tests\Composer\Script;
 use Composer\Config as ComposerConfig;
 use Composer\IO\ConsoleIO;
 use Composer\Script\Event;
-use FA\Tests\CustomTestCase;
+use FA\Tests\ConfigTestCase;
 
-class ComposerScriptTestCase extends CustomTestCase
+class ComposerScriptTestCase extends ConfigTestCase
 {
     /**
      * @var Composer\Composer

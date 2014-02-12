@@ -4,9 +4,9 @@ namespace FA\Tests\DI;
 
 use FA\DI\Container;
 use FA\Model\Photo\Photo;
-use FA\Tests\CustomTestCase;
+use FA\Tests\ConfigTestCase;
 
-class ContainerTest extends CustomTestCase
+class ContainerTest extends ConfigTestCase
 {
     protected $container;
 
