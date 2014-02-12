@@ -16,7 +16,7 @@ class NavigationTest extends \PHPUnit_Framework_TestCase
         $app = new \Slim\Slim();
         $app->view(new \Slim\View());
 
-        $app->get('/', function() {
+        $app->get('/', function () {
             echo 'Success';
         });
 
@@ -57,7 +57,7 @@ class NavigationTest extends \PHPUnit_Framework_TestCase
         $app = new \Slim\Slim();
         $app->view(new \Slim\View());
 
-        $app->get('/admin', function() {
+        $app->get('/admin', function () {
             echo 'Success';
         });
 

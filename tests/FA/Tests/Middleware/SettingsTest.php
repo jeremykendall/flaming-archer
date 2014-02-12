@@ -26,7 +26,7 @@ class SettingsTest extends ConfigTestCase
         $this->app = new \Slim\Slim();
         $this->app->view(new \Slim\View());
 
-        $this->app->get('/feed', function() {
+        $this->app->get('/feed', function () {
             echo 'Success';
         })->name('feed');
 

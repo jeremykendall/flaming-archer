@@ -104,7 +104,7 @@ class DbAdapterTest extends \PHPUnit_Framework_TestCase
         $this->adapter->setCacheEnabled(true);
         $this->assertFalse($this->adapter->cacheEnabled());
     }
-    
+
     public function testCacheEnabledFalseIfCacheEnabledFalseButCacheNotNull()
     {
         $this->adapter->setCacheEnabled(false);
@@ -124,7 +124,7 @@ class DbAdapterTest extends \PHPUnit_Framework_TestCase
     {
         $offset = 2;
         $itemCountPerPage = 25;
-        
+
         $expected = DbAdapter::CACHE_KEY_PREFIX . md5($offset . $itemCountPerPage);
         $actual = $this->adapter->getCacheId($offset, $itemCountPerPage);
 

@@ -214,11 +214,11 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
         $this->authAdapter->expects($this->at(1))
             ->method('authenticate')
             ->will($this->returnValue($this->result));
-        
+
         $this->result->expects($this->at(0))
             ->method('isValid')
             ->will($this->returnValue(true));
-        
+
         $this->dao->expects($this->once())
             ->method('findByEmail')
             ->with($this->user->getEmail())
@@ -227,7 +227,7 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
         $this->dao->expects($this->once())
             ->method('changePassword')
             ->with(
-                $this->user->getId(), 
+                $this->user->getId(),
                 $this->matchesRegularExpression('/^\$2y\$10\$[a-zA-Z0-9\.\/]*$/')
             )
             ->will($this->returnValue($this->user));
@@ -264,11 +264,11 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
         $this->authAdapter->expects($this->at(1))
             ->method('authenticate')
             ->will($this->returnValue($this->result));
-        
+
         $this->result->expects($this->at(0))
             ->method('isValid')
             ->will($this->returnValue(true));
-        
+
         $this->dao->expects($this->once())
             ->method('findByEmail')
             ->with($this->user->getEmail())
@@ -277,7 +277,7 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
         $this->dao->expects($this->once())
             ->method('changePassword')
             ->with(
-                $this->user->getId(), 
+                $this->user->getId(),
                 $this->matchesRegularExpression('/^\$2y\$10\$[a-zA-Z0-9\.\/]*$/')
             )
             ->will($this->returnValue($this->user));
@@ -335,7 +335,7 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
         $this->dao->expects($this->once())
             ->method('createUser')
             ->with(
-                $this->user->getEmail(), 
+                $this->user->getEmail(),
                 $this->matchesRegularExpression('/^\$2y\$10\$[a-zA-Z0-9\.\/]*$/')
             )
             ->will($this->returnValue($this->user));

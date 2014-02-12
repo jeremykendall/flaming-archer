@@ -35,7 +35,7 @@ class GoogleAnalyticsTest extends \PHPUnit_Framework_TestCase
         $this->app = new \Slim\Slim();
         $this->app->view(new \Slim\View());
 
-        $this->app->get('/', function() {
+        $this->app->get('/', function () {
             echo 'Success';
         });
     }

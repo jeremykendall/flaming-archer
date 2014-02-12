@@ -133,7 +133,7 @@ class FlickrServiceIntegrationTest extends ConfigTestCase
 
         $result = $this->service->findPhotos($photos);
 
-        $this->assertInternalType('array', $result); 
+        $this->assertInternalType('array', $result);
         $this->assertCount(3, $result);
         $this->assertContainsOnlyInstancesOf('FA\Model\Photo\Photo', $result);
 
@@ -222,7 +222,7 @@ class FlickrServiceIntegrationTest extends ConfigTestCase
    "stat":"ok"
 }
 JSON;
-    
+
         return json_decode($result, true);
     }
 

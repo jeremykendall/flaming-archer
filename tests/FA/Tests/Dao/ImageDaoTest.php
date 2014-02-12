@@ -202,8 +202,6 @@ class ImageDaoTest extends CommonDbTestCase
         $this->assertEquals($actual->getPosted(), $expected->getPosted());
     }
 
-
-
     /**
      * @covers FA\Dao\ImageDao::findFirstImage
      */

@@ -36,8 +36,8 @@ class MetaTagsTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->metaTags = new MetaTags(
-            $this->request, 
-            $this->photo, 
+            $this->request,
+            $this->photo,
             $this->profile
         );
 

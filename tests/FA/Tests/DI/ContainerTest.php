@@ -32,7 +32,7 @@ class ContainerTest extends ConfigTestCase
         $this->config['googleAnalyticsDomain'] = '';
 
         $container = new Container($this->config);
-        
+
         $this->assertNull($container['googleAnalyticsMiddleware']);
     }
 
@@ -42,7 +42,7 @@ class ContainerTest extends ConfigTestCase
         $this->config['googleAnalyticsDomain'] = 'example.com';
 
         $container = new Container($this->config);
-        
+
         $this->assertInstanceOf('FA\Middleware\GoogleAnalytics', $container['googleAnalyticsMiddleware']);
     }
 
@@ -59,7 +59,7 @@ class ContainerTest extends ConfigTestCase
     public function testEventDispatcher()
     {
         $this->assertInstanceOf(
-            'Symfony\Component\EventDispatcher\EventDispatcher', 
+            'Symfony\Component\EventDispatcher\EventDispatcher',
             $this->container['dispatcher']
         );
     }
@@ -67,7 +67,7 @@ class ContainerTest extends ConfigTestCase
     public function testCache()
     {
         $this->assertInstanceOf(
-            'Zend\Cache\Storage\Adapter\Filesystem', 
+            'Zend\Cache\Storage\Adapter\Filesystem',
             $this->container['cache']
         );
     }
@@ -75,7 +75,7 @@ class ContainerTest extends ConfigTestCase
     public function testPhotoSubscriber()
     {
         $this->assertInstanceOf(
-            'FA\Event\Subscriber\PhotoSubscriber', 
+            'FA\Event\Subscriber\PhotoSubscriber',
             $this->container['event_subscriber.photo']
         );
     }

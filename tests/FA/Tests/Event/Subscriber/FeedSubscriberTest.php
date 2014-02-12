@@ -64,9 +64,9 @@ class FeedSubscriberTest extends ConfigTestCase
 
     public function testOnContentChange()
     {
-        $format = 'rss'; 
-        $outfile = 'feed.xml'; 
-        $feedUrl = 'http://example.com/feed'; 
+        $format = 'rss';
+        $outfile = 'feed.xml';
+        $feedUrl = 'http://example.com/feed';
         $notifyMode = 'publish';
 
         $event = new FeedEvent(
@@ -91,9 +91,9 @@ class FeedSubscriberTest extends ConfigTestCase
 
     public function testOnFeedPublish()
     {
-        $format = 'rss'; 
-        $outfile = 'feed.xml'; 
-        $feedUrl = 'http://example.com/feed'; 
+        $format = 'rss';
+        $outfile = 'feed.xml';
+        $feedUrl = 'http://example.com/feed';
         $notifyMode = 'publish';
 
         $event = new FeedEvent(
