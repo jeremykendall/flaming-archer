@@ -19,7 +19,7 @@ class PubSubNotifier
      *
      * @param Client $client Http client
      * @param LoggerInterface PSR Logger Interface
-     * @param string $hubUrl  Url of pubsubhubbub hub to notify
+     * @param string $hubUrl Url of pubsubhubbub hub to notify
      */
     public function __construct(ClientInterface $client, LoggerInterface $logger, $hubUrl)
     {

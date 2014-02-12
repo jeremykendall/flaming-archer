@@ -4,7 +4,6 @@ namespace FA\Model\Photo;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use FA\Model\BaseModel;
-use FA\Model\Photo\Size;
 
 class Photo extends BaseModel
 {

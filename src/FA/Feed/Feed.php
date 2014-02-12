@@ -83,8 +83,8 @@ class Feed
             $entry->setDescription(sprintf('%s | Day %d', $photo->getTitle(), $photo->getDay()));
 
             $content = $this->view->render($this->getTemplate(), array(
-                'photo' => $photo, 
-                'profile' => $this->profile, 
+                'photo' => $photo,
+                'profile' => $this->profile,
                 'baseUrl' => $this->baseUrl,
             ));
 

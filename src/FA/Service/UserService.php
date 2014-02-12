@@ -44,7 +44,7 @@ class UserService
      * Updates user's email address and updates auth storage with
      * updated user data
      *
-     * @param User  $user  User data
+     * @param  User $user User data
      * @return User Updated user
      */
     public function updateEmail(User $user)

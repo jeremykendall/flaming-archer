@@ -71,13 +71,13 @@ class MetaTags
     {
         $tags = array(
             'og:url' => sprintf(
-                '%s%s', 
-                $this->request->getUrl(), 
+                '%s%s',
+                $this->request->getUrl(),
                 $this->request->getPath()
             ),
             'og:title' => sprintf(
-                '%s | Day %s', 
-                $this->photo->getTitle(), 
+                '%s | Day %s',
+                $this->photo->getTitle(),
                 $this->photo->getDay()
             ),
             'og:description' => $this->description,
@@ -96,8 +96,8 @@ class MetaTags
             'twitter:site' => $this->profile['twitter_username'],
             'twitter:creator' => $this->profile['twitter_username'],
             'twitter:title' => sprintf(
-                '%s | Day %s', 
-                $this->photo->getTitle(), 
+                '%s | Day %s',
+                $this->photo->getTitle(),
                 $this->photo->getDay()
             ),
             'twitter:image:src' => $this->size->getSource(),

@@ -101,7 +101,7 @@ class User extends BaseModel implements IdentityInterface
     {
         return $this->role;
     }
-    
+
     /**
      * Set role
      *

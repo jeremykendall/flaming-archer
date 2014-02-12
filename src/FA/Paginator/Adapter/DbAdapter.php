@@ -100,16 +100,17 @@ class DbAdapter implements AdapterInterface
     {
         return (($this->cache !== null) && $this->cacheEnabled);
     }
-    
+
     /**
      * Enables/Disables the cache
      *
-     * @param bool $enable
+     * @param  bool      $enable
      * @return DbAdapter
      */
     public function setCacheEnabled($enable)
     {
         $this->cacheEnabled = (bool) $enable;
+
         return $this;
     }
 }

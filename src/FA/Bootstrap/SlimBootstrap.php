@@ -7,7 +7,6 @@ use Guzzle\Log\MessageFormatter;
 use Guzzle\Log\MonologLogAdapter;
 use Guzzle\Plugin\Log\LogPlugin;
 use Monolog\Handler\ChromePHPHandler;
-use Psr\Log\LogLevel;
 use Slim\Log;
 use Slim\Slim;
 use Slim\Views\Twig;
@@ -54,7 +53,7 @@ class SlimBootstrap
 
     public function configureDevelopmentMode(Slim $app, Container $container)
     {
-        $app->configureMode('development', function() use ($app, $container) {
+        $app->configureMode('development', function () use ($app, $container) {
             $container['logger.app']->pushHandler(
                 new ChromePHPHandler($container['config']['logger.app.level'])
             );
@@ -98,11 +97,11 @@ class SlimBootstrap
     // TODO: Make sure other exceptions get handled!
     public function configureCustomErrorHandling(Slim $app)
     {
-        $app->error(function(\Exception $e) use ($app) {
+        $app->error(function (\Exception $e) use ($app) {
             if ($e instanceof \FA\Service\FlickrServiceUnavailableException) {
                 $app->render('flickr-down.html');
             }
-            
+
             throw $e;
         });
     }

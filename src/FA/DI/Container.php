@@ -134,9 +134,9 @@ class Container extends Pimple
 
         $this['feed.writer'] = function () use ($c) {
             return new Feed(
-                $c['imageService'], 
-                $c['twig.loader.string'], 
-                $c['config']['profile'], 
+                $c['imageService'],
+                $c['twig.loader.string'],
+                $c['config']['profile'],
                 $c['baseUrl'],
                 $c['feedUri'],
                 $c['config']['pubsubhubbub.url']
@@ -243,11 +243,12 @@ class Container extends Pimple
 
         $this['guzzleFlickrCachingClient'] = $this->share(function () use ($c) {
             $canCache = new CallbackCanCacheStrategy(
-                function ($request) { 
+                function ($request) {
                     if ($request->getQuery()->get('method') === 'flickr.photos.search') {
                         $params = $request->getParams();
                         $params['cache.disallowed-by-callback'] = true;
-                        return false; 
+
+                        return false;
                     }
 
                     return true;
@@ -330,6 +331,7 @@ class Container extends Pimple
 
         $this['now'] = function () use ($c) {
             $tz = new \DateTimeZone($c['config']['profile']['timezone']);
+
             return new \DateTime('now', $tz);
         };
     }

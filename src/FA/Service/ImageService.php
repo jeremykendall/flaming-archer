@@ -11,7 +11,6 @@ namespace FA\Service;
 
 use FA\Dao\ImageDao;
 use FA\Model\Photo\Photo;
-use FA\Service\FlickrInterface;
 
 /**
  * Image service abstracts application requests for image data

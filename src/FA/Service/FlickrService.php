@@ -12,8 +12,6 @@ namespace FA\Service;
 use Doctrine\Common\Collections\ArrayCollection;
 use FA\Model\Photo\Photo;
 use FA\Model\Photo\Size;
-use FA\Service\FlickrServiceException;
-use FA\Service\FlickrServiceUnavailableException;
 use Guzzle\Common\Exception\MultiTransferException;
 use Guzzle\Http\ClientInterface;
 use Psr\Log\LoggerInterface;

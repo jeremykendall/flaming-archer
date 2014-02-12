@@ -16,7 +16,7 @@ class PhotoEvent extends Event
     {
         $this->setPhoto($photo);
     }
-    
+
     /**
      * Get photo
      *
@@ -26,7 +26,7 @@ class PhotoEvent extends Event
     {
         return $this->photo;
     }
-    
+
     /**
      * Set photo
      *
