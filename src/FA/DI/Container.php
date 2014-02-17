@@ -60,7 +60,7 @@ class Container extends Pimple
         $c['baseUrl'] = null;
         $c['feedUri'] = null;
 
-        $this['db'] = $this->share(function () use ($c) {
+        $this['db'] = function () use ($c) {
             try {
                 $db = new \PDO(
                     $c['config']['pdo']['dsn'],
@@ -74,9 +74,9 @@ class Container extends Pimple
                 error_log('Database connection error in ' . $e->getFile() . ' on line ' . $e->getLine() . ': ' . $e->getMessage());
                 die('Database connection error. Please check php error log.');
             }
-        });
+        };
 
-        $this['logger.app'] = $this->share(function () use ($c) {
+        $this['logger.app'] = function () use ($c) {
             $log = new Logger('app');
             $log->pushHandler(
                 new StreamHandler(
@@ -86,9 +86,9 @@ class Container extends Pimple
             );
 
             return $log;
-        });
+        };
 
-        $this['logger.guzzle'] = $this->share(function () use ($c) {
+        $this['logger.guzzle'] = function () use ($c) {
             $log = new Logger('guzzle');
             $log->pushHandler(
                 new StreamHandler(
@@ -98,19 +98,19 @@ class Container extends Pimple
             );
 
             return $log;
-        });
+        };
 
-        $this['userDao'] = $this->share(function () use ($c) {
+        $this['userDao'] = function () use ($c) {
             return new UserDao($c['db']);
-        });
+        };
 
-        $this['authAdapter'] = $this->share(function () use ($c) {
+        $this['authAdapter'] = function () use ($c) {
             return new DbAdapter($c['userDao']);
-        });
+        };
 
-        $this['cache'] = $this->share(function () use ($c) {
+        $this['cache'] = function () use ($c) {
             return StorageFactory::factory($c['config']['cache']);
-        });
+        };
 
         $this['flickrService'] = function () use ($c) {
             return new FlickrService($c['guzzleFlickrClient'], $c['logger.app']);
@@ -230,7 +230,7 @@ class Container extends Pimple
             );
         };
 
-        $this['guzzleFlickrClient'] = $this->share(function () use ($c) {
+        $this['guzzleFlickrClient'] = function () use ($c) {
             $client = new Client($c['config']['flickr.api.endpoint']);
             $client->setDefaultOption('query', array(
                 'api_key' => $c['config']['flickr.api.key'],
@@ -239,11 +239,12 @@ class Container extends Pimple
             ));
 
             return $client;
-        });
+        };
 
-        $this['guzzleFlickrCachingClient'] = $this->share(function () use ($c) {
+        $this['guzzleFlickrCachingClient'] = function () use ($c) {
             $canCache = new CallbackCanCacheStrategy(
                 function ($request) {
+                    // Do not cache results of 'flickr.photos.search'
                     if ($request->getQuery()->get('method') === 'flickr.photos.search') {
                         $params = $request->getParams();
                         $params['cache.disallowed-by-callback'] = true;
@@ -255,6 +256,17 @@ class Container extends Pimple
                 }
             );
 
+            $logCacheResult = function (Event $event) use ($c) {
+                $request = $event['request'];
+
+                $cacheResult = array(
+                    'flickr.method' => $request->getQuery()->get('method'),
+                    'params' => $request->getParams(),
+                );
+
+                $c['logger.guzzle']->debug('CACHE RESULT', $cacheResult);
+            };
+
             $storage = new DefaultCacheStorage(new ZendCacheAdapter($c['cache']));
 
             $cachePlugin = new CachePlugin(array(
@@ -264,21 +276,11 @@ class Container extends Pimple
 
             $client = $c['guzzleFlickrClient'];
             $client->addSubscriber($cachePlugin);
-
-            $client->getEventDispatcher()->addListener('request.before_send', function (Event $event) use ($c) {
-                $request = $event['request'];
-
-                $cacheResult = array(
-                    'flickr.method' => $request->getQuery()->get('method'),
-                    'params' => $request->getParams(),
-                );
-
-                $c['logger.guzzle']->debug('CACHE RESULT', $cacheResult);
-            },
-            -999);
+            $client->getEventDispatcher()
+                ->addListener('request.before_send', $logCacheResult, -999);
 
             return $client;
-        });
+        };
 
         $this['defaultFlickrSearchOptions'] = function () use ($c) {
             $tz = new \DateTimeZone($c['config']['profile']['timezone']);

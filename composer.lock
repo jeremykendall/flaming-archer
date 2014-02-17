@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "8c62c3c9602e84f3d918ad30fb89db90",
+    "hash": "b27cdbe818f7696b0d8b824bd5ec6485",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -540,22 +540,22 @@
         },
         {
             "name": "jeremykendall/password-validator",
-            "version": "dev-develop",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jeremykendall/password-validator.git",
-                "reference": "c7a4aacec39ba01c98e44495942fb70f8c9c5a9e"
+                "reference": "88ca3e0530d7800b4376a70a487fa9696538cf72"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jeremykendall/password-validator/zipball/c7a4aacec39ba01c98e44495942fb70f8c9c5a9e",
-                "reference": "c7a4aacec39ba01c98e44495942fb70f8c9c5a9e",
+                "url": "https://api.github.com/repos/jeremykendall/password-validator/zipball/88ca3e0530d7800b4376a70a487fa9696538cf72",
+                "reference": "88ca3e0530d7800b4376a70a487fa9696538cf72",
                 "shasum": ""
             },
             "require": {
                 "ircmaxell/password-compat": "1.*",
                 "php": ">=5.3.7",
-                "wp-cli/php-cli-tools": "v0.9.4"
+                "wp-cli/php-cli-tools": "~0.9.4"
             },
             "require-dev": {
                 "league/phpunit-coverage-listener": "~1.1",
@@ -592,7 +592,7 @@
                 "passwords",
                 "security"
             ],
-            "time": "2014-01-29 00:24:46"
+            "time": "2014-02-15 15:49:57"
         },
         {
             "name": "jeremykendall/slim-auth",
@@ -600,18 +600,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/jeremykendall/slim-auth.git",
-                "reference": "79b2f5ebf94580d1632ebd6829f3c889d498a09f"
+                "reference": "7357b0e236c7123207d956d186b464937d3a1275"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jeremykendall/slim-auth/zipball/79b2f5ebf94580d1632ebd6829f3c889d498a09f",
-                "reference": "79b2f5ebf94580d1632ebd6829f3c889d498a09f",
+                "url": "https://api.github.com/repos/jeremykendall/slim-auth/zipball/7357b0e236c7123207d956d186b464937d3a1275",
+                "reference": "7357b0e236c7123207d956d186b464937d3a1275",
                 "shasum": ""
             },
             "require": {
-                "jeremykendall/password-validator": "dev-develop",
+                "jeremykendall/password-validator": "1.*",
                 "php": ">=5.3.7",
-                "wp-cli/php-cli-tools": "v0.9.4",
+                "wp-cli/php-cli-tools": "~0.9.4",
                 "zendframework/zend-authentication": "2.*",
                 "zendframework/zend-permissions-acl": "2.*",
                 "zendframework/zend-session": "2.*"
@@ -656,7 +656,7 @@
                 "zend",
                 "zf2"
             ],
-            "time": "2014-01-13 01:56:22"
+            "time": "2014-02-17 04:39:43"
         },
         {
             "name": "monolog/monolog",
@@ -727,16 +727,16 @@
         },
         {
             "name": "pimple/pimple",
-            "version": "v1.0.2",
+            "version": "v2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fabpot/Pimple.git",
-                "reference": "ae11e57e8c2bb414b2ff93396dbbfc0eb92feb94"
+                "reference": "f99b3df12991c22463927aa6a18fd9b2212917f2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fabpot/Pimple/zipball/ae11e57e8c2bb414b2ff93396dbbfc0eb92feb94",
-                "reference": "ae11e57e8c2bb414b2ff93396dbbfc0eb92feb94",
+                "url": "https://api.github.com/repos/fabpot/Pimple/zipball/f99b3df12991c22463927aa6a18fd9b2212917f2",
+                "reference": "f99b3df12991c22463927aa6a18fd9b2212917f2",
                 "shasum": ""
             },
             "require": {
@@ -745,7 +745,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.0.x-dev"
+                    "dev-master": "2.0.x-dev"
                 }
             },
             "autoload": {
@@ -760,7 +760,9 @@
             "authors": [
                 {
                     "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
+                    "email": "fabien@symfony.com",
+                    "homepage": "http://fabien.potencier.org",
+                    "role": "Lead Developer"
                 }
             ],
             "description": "Pimple is a simple Dependency Injection Container for PHP 5.3",
@@ -769,7 +771,7 @@
                 "container",
                 "dependency injection"
             ],
-            "time": "2013-03-08 08:21:40"
+            "time": "2014-02-10 08:05:32"
         },
         {
             "name": "psr/log",
@@ -811,16 +813,16 @@
         },
         {
             "name": "slim/slim",
-            "version": "2.4.0",
+            "version": "2.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeguy/Slim.git",
-                "reference": "ff7d7148848fa4f45712984d7b91ac3cbced586b"
+                "reference": "3a2ac723f17b5d81607287ff28575d38b9fbc70e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeguy/Slim/zipball/ff7d7148848fa4f45712984d7b91ac3cbced586b",
-                "reference": "ff7d7148848fa4f45712984d7b91ac3cbced586b",
+                "url": "https://api.github.com/repos/codeguy/Slim/zipball/3a2ac723f17b5d81607287ff28575d38b9fbc70e",
+                "reference": "3a2ac723f17b5d81607287ff28575d38b9fbc70e",
                 "shasum": ""
             },
             "require": {
@@ -853,7 +855,7 @@
                 "rest",
                 "router"
             ],
-            "time": "2013-11-29 20:33:36"
+            "time": "2014-02-16 18:18:25"
         },
         {
             "name": "slim/views",
@@ -911,17 +913,17 @@
         },
         {
             "name": "symfony/event-dispatcher",
-            "version": "v2.3.9",
+            "version": "v2.3.10",
             "target-dir": "Symfony/Component/EventDispatcher",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/EventDispatcher.git",
-                "reference": "3153c07622eff7894a154f87cfa7dc501d2dbf8e"
+                "reference": "15645237c6ff70e74a28e8836362d82492765055"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/EventDispatcher/zipball/3153c07622eff7894a154f87cfa7dc501d2dbf8e",
-                "reference": "3153c07622eff7894a154f87cfa7dc501d2dbf8e",
+                "url": "https://api.github.com/repos/symfony/EventDispatcher/zipball/15645237c6ff70e74a28e8836362d82492765055",
+                "reference": "15645237c6ff70e74a28e8836362d82492765055",
                 "shasum": ""
             },
             "require": {
@@ -952,7 +954,9 @@
             "authors": [
                 {
                     "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
+                    "email": "fabien@symfony.com",
+                    "homepage": "http://fabien.potencier.org",
+                    "role": "Lead Developer"
                 },
                 {
                     "name": "Symfony Community",
@@ -961,7 +965,7 @@
             ],
             "description": "Symfony EventDispatcher Component",
             "homepage": "http://symfony.com",
-            "time": "2013-12-28 07:46:05"
+            "time": "2014-02-11 10:29:24"
         },
         {
             "name": "twig/twig",
@@ -1890,12 +1894,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/composer.git",
-                "reference": "b7a9ea4187bce63f418bf7ba035b63dcb1e23ef6"
+                "reference": "9896abeb380f65a146e988f51b46cdb8e1b88e01"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/composer/zipball/b7a9ea4187bce63f418bf7ba035b63dcb1e23ef6",
-                "reference": "b7a9ea4187bce63f418bf7ba035b63dcb1e23ef6",
+                "url": "https://api.github.com/repos/composer/composer/zipball/9896abeb380f65a146e988f51b46cdb8e1b88e01",
+                "reference": "9896abeb380f65a146e988f51b46cdb8e1b88e01",
                 "shasum": ""
             },
             "require": {
@@ -1944,14 +1948,14 @@
                     "homepage": "http://www.naderman.de"
                 }
             ],
-            "description": "Dependency Manager",
+            "description": "Composer helps you declare, manage and install dependencies of PHP projects, ensuring you have the right stack everywhere.",
             "homepage": "http://getcomposer.org/",
             "keywords": [
                 "autoload",
                 "dependency",
                 "package"
             ],
-            "time": "2014-02-06 22:07:47"
+            "time": "2014-02-13 15:23:53"
         },
         {
             "name": "jeremykendall/phpctagger",
@@ -2387,16 +2391,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "3.7.30",
+            "version": "3.7.31",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "2f33258fa5a0c330515b7deba2bc040fa5c3953b"
+                "reference": "d24e9877331039582497052cc3c4d9f465b88210"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/2f33258fa5a0c330515b7deba2bc040fa5c3953b",
-                "reference": "2f33258fa5a0c330515b7deba2bc040fa5c3953b",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/d24e9877331039582497052cc3c4d9f465b88210",
+                "reference": "d24e9877331039582497052cc3c4d9f465b88210",
                 "shasum": ""
             },
             "require": {
@@ -2457,7 +2461,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2014-01-31 08:54:33"
+            "time": "2014-02-03 07:46:27"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -2557,17 +2561,17 @@
         },
         {
             "name": "symfony/console",
-            "version": "v2.4.1",
+            "version": "v2.4.2",
             "target-dir": "Symfony/Component/Console",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Console.git",
-                "reference": "4c1ed2ff514bd85ee186eebb010ccbdeeab05af7"
+                "reference": "940f217cbc3c8a33e5403e7c595495c4884400fe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Console/zipball/4c1ed2ff514bd85ee186eebb010ccbdeeab05af7",
-                "reference": "4c1ed2ff514bd85ee186eebb010ccbdeeab05af7",
+                "url": "https://api.github.com/repos/symfony/Console/zipball/940f217cbc3c8a33e5403e7c595495c4884400fe",
+                "reference": "940f217cbc3c8a33e5403e7c595495c4884400fe",
                 "shasum": ""
             },
             "require": {
@@ -2597,7 +2601,9 @@
             "authors": [
                 {
                     "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
+                    "email": "fabien@symfony.com",
+                    "homepage": "http://fabien.potencier.org",
+                    "role": "Lead Developer"
                 },
                 {
                     "name": "Symfony Community",
@@ -2606,21 +2612,21 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "http://symfony.com",
-            "time": "2014-01-01 08:14:50"
+            "time": "2014-02-11 13:52:09"
         },
         {
             "name": "symfony/finder",
-            "version": "v2.4.1",
+            "version": "v2.4.2",
             "target-dir": "Symfony/Component/Finder",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Finder.git",
-                "reference": "6904345cf2b3bbab1f6d6e4ce1724cb99df9f00a"
+                "reference": "b6735d1fc16da13c4c7dddfe78366a4a098cf011"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Finder/zipball/6904345cf2b3bbab1f6d6e4ce1724cb99df9f00a",
-                "reference": "6904345cf2b3bbab1f6d6e4ce1724cb99df9f00a",
+                "url": "https://api.github.com/repos/symfony/Finder/zipball/b6735d1fc16da13c4c7dddfe78366a4a098cf011",
+                "reference": "b6735d1fc16da13c4c7dddfe78366a4a098cf011",
                 "shasum": ""
             },
             "require": {
@@ -2644,7 +2650,9 @@
             "authors": [
                 {
                     "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
+                    "email": "fabien@symfony.com",
+                    "homepage": "http://fabien.potencier.org",
+                    "role": "Lead Developer"
                 },
                 {
                     "name": "Symfony Community",
@@ -2653,21 +2661,21 @@
             ],
             "description": "Symfony Finder Component",
             "homepage": "http://symfony.com",
-            "time": "2014-01-01 08:14:50"
+            "time": "2014-01-07 13:28:54"
         },
         {
             "name": "symfony/process",
-            "version": "v2.4.1",
+            "version": "v2.4.2",
             "target-dir": "Symfony/Component/Process",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Process.git",
-                "reference": "58fdccb311e44f28866f976c2d7b3227e9f713db"
+                "reference": "c175448bac997556f8ab972908a4e14c7291fb03"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Process/zipball/58fdccb311e44f28866f976c2d7b3227e9f713db",
-                "reference": "58fdccb311e44f28866f976c2d7b3227e9f713db",
+                "url": "https://api.github.com/repos/symfony/Process/zipball/c175448bac997556f8ab972908a4e14c7291fb03",
+                "reference": "c175448bac997556f8ab972908a4e14c7291fb03",
                 "shasum": ""
             },
             "require": {
@@ -2691,7 +2699,9 @@
             "authors": [
                 {
                     "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
+                    "email": "fabien@symfony.com",
+                    "homepage": "http://fabien.potencier.org",
+                    "role": "Lead Developer"
                 },
                 {
                     "name": "Symfony Community",
@@ -2700,21 +2710,21 @@
             ],
             "description": "Symfony Process Component",
             "homepage": "http://symfony.com",
-            "time": "2014-01-05 02:10:50"
+            "time": "2014-02-11 13:52:09"
         },
         {
             "name": "symfony/yaml",
-            "version": "v2.4.1",
+            "version": "v2.4.2",
             "target-dir": "Symfony/Component/Yaml",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Yaml.git",
-                "reference": "4e1a237fc48145fae114b96458d799746ad89aa0"
+                "reference": "bb6ddaf8956139d1b8c360b4b713ed0138e876b3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Yaml/zipball/4e1a237fc48145fae114b96458d799746ad89aa0",
-                "reference": "4e1a237fc48145fae114b96458d799746ad89aa0",
+                "url": "https://api.github.com/repos/symfony/Yaml/zipball/bb6ddaf8956139d1b8c360b4b713ed0138e876b3",
+                "reference": "bb6ddaf8956139d1b8c360b4b713ed0138e876b3",
                 "shasum": ""
             },
             "require": {
@@ -2738,7 +2748,9 @@
             "authors": [
                 {
                     "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
+                    "email": "fabien@symfony.com",
+                    "homepage": "http://fabien.potencier.org",
+                    "role": "Lead Developer"
                 },
                 {
                     "name": "Symfony Community",
@@ -2747,7 +2759,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "http://symfony.com",
-            "time": "2013-12-28 08:12:03"
+            "time": "2014-01-07 13:28:54"
         },
         {
             "name": "whatthejeff/fab",
@@ -2864,16 +2876,16 @@
         },
         {
             "name": "whatthejeff/nyancat-scoreboard",
-            "version": "v1.1.0",
+            "version": "v1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/whatthejeff/nyancat-scoreboard.git",
-                "reference": "e8390ebcb9119ee42194706a9f5c51f241a598d3"
+                "reference": "ab5e68605d4950f299684f4e161d56e96be6994c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/whatthejeff/nyancat-scoreboard/zipball/e8390ebcb9119ee42194706a9f5c51f241a598d3",
-                "reference": "e8390ebcb9119ee42194706a9f5c51f241a598d3",
+                "url": "https://api.github.com/repos/whatthejeff/nyancat-scoreboard/zipball/ab5e68605d4950f299684f4e161d56e96be6994c",
+                "reference": "ab5e68605d4950f299684f4e161d56e96be6994c",
                 "shasum": ""
             },
             "require": {
@@ -2882,7 +2894,9 @@
             },
             "require-dev": {
                 "pear-pear/pear": "1.9.4",
-                "phpunit/phpunit": "~3.7"
+                "phpunit/php-code-coverage": "1.3.*@dev",
+                "phpunit/phpunit": "3.8.*@dev",
+                "phpunit/phpunit-mock-objects": "1.3.*@dev"
             },
             "type": "library",
             "extra": {
@@ -2914,7 +2928,7 @@
                 "scoreboard",
                 "tests"
             ],
-            "time": "2013-06-06 09:16:17"
+            "time": "2014-02-12 22:16:49"
         }
     ],
     "aliases": [
@@ -2923,12 +2937,11 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "jeremykendall/slim-auth": 20,
-        "jeremykendall/password-validator": 20,
         "composer/composer": 20,
         "jeremykendall/phpctagger": 20
     },
     "platform": {
-        "php": ">=5.3.10",
+        "php": ">=5.4",
         "ext-mcrypt": "*"
     },
     "platform-dev": [

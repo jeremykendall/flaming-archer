@@ -3,9 +3,9 @@
 namespace FA\Bootstrap;
 
 use FA\DI\Container;
-use Guzzle\Log\MessageFormatter;
-use Guzzle\Log\MonologLogAdapter;
-use Guzzle\Plugin\Log\LogPlugin;
+use Guzzle\Log\MessageFormatter as GuzzleMessageFormatter;
+use Guzzle\Log\MonologLogAdapter as GuzzleMonologLogAdapter;
+use Guzzle\Plugin\Log\LogPlugin as GuzzleLogPlugin;
 use Monolog\Handler\ChromePHPHandler;
 use Slim\Log;
 use Slim\Slim;
@@ -65,12 +65,14 @@ class SlimBootstrap
 
     public function configureLogging(Slim $app, Container $container)
     {
+        // Set default logger
         $app->container->singleton('log', function () use ($container) {
             return $container['logger.app'];
         });
 
-        $adapter = new MonologLogAdapter($container['logger.guzzle']);
-        $logPlugin = new LogPlugin($adapter, MessageFormatter::DEBUG_FORMAT);
+        // Add logging to the Guzzle Flickr Client
+        $adapter = new GuzzleMonologLogAdapter($container['logger.guzzle']);
+        $logPlugin = new GuzzleLogPlugin($adapter, GuzzleMessageFormatter::DEBUG_FORMAT);
         $container['guzzleFlickrClient']->addSubscriber($logPlugin);
     }
 
