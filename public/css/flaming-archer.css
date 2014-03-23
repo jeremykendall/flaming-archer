@@ -34,7 +34,6 @@ input#day.form-control {
 
 .day-photo img { 
     max-height: 90%; 
-    height: 90%; 
     max-width: 100%; 
     vertical-align: middle; 
 }
