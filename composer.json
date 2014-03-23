@@ -35,21 +35,21 @@
         "symfony/event-dispatcher": "2.3.*",
         "twig/twig": "1.13.*",
         "wp-cli/php-cli-tools": "~0.9.4",
-        "zendframework/zend-authentication": "2.2.*",
-        "zendframework/zend-cache": "2.2.*",
-        "zendframework/zend-config": "2.2.*",
-        "zendframework/zend-feed": "2.2.*",
-        "zendframework/zend-inputfilter": "2.2.*",
-        "zendframework/zend-paginator": "2.2.*",
-        "zendframework/zend-serializer": "2.2.*",
-        "zendframework/zend-session": "2.2.*"
+        "zendframework/zend-authentication": "2.3.*",
+        "zendframework/zend-cache": "2.3.*",
+        "zendframework/zend-config": "2.3.*",
+        "zendframework/zend-feed": "2.3.*",
+        "zendframework/zend-inputfilter": "2.3.*",
+        "zendframework/zend-paginator": "2.3.*",
+        "zendframework/zend-serializer": "2.3.*",
+        "zendframework/zend-session": "2.3.*"
     },
     "require-dev": {
         "composer/composer": "1.0.*@dev",
         "mikey179/vfsStream": "1.2.*",
         "mockery/mockery": "0.8.0",
         "jeremykendall/phpctagger": "dev-master",
-        "phpunit/phpunit": "3.7.*",
+        "phpunit/phpunit": "4.*",
         "whatthejeff/nyancat-phpunit-resultprinter": "v1.2.0"
     },
     "autoload": {
