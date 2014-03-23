@@ -255,6 +255,17 @@ class Photo extends BaseModel
         return $this->getSize('Medium 640');
     }
 
+    public function getDaySize()
+    {
+        $featured = $this->getSize('Medium 800');
+
+        if (!$featured) {
+            $featured = $this->getSize('Medium 640');
+        }
+
+        return $featured;
+    }
+
     public function toArray()
     {
         return array(
