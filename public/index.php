@@ -40,9 +40,11 @@ $app->get('/(page/:page)', function ($page = 1) use ($app, $container) {
     $paginator->setCurrentPageNumber($page);
     $pages = $paginator->getPages();
 
+    $home = ($page == 1 ) ? true : false;
+
     $app->render(
         'index.twig', 
-        array('paginator' => $paginator, 'pages' => $pages, 'home' => true)
+        array('paginator' => $paginator, 'pages' => $pages, 'home' => $home)
     );
 });
 
