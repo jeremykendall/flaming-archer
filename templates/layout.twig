@@ -2,7 +2,8 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         {% if image is defined %}
             <meta name="description" content="{{ (image.description) ? image.description : profile.tagline }}">
         {% else %}
@@ -18,39 +19,74 @@
         <title>{% block page_title %}{{ profile.site_name }}{% endblock %}</title>
 
         <!-- Latest compiled and minified CSS -->
-        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
 
         <!-- Custom styles for this template -->
-        <link href="/css/jumbotron-narrow.css" rel="stylesheet">
+        <link rel="stylesheet" href="/css/bootswatch.com.cyborg.bootstrap.min.css">
+        <link rel="stylesheet" href="/css/flaming-archer.css">
 
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.6.2/html5shiv.js"></script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.2.0/respond.js"></script>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
 
         {% block stylesheets %}{% endblock %}
     </head>
 
     <body>
+        <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">Project name</a>
+                </div>
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a href="#">Home</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div><!--/.nav-collapse -->
+            </div>
+        </div>
+        <div class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <a href="/" class="navbar-brand">{{ profile.photographer }}</a>
+                    <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+                <div class="navbar-collapse collapse" id="navbar-main">
+                    <ul class="nav navbar-nav">
+                        {% for link in navigation %}
+                        <li class="{{link.class}}"><a href="{{link.href}}">{{link.caption}}</a></li>
+                        {% endfor %}
+                    </ul>
 
+                </div>
+            </div>
+        </div>
         <div class="container">
-            <div class="header">
-                <ul class="nav nav-pills pull-right">
-                    {% for link in navigation %}
-                    <li class="{{link.class}}"><a href="{{link.href}}">{{link.caption}}</a></li>
-                    {% endfor %}
-                </ul>
-                <h3 class="text-muted">{{ profile.photographer }}</h3>
+            {% if home is defined  %}
+            {% if home %}
+            <div class="page-header" id="banner">
+                <div class="col-lg-12">
+                    <h1>{{ profile.site_name }}</h1>
+                    <p class="lead">
+                        {{ profile.tagline }}
+                    </p>
+                </div>
             </div>
-
-            {% if home is defined %}
-            <div class="jumbotron">
-                <h1>{{ profile.site_name }}</h1>
-                <p class="lead">
-                    {{ profile.tagline }}
-                </p>
-            </div>
+            {% endif %}
             {% endif %}
 
             <div class="row photos">
@@ -67,9 +103,9 @@
             </div>
         </div>
 
-        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
         <!-- Latest compiled and minified JavaScript -->
-        <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="/js/jquery.hotkeys.js"></script>
 
         {% block javascript %} {% endblock %}

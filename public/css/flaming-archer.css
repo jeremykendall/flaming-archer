@@ -1,0 +1,46 @@
+html, body {
+    margin: 0;
+    height: 100%;
+}
+
+body {
+    padding-top: 70px;
+}
+
+.photo {
+    position: relative;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    width: 100%;
+}
+
+.photo p {
+    padding-top: 10px;
+}
+
+input#day.form-control {
+    width: 40%;
+}
+
+.img-thumbnail-today {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.day-photo { 
+    background-color: black; 
+    text-align: center; 
+    font-size: 0; 
+}
+
+.day-photo img { 
+    max-height: 90%; 
+    height: 90%; 
+    max-width: 100%; 
+    vertical-align: middle; 
+}
+
+.day-photo div { 
+    display: inline-block; 
+    vertical-align: middle; 
+}

@@ -3,14 +3,11 @@
 {% block content %}
 {% for image in paginator %}
 <div class="row photo">
-    <div class="col-md-3 col-sm-3">
-        <p class="text-right text-muted">
-            <em><a href="/day/{{ image.day }}">{{ image.posted|date("d F Y") }}</a></em><br>
-            <em>Day {{ image.day }}</em>
-        </p>
-    </div>
-    <div class="col-md-9 col-sm-9 text-center">
+    <div class="col-md-12 col-sm-12 text-center">
         <a href="/day/{{ image.day }}"><img src="{{ image.featureSize.source }}" class="img-responsive img-thumbnail text-center" /></a>
+        <p class="text-muted">
+            <em><a href="/day/{{ image.day }}">{{ image.posted|date("d F Y") }}:</a> Day {{ image.day }}</em>
+        </p>
     </div>
 </div>
 {% else %}

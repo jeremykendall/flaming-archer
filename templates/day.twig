@@ -12,19 +12,18 @@
 
 {% block content %}
 <div class="row">
-    <div class="day-photo text-center col-md-12">
-        <p class="lead"><em>{{ image.posted|date("d F Y") }}, Day {{ image.day }}</em></p>
-        <a href="http://flickr.com/photos/{{ profile.flickr_username }}/{{ image.photoId }}/lightbox" target="_blank" title="View on Flickr">
-            <img class="img-responsive img-thumbnail" src="{{ image.featureSize.source }}" height="{{ image.featureSize.height }}" width="{{ image.featureSize.width }}" />
-        </a>
-    </div>
-    <div class="photo-meta col-md-12">
-        <h3>{{ image.title }}</h3>
-        <p>{{ image.description|raw }}</p>
+    <div id="day-photo-wrapper">
+        <div class="day-photo text-center col-md-12">
+            <a href="http://flickr.com/photos/{{ profile.flickr_username }}/{{ image.photoId }}/lightbox" target="_blank" title="View on Flickr">
+                <img class="img-responsive img-thumbnail" src="{{ image.daySize.source }}" />
+            </a>
+        </div>
     </div>
 </div>
 <div class="row">
-    <div class="col-md-3 col-md-offset-9">
+    <div class="photo-meta col-md-10 col-md-offset-1">
+        <h3>{{ image.title }} <small>{{ image.posted|date("d F Y") }}, Day {{ image.day }}</small></h3>
+        <p>{{ image.description|raw }}</p>
     </div>
 </div>
 <div class="row">
