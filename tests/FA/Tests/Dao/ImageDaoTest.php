@@ -134,7 +134,7 @@ class ImageDaoTest extends CommonDbTestCase
      */
     public function testSaveDuplicateDayThrowsException()
     {
-        $this->setExpectedException('PDOException', 'SQLSTATE[23000]: Integrity constraint violation: 19 column day is not unique');
+        $this->setExpectedException('PDOException', 'SQLSTATE[23000]: Integrity constraint violation: 19');
         $photo = new Photo();
         $photo->setDay(7);
         $photo->setPhotoId(9627527264);
@@ -146,7 +146,7 @@ class ImageDaoTest extends CommonDbTestCase
      */
     public function testSaveDuplicatePhotoIdThrowsException()
     {
-        $this->setExpectedException('PDOException', 'SQLSTATE[23000]: Integrity constraint violation: 19 column photoId is not unique');
+        $this->setExpectedException('PDOException', 'SQLSTATE[23000]: Integrity constraint violation: 19');
         $photo = new Photo();
         $photo->setDay(11);
         $photo->setPhotoId(7512338326);
