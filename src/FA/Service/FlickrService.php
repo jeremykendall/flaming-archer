@@ -28,6 +28,7 @@ class FlickrService implements FlickrInterface
      */
     const PHOTO_NOT_FOUND = 1;
     const PERMISSION_DENIED = 2;
+    const SSL_REQUIRED = 95;
     const INVALID_API_KEY = 100;
     const SERVICE_UNAVAILABLE = 105;
 
