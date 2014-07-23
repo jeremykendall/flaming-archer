@@ -8,4 +8,4 @@ script: phpunit --exclude-group internet
 
 before_script:
   - composer self-update
-  - composer update --prefer-source
+  - composer install --prefer-source
