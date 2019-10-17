@@ -1,7 +1,7 @@
 GEM
   remote: http://rubygems.org/
   specs:
-    facter (1.6.13)
+    facter (1.7.6)
     metaclass (0.0.1)
     mocha (0.12.7)
       metaclass (~> 0.0.1)
