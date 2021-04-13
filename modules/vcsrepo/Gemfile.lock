@@ -1,20 +1,43 @@
 GEM
   remote: http://rubygems.org/
   specs:
-    facter (1.6.13)
+    concurrent-ruby (1.1.8)
+    deep_merge (1.2.1)
+    facter (4.0.52)
+      hocon (~> 1.3)
+      thor (>= 1.0.1, < 2.0)
+    fast_gettext (1.8.0)
+    hiera (3.7.0)
+    hocon (1.3.1)
+    httpclient (2.8.3)
+    locale (2.1.3)
     metaclass (0.0.1)
     mocha (0.12.7)
       metaclass (~> 0.0.1)
-    puppet (2.7.19)
-      facter (~> 1.5)
+    multi_json (1.15.0)
+    puppet (6.13.0)
+      concurrent-ruby (~> 1.0)
+      deep_merge (~> 1.0)
+      facter (> 2.0.1, < 5)
+      fast_gettext (~> 1.1)
+      hiera (>= 3.2.1, < 4)
+      httpclient (~> 2.8)
+      locale (~> 2.1)
+      multi_json (~> 1.10)
+      puppet-resource_api (~> 1.5)
+      semantic_puppet (~> 1.0)
+    puppet-resource_api (1.8.13)
+      hocon (>= 1.0)
     rake (0.8.7)
     rspec (1.2.9)
+    semantic_puppet (1.0.3)
+    thor (1.1.0)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   mocha (~> 0.12.7)
-  puppet (~> 2.7)
+  puppet (~> 6.13)
   rake (~> 0.8.7)
   rspec (~> 1.2.9)
